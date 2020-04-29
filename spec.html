@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+    <title>Footprints Specification</title>
+    <script async class="remove" src="//www.w3.org/Tools/respec/respec-w3c-common">
+    </script>
+    <script class="remove">
+      var respecConfig = {
+        shortName:      "footprints-spec",
+        specStatus:     "ED",
+        // specStatus:     "WG-NOTE",
+        noRecTrack: true,
+        edDraftURI:  "https://shapetrees.github.io/specification/spec",
+        editors:  [
+          { name: "Eric Prud'hommeaux" , w3cid: "2112" },
+          { name: "Justin Bingham" }
+        ],
+        cg: "Solid",
+        wgURI: "https://www.w3.org/community/solid/",
+        // wgPatentURI:  "https://www.w3.org/2004/01/pp-impl/53154/status",
+        github: {
+          repoURL: "https://github.com/shapetrees/specification",
+          branch: "master"
+        },
+        contributing: [
+          "https://github.com/w3c/respec/wiki"
+        ]
+      };
+    </script>
+    <style>
+      .cross::before { content: "(see primer)"; font-size: small; vertical-align: top; background-color: buttonface }
+    </style>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"/>
+    <link rel="stylesheet" href="local.css"/>
+  </head>
+  <body>
+
+    <section id="abstract">
+      <p>
+        Semantic Web Applications interoperate by sharing semantics of terms and constellations of data structures.
+        This specification defines Footprints, a mechanism for declaring and operating over constellations of data structures.
+      </p>
+    </section>
+
+    <section id="sotd">
+      <p>
+        This is a proposal for the structure and use of Footprints in Solid.
+        It is possible that this or a derivative document will become a Solid specification.
+      </p>
+    </section>
+
+    <section id="introduction" class="informative">
+      <h2>Introduction</h2>
+      <p>
+        A Footprint defines a tree of related resources which combine to enable some task.
+        The footprint associates each resource with a shape in a schema.
+        This document defines the structure and use of Footprints for [[[LDP]]] [[LDP]] Resources.
+      </p>
+      <p>
+        A <span class="blueprint-label">footprint</span> is defined as an RDF graph structure and the behaviors of agents respecting that graph structure.
+        These semantics can be implemented by a server, a client-side library, or a privilenged third-party helper application.
+        Communication, including error reporting, is defined in terms of HTTP; allowing a single definition to define the behaviors for servers, clients and third-party applications.
+      </p>
+    </section>
+
+    <section id="structure">
+      <h2>Footprint Structure <a class="cross" href="primer#structure"></a></h2>
+      <p>
+        A <dfn>Footprint</dfn> is a machine-readable template describing the expected layout of a tree of LDP Resources in a POD.
+        The Footprint structure is a tree that can be expressed in JSON-LD as nested JSON objects or as a hierarchical RDF graph.
+        It is composed of a set of steps in hierarchy captured by <code>foot:contents</code> links:
+      </p>
+      <div>
+        <pre><code class="shexc">
+&lt;#Step&gt; {
+  foot:instanceType [ldp:BasicContainer ldp:Resource] ;
+  (rdfs:label xsd:string | foot:uriTemplate xsd:string) ;
+  foot:uses IRI ? ;
+  (foot:shape IRI | foot:mediaType xsd:string )? ;
+  foot:contents @&lt;#Step&gt;*
+}
+        </code></pre>
+      </div>
+      <p>
+        The <code>foot:contents</code> property MUST NOT introduce any cycles into the RDF graph.
+      </p>
+      <p>
+        The realization of a <a>footprint</a> is an <dfn>instance tree</dfn>.
+        The the upper-most Container of that tree is an <dfn>instance root</dfn>.
+        Let <code>F</code> be a <a>footprint</a>; let <code>T</code> be a corresponding <a>instance tree</a><!-- ; let <code>R</code> be its <a>instance root</a> -->.
+        For any step <code>S</code> in <code>F</code>:
+      </p>
+      <ul>
+        <li>The rdf:type arc (written 'a' above) identifies the type of a corresponding Resource <code>R</code> in <code>T</code>.</li>
+        <li>An { <code>S</code> <code>rdfs:label</code> <code>L</code> } arc indicates that there is exactly one corresponding Resource <code>R</code> and it has the name <code>L</code>.</li>
+        <li>An { <code>S</code> <code>foot:uriTemplate</code> <code>L</code> } arc indicates that there are an arbitrary number of corresponding Resources <code>R</code> and each will have a name that matches the URI template [[RFC6570]] <code>L</code>.</li>
+        <li>An { <code>S</code> <code>foot:shape</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to <code>Sh</code>.</li>
+        <li>Any { <code>S</code> <code>foot:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.
+        <div class="issue">
+          <p>
+            The shape above could be more precise, allowing only for <code>foot:contents</code> arcs if the type is a Container:
+          </p>
+          <pre><code class="shexc">
+&lt;#Step&gt; {
+  (
+    a [ldp:BasicContainer] ;
+    (rdfs:label xsd:string | foot:uriTemplate xsd:string) ;
+    foot:contents @&lt;#Step&gt; +
+  |
+    a [ldp:Resource] ;
+    foot:uriTemplate xsd:string
+  ) ;
+  foot:uses IRI ? ;
+  (foot:shape IRI | foot:mediaType xsd:string )? ;
+}
+          </code></pre>
+          <p>Is that too meticulous?</p>
+        </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="terms">
+      <h2>Terms</h2>
+      <p>
+        The following types and functions are used throughout this specification:
+      </p>
+      <ul>
+        <li>types:
+        <ul>
+          <li><dfn>Container</dfn> -- a [[[LDP]]] [[LDP]] Container</li>
+          <li><dfn>Managed Container</dfn> -- any LDP Container in an <a>Instance Tree</a>. A Managed Container may be an <a>Instance Root</a> or hierarchically nested within an <a>Instance Tree</a>.<span class="issue">Consider calling this an Instance Container instead</span></li>
+          <li><dfn>Unmanaged Container</dfn> -- any LDP Container which is not in an <a>Instance Tree</a>.<span class="issue">Just a regular LDP container then?</span></li>
+          <li><dfn>Supported RDF Format</dfn> -- a textual representation of an RDF graph in a format that can be accurately and losslessly parsed to that RDF graph.</li>
+          <li><dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an HTTP request with a parser determined by the Content-type: header of that HTTP request.</li>
+          <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource.</li>
+          <li><dfn>Dynamic Container</dfn> -- an LDP Container .</li>
+          <li><dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of a GET on an LDP Resource.</li>
+        </ul>
+        </li>
+        <li>functions:
+        <ul>
+          <li><dfn>instantiate (resource, contents)</dfn> --
+          <ul>
+            <li>Make <code>contents</code> available by GET request to <code>resource</code>.</li>
+            <li>Let <code>parent</code> be the result of resolving the relative URL <code>..</code> against <code>resource</code>.<br/>
+            Add the triple {<code>parent</code> ldp:contains <code>resource</code>} to <code>parent</code>.</li>
+          </ul>
+          </li>
+        </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="stomp">
+      <h2>Creating New Footprint Instances <a class="cross" href="primer#creating"></a></h2>
+      <p>
+        Creating a new footprint instance starts with a POST P to a Regular Container <code>parent</code> to establish the Footprint <a>Instance Root</a> with a request body Content-type of some supported RDF Format.
+        The <a>Instance Root</a> and <b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, ".")
+      </p>
+    </section>
+
+    <section>
+      <h2>Navigating Footprint Instances</h2>
+      <p>
+        The Footprint describes instances which are hierarchies in an LDP Container hierarchy.
+        Every Managed Container expresses these data for navigation purposes:
+      </p>
+      <ul>
+        <li><b>Footprint Instantiation Root</b> &mdash; the URL of a Footprint .</li>
+        <li><b>Footprint Instantiation Path</b> &mdash; a relative IRI identifying a location within a footprint instance. This is represented in RDF as a literal.</li>
+        <li><b>Footprint Instantiation Step</b> &mdash; a location within a footprint identified by the IRI of the subject node of that step in the footprint.</li>
+      </ul>
+      <p>
+        <dfn>instantiate static</dfn> (<code>footprintInstantiationStep</code>, <code>footprintStep</code>) instantiates the Static Containers implied by footprintInstantiationStep <a class="excode" href="https://github.com/shapetrees/specification/blob/master/util/footprint.js#L309-L331"></a>
+      </p>
+      <ol>
+        <li>
+          <p>
+            instantiate a <b>footprint instance step</b> &mdash; an LDP Container with a Resource Graph conformant to <span class="hljs-name">&lt;#FootprintInstanceStep&gt;</span> below:
+          </p>
+          <div>
+            <pre><code class="shexc">
+&lt;#FootprintInstanceStep&gt; {
+  a [ldp:BasicContainer] ;
+  dc:title xsd:string;
+  foot:footprintRoot IRI;
+  foot:footprintInstancePath xsd:string;
+  foot:footprintInstanceRoot IRI;
+  ldp:contains IRI *.
+}
+            </code></pre>
+          </div>
+        </li>
+        <li>for each <code>child step</code> in { <code>footprintInstantiationStep</code>, footprint:contents, * }
+          <ul>
+            <li>if <code>child step</code> has an rdf:label <code>directory label</code>
+            <ul>
+              <li>apply <a>instantiate static</a>(<code>child step</code>, path.join(<code>footprintStep</code>, <code>directory label</code>))</li>
+            </ul>
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section id="post-managed">
+      <h2>Updating Footprint Instances <a class="cross" href="primer#updating"></a></h2>
+      <div class="issue">
+        <p>
+          Require slight refactoring for client-side handling.
+        </p>
+      </div>
+      <p>
+        For any POST <code>P</code> to any Managed Container <code>parent</code>:
+      </p>
+      <ol>
+        <li>If <code>P</code> does not have a Link: header with rel="root" and href=<code>H</code>, the request is rejected with a status code of 400.</li>
+        <li>Let <code>N</code> be <code>H</code> resolved against he base of parent's URL overloaded by any BASE or PREFIXes defined in the Resource Body.</li>
+        <li>Let <code>RG</code> be the container's Resource Graph.</li>
+        <li>Let <code>IR</code> be the Footprint Instantiation Root.</li>
+        <li>Let <code>IP</code> be the Footprint Instantiation Path.</li>
+        <li>Let <code>IS</code> be the Footprint Instantiation Step found by following IP through the Footprint hierarchy.</li>
+        <li>Let <code>S</code> be the the foot:shape included in IS.</li>
+        <li>Let <code>R</code> be the results of validating the ShapeMap <code>N@S</code>.</li>
+        <li>If <code>R</code> is an error, the request is rejected with a status code of 422 (Unprocessable Entity).</li>
+        <li>Otherwise the POD creates a new entity <code>Name</code>, where name may have been influenced by the Slug: header:
+        <ul>
+          <li>If <code>P</code> has a Link: header with rel="type" and href=ldp:Container,
+          <ul>
+            <li><b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, <code>IP</code> + "/" + <code>Name</code>))</li>
+          </ul>
+          </li>
+          <li>The request is processed according to POST to an [[!LDP]] Container.</li>
+        </ul>
+        </li>
+      </ol>
+    </section>
+
+    <section id="conformance">
+    </section>
+
+    <script src="http://www.w3.org/2019/Talks/1209-swat4ls-egp/highlight.pack.js"></script>
+    <script src="http://www.w3.org/2019/Talks/1209-swat4ls-egp/highlight-shexc.js"></script>
+    <!-- <script src="WWW/2019/Talks/1209-swat4ls-egp/highlight-shexc.js"></script> -->
+    <script>
+      // TODO: add ShEx highlighter to respec
+      hljs.registerLanguage('shexc', hljsDefineShExC);
+      hljs.registerLanguage('turtle', hljsDefineTExpr);
+      (['DOMContentLoaded', 'load']).forEach(e => addEventListener(e, init, false));
+      let inited = false;
+
+      function hljsDefineTExpr (highlightjs) { // works pretty well for Turtle.
+        const ret = hljsDefineShExC(highlightjs, 'tripleConstraint');
+        ret.disableAutodetect = true;
+        return ret;
+      }
+
+      function init () {
+        if (inited) return;
+        inited = true;
+        ([400, 800, 1600, 3200, 6400]).forEach(
+          tOut => setTimeout(highlightAll, tOut)
+        )
+      }
+
+      function highlightAll () {
+        console.log(new Date())
+        try {
+          const blocks = document.querySelectorAll('.shexc,.turtle');
+          [].forEach.call(blocks, (b) => {
+            hljs.highlightBlock(b);
+          });
+        } catch (e) {}
+      }
+    </script>
+  </body>
+</html>
