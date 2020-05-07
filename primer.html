@@ -307,6 +307,8 @@ li.choice > ul > li {
         </li>
         <li>an optional <dfn>contents</dfn>: a list of nested steps.<br/>
         This captures the containership of a conforming resource hierarchy.</li>
+        <li>an optional <dfn>skosIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
+         These SKOS graphs can be used to describe the shape tree in human-readable terms.</li>
       </ul>
       <!--
       <p>
@@ -448,7 +450,7 @@ Content-length: 396
     </section>
 
     <section id="updating">
-      <h2>Updating ShapeTree Instances <a class="cross" href="spec#post-managed"></a></h2>
+      <h2>Updating ShapeTree Instances <a class="cross" href="spec.html#post-managed"></a></h2>
       <p>
         Despite NeverNote having planted the LDP Container <code>/data/CommonNotes</code>, it could be another application, OtherNote, which first creates data there.
         <!-- When an client application plants a ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/ldpServer.js#L47-L78"></a>, the POD will record the association between the create a an <code>instantiation</code> of tha.
@@ -502,12 +504,32 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
     tree:shapeTreeInstanceRoot &lt;&gt;.
           </code></pre>
     </section>
-    <!-- ul>
-        <li><b>PhotoAlbum</b> - collects photos or references to photos into sharable albums (ShapeTree <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/album/PhotoAlbumShapeTree.ttl">Turtle</a> / <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/album/PhotoAlbumShapeTree.jsonld">JSON-LD</a>, <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/album/PhotoAlbum.shex">schema</a>).</li>
-        <li><b>MultiCal</b> - migrates calendar applications between two common formats, "Common" (ShapeTree <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/CalendarShapeTree.ttl">Turtle</a> / <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/CalendarShapeTree.jsonld">JSON-LD</a>, <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/Calendar.shex">schema</a>), and "Google" (ShapeTree <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/GoogleShapeTree.ttl">Turtle</a> / <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/GoogleShapeTree.jsonld">JSON-LD</a>, <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/cal/GoogleCalendar.shex">schema</a>).</li>
-        <li><b>GitHub</b> - a storage repository associating users or groups with repositories, issues and events (ShapeTree <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/gh/ghShapeTree.ttl">Turtle</a> / <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/gh/ghShapeTree.jsonld">JSON-LD</a>, <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/gh/ghSchema.shex">schema</a>).</li>
-      </ul -->
 
+    <section id="describing">
+      <h2>Describing Shape Trees <a class="cross" href="spec.html#describing-shapetrees"></a></h2>
+      <p>
+        To aid in the human-readability of Shape Trees, a SKOS graph can be used to provide a textual representation of the structure.
+      </p>
+      <p>
+        Making use of the <code>tree:step</code> predicate, labels can be applied to specific steps in a Shape Tree using any language.
+        A SKOS index document allows for discovery of multiple definitions of a Shape Tree supporting multiple language preferences and cognitive abilities.
+      </p>
+      <p>
+        A sample SKOS graph defining the terms in the CommonNotes Shape Tree:
+      </p>
+      <pre><code class="example footprint turtle">
+@prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
+@prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt; .
+@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
+@prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
+
+<#root> a tree:NavigationStep ; tree:step f:root ; skosxl:prefLabel [ skosxl:literalForm "Note Container"@en ] ; skos:narrower <#note> .
+   <#note> a tree:NavigationStep ; tree:step f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower <#citation>, <#image> .
+      <#citation> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
+      <#image> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .
+          </code></pre>
+
+    </section>    
 
     <script src="http://www.w3.org/2019/Talks/1209-swat4ls-egp/highlight.pack.js"></script>
     <script src="http://www.w3.org/2019/Talks/1209-swat4ls-egp/highlight-shexc.js"></script>

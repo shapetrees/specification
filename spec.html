@@ -65,7 +65,7 @@
     </section>
 
     <section id="structure">
-      <h2>Shape Tree Structure <a class="cross" href="primer#structure"></a></h2>
+      <h2>Shape Tree Structure <a class="cross" href="primer.html#structure"></a></h2>
       <p>
         A <dfn>Shape Tree</dfn> is a machine-readable template describing the expected layout of a tree of LDP Resources in a POD.
         The Shape Tree structure is a tree that can be expressed in JSON-LD as nested JSON objects or as a hierarchical RDF graph.
@@ -78,7 +78,8 @@
   (rdfs:label xsd:string | tree:uriTemplate xsd:string) ;
   tree:uses IRI ? ;
   (tree:shape IRI | tree:mediaType xsd:string )? ;
-  tree:contents @&lt;#Step&gt;*
+  tree:contents @&lt;#Step&gt;* ;
+  tree:skosIndex IRI ?
 }
         </code></pre>
       </div>
@@ -97,6 +98,7 @@
         <li>An { <code>S</code> <code>tree:uriTemplate</code> <code>L</code> } arc indicates that there are an arbitrary number of corresponding Resources <code>R</code> and each will have a name that matches the URI template [[RFC6570]] <code>L</code>.</li>
         <li>An { <code>S</code> <code>tree:shape</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to <code>Sh</code>.</li>
         <li>Any { <code>S</code> <code>tree:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.
+        <li>An { <code>S</code> <code>tree:skosIndex</code> <code>SI</code> } arc indicates that an index of one or more SKOS [[skos-primer]] graphs is present to describe Shape Tree <code>T</code> in a human-readable way.
         <div class="issue">
           <p>
             The shape above could be more precise, allowing only for <code>tree:contents</code> arcs if the type is a Container:
@@ -137,6 +139,7 @@
           <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource.</li>
           <li><dfn>Dynamic Container</dfn> -- an LDP Container .</li>
           <li><dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of a GET on an LDP Resource.</li>
+          <li><dfn>SKOS Graph</dfn> -- an RDF graph conforming to the Simple Knowledge Organization System (SKOS) data model
         </ul>
         </li>
         <li>functions:
@@ -154,7 +157,7 @@
     </section>
 
     <section id="stomp">
-      <h2>Creating New Shape Tree Instances <a class="cross" href="primer#creating"></a></h2>
+      <h2>Creating New Shape Tree Instances <a class="cross" href="primer.html#creating"></a></h2>
       <p>
         Creating a new shape tree instance starts with a POST P to a Regular Container <code>parent</code> to establish the Shape Tree <a>Instance Root</a> with a request body Content-type of some supported RDF Format.
         The <a>Instance Root</a> and <b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, ".")
@@ -206,7 +209,7 @@
     </section>
 
     <section id="post-managed">
-      <h2>Updating Shape Tree Instances <a class="cross" href="primer#updating"></a></h2>
+      <h2>Updating Shape Tree Instances <a class="cross" href="primer.html#updating"></a></h2>
       <div class="issue">
         <p>
           Require slight refactoring for client-side handling.
@@ -237,6 +240,16 @@
         </li>
       </ol>
     </section>
+
+    <section id="describing-shapetrees">
+      <h2>Describing Shape Trees <a class="cross" href="primer.html#describing"></a></h2>
+      <p>
+        External graphs adhering to the SKOS data model can be optionally used to describe the Shape Tree in human-readable terms.
+
+        Specifying a <code>tree:skosIndex</code> predicate within Shape Tree definition enables clients to discover available human-readable definitions of that Shape Tree.
+      </p>
+    </section>
+
 
     <section id="conformance">
     </section>
