@@ -306,10 +306,11 @@ li.choice > ul > li {
         </ul>
         </li>
         <li>an optional <dfn>contents</dfn>: a list of nested steps.<br/>
-        This captures the containership of a conforming resource hierarchy.</li>
-        <li>an optional <dfn>skosIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
-         These SKOS graphs can be used to describe the shape tree in human-readable terms.</li>
+        This captures the containership of a conforming resource hierarchy.</li>        
       </ul>
+      <p>Informing all steps is an optional <dfn>skosIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
+         the interface hierarchies in this index will have arbitrary links back into steps in this ShapeTree and maybe others.</li>
+
       <!--
       <p>
         The outer-most step must have an <a>id</a>, has neither a <a>label</a> nor a <a>uriTemplate</a> and has at least one <a>contents</a> arc.
@@ -450,7 +451,7 @@ Content-length: 396
     </section>
 
     <section id="updating">
-      <h2>Updating ShapeTree Instances <a class="cross" href="spec.html#post-managed"></a></h2>
+      <h2>Updating ShapeTree Instances <a class="cross" href="spec#post-managed"></a></h2>
       <p>
         Despite NeverNote having planted the LDP Container <code>/data/CommonNotes</code>, it could be another application, OtherNote, which first creates data there.
         <!-- When an client application plants a ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/ldpServer.js#L47-L78"></a>, the POD will record the association between the create a an <code>instantiation</code> of tha.
@@ -506,7 +507,7 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
     </section>
 
     <section id="describing">
-      <h2>Describing Shape Trees <a class="cross" href="spec.html#describing-shapetrees"></a></h2>
+      <h2>Describing Shape Trees <a class="cross" href="spec#describing-shapetrees"></a></h2>
       <p>
         To aid in the human-readability of Shape Trees, a SKOS graph can be used to provide a textual representation of the structure.
       </p>
