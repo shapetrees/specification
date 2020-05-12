@@ -81,7 +81,6 @@
   tree:contents @&lt;#Step&gt;* 
 }
 
-<> skosIndex <./MyKnownInterfaceHierarchies> .
         </code></pre>
       </div>
       <p>
@@ -101,7 +100,7 @@
         <li>Any { <code>S</code> <code>tree:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.</li>
       </ul>
       <p>
-        An { <code>S</code> <code>tree:skosIndex</code> <code>Si</code> } arc indicates the location of hierarchies which can be used to link back to one or more ShapeTree steps.
+        An { <code>tree:skosIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>F</code> .
       </p>
         <div class="issue">
           <p>
@@ -143,7 +142,7 @@
           <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource.</li>
           <li><dfn>Dynamic Container</dfn> -- an LDP Container .</li>
           <li><dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of a GET on an LDP Resource.</li>
-          <li><dfn>SKOS Graph</dfn> -- an RDF graph conforming to the Simple Knowledge Organization System (SKOS) data model
+          <li><dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]] [[skos-reference]] data model
         </ul>
         </li>
         <li>functions:

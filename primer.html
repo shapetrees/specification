@@ -309,7 +309,9 @@ li.choice > ul > li {
         This captures the containership of a conforming resource hierarchy.</li>        
       </ul>
       <p>Informing all steps is an optional <dfn>skosIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
-         the interface hierarchies in this index will have arbitrary links back into steps in this ShapeTree and maybe others.</li>
+
+         As detailed in <a href="#describing">Describing Shape Trees</a> below, SKOS is provides an extensible means to describe a shape tree in human-readable terms.  The skosIndex: allows shape tree maintainers to provide a reference to SKOS graphs that accurately and reliably describe the shape tree as intended.  
+       </li>
 
       <!--
       <p>
@@ -514,6 +516,7 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
       <p>
         Making use of the <code>tree:step</code> predicate, labels can be applied to specific steps in a Shape Tree using any language.
         A SKOS index document allows for discovery of multiple definitions of a Shape Tree supporting multiple language preferences and cognitive abilities.
+        The convention on how this index of SKOS graphs is structured and used, along with the rules to govern the selection of the appropriate graph for a user is the responsibility of the ecosystem using Shape Trees.
       </p>
       <p>
         A sample SKOS graph defining the terms in the CommonNotes Shape Tree:
