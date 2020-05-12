@@ -519,7 +519,7 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
         The convention on how this index of SKOS graphs is structured and used, along with the rules to govern the selection of the appropriate graph for a user is the responsibility of the ecosystem using Shape Trees.
       </p>
       <p>
-        A sample SKOS graph defining the terms in the CommonNotes Shape Tree:
+        A sample SKOS graph, in English, defining the terms in the CommonNotes Shape Tree:
       </p>
       <pre><code class="example footprint turtle">
 @prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
@@ -531,6 +531,21 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
    <#note> a tree:NavigationStep ; tree:step f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower <#citation>, <#image> .
       <#citation> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
       <#image> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .
+          </code></pre>
+
+      <p>
+        A sample SKOS graph, in Russian, describing the same CommonNotes Shape Tree:
+      </p>
+      <pre><code class="example footprint turtle">
+@prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
+@prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt; .
+@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
+@prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
+
+<#root> a tree:NavigationStep ; tree:step f:root ; skosxl:prefLabel [ skosxl:literalForm "контейнер для заметок"@ru ] ; skos:narrower <#note> .
+   <#note> a tree:NavigationStep ; tree:step f:note ; skosxl:prefLabel [ skosxl:literalForm "текстовое содержание заметки"@ru ] ; skos:narrower <#citation>, <#image> .
+      <#citation> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Цитирование другого документа в заметке"@ru ] .
+      <#image> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Встроенное изображение или изображение в заметке"@ru ] .
           </code></pre>
 
     </section>    
