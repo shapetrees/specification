@@ -519,7 +519,36 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
         The convention on how this index of SKOS graphs is structured and used, along with the rules to govern the selection of the appropriate graph for a user is the responsibility of the ecosystem using Shape Trees.
       </p>
       <p>
-        A sample SKOS graph, in English, defining the terms in the CommonNotes Shape Tree:
+        A sample SKOS index document, with references to English and Russian representations of the CommonNotes Shape Tree:
+      </p>
+      <pre><code class="example footprint turtle">
+@prefix tree: <http://www.w3.org/ns/shapetree#> .
+@prefix treeIndex: <http://shapetree.org/ns/treeIndex#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+<#index>
+  a tree:skosIndex ;
+  tree:shapeTreeRoot <https://commonnote.example/CommonNoteShapeTree#container> ;
+  treeIndex:entries <#en>, <#ru>
+<#en>
+  owl:sameAs <#en-v1> .
+<#ru>
+  owl:sameAs <#ru-v1> .
+<#en-v1>
+  a treeIndex:entry;
+  xsd:lang "en" ;
+  treeIndex:skosGraphRoot <https://commonnote.example/CommonNoteGraph-en-v1#root> ;
+  treeIndex:version "1.0" ;
+  treeIndex:sha326Hash: "92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47" .
+<#ru-v1>
+  a treeIndex:entry;
+  xsd:lang "ru" ;
+  treeIndex:skosGraphRoot <https://commonnote.example/CommonNoteGraph-ru-v1#root> ;
+  treeIndex:version "1.0" ;
+  treeIndex:sha326Hash: "7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c" .      
+      </code></pre>
+      <p>
+        A sample SKOS graph <code>(<#en-v1>)</code>, in English, defining the terms in the CommonNotes Shape Tree:
       </p>
       <pre><code class="example footprint turtle">
 @prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
@@ -534,7 +563,7 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
           </code></pre>
 
       <p>
-        A sample SKOS graph, in Russian, describing the same CommonNotes Shape Tree:
+        A sample SKOS graph <code>(<#ru-v1>)</code>, in Russian, describing the same CommonNotes Shape Tree:
       </p>
       <pre><code class="example footprint turtle">
 @prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
