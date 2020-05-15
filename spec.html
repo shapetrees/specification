@@ -78,8 +78,9 @@
   (rdfs:label xsd:string | tree:uriTemplate xsd:string) ;
   tree:uses IRI ? ;
   (tree:shape IRI | tree:mediaType xsd:string )? ;
-  tree:contents @&lt;#Step&gt;*
+  tree:contents @&lt;#Step&gt;* 
 }
+
         </code></pre>
       </div>
       <p>
@@ -96,7 +97,11 @@
         <li>An { <code>S</code> <code>rdfs:label</code> <code>L</code> } arc indicates that there is exactly one corresponding Resource <code>R</code> and it has the name <code>L</code>.</li>
         <li>An { <code>S</code> <code>tree:uriTemplate</code> <code>L</code> } arc indicates that there are an arbitrary number of corresponding Resources <code>R</code> and each will have a name that matches the URI template [[RFC6570]] <code>L</code>.</li>
         <li>An { <code>S</code> <code>tree:shape</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to <code>Sh</code>.</li>
-        <li>Any { <code>S</code> <code>tree:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.
+        <li>Any { <code>S</code> <code>tree:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.</li>
+      </ul>
+      <p>
+        A { <code>tree:skosIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>F</code> .
+      </p>
         <div class="issue">
           <p>
             The shape above could be more precise, allowing only for <code>tree:contents</code> arcs if the type is a Container:
@@ -137,6 +142,7 @@
           <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource.</li>
           <li><dfn>Dynamic Container</dfn> -- an LDP Container .</li>
           <li><dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of a GET on an LDP Resource.</li>
+          <li><dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]] [[skos-reference]] data model
         </ul>
         </li>
         <li>functions:
@@ -237,6 +243,16 @@
         </li>
       </ol>
     </section>
+
+    <section id="describing-shapetrees">
+      <h2>Describing Shape Trees <a class="cross" href="primer#describing"></a></h2>
+      <p>
+        External graphs adhering to the SKOS data model can be optionally used to describe the Shape Tree in human-readable terms.
+
+        Specifying a <code>tree:skosIndex</code> predicate within Shape Tree definition enables clients to discover available human-readable definitions of that Shape Tree.
+      </p>
+    </section>
+
 
     <section id="conformance">
     </section>
