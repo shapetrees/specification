@@ -72,12 +72,11 @@
 #############################################################################
 :usesTree 
   a owl:ObjectProperty ;
-  rdfs:domain [ owl:oneOf ( :ShapeTreeLabel :ShapeTreeReference )  ;
+  rdfs:domain [ owl:oneOf ( :ShapeTreeLabel :ShapeTreeReference ) ] ;
   rdfs:range :ShapeTree ;
   rdfs:comment "Links to a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Uses ShapeTree"@en .
-
 
 
 # ShapeTreeContainer IRI
