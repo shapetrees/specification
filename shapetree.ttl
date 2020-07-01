@@ -3,6 +3,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
 
 <>
@@ -22,18 +23,19 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTree"@en .
 
+#
 # Properties in domain of ShapeTree
-#########################################################
+#
 :expectsType 
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
-  rdfs:range :ShapeTreeExpectedResourceType ;
+  rdfs:range [ owl:oneOf ( :ShapeTreeContainer :ShapeTreeResource ) ] ;
   rdfs:comment "Describes the expected type of resource the ShapeTree will create."@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
 
 :hasContents 
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTree ;
   rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted container"@en ;
@@ -41,7 +43,7 @@
   rdfs:label "Has Contents"@en .
 
 :hasReferences 
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTreeReference ;
   rdfs:isDefinedBy <> ;
@@ -49,14 +51,15 @@
   rdfs:label "Has References"@en .
 
 :nameTemplatedBy 
-  a rdf:Property ;
+  a owl:DatatypeProperty ;
   rdfs:domain :ShapeTree ;
+  rdfs:range xsd:string ;
   rdfs:comment "Describes a URI Template (RFC 6570) that governs the naming of resources of this ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Name Templated By"@en .
 
 :validatedBy 
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:comment "Links a ShapeTree to a Shape"@en ;
   rdfs:isDefinedBy <> ;
@@ -68,8 +71,8 @@
 # to a ShapeTree is required
 #############################################################################
 :usesTree 
-  a rdf:Property ;
-  rdfs:domain :ShapeTreeLabel ;
+  a owl:ObjectProperty ;
+  rdfs:domain [ owl:oneOf ( :ShapeTreeLabel :ShapeTreeReference )  ;
   rdfs:range :ShapeTree ;
   rdfs:comment "Links to a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
@@ -77,41 +80,21 @@
 
 
 
-# ShapeTreeExpectedResourceType Class
+# ShapeTreeContainer IRI
 #############################################################################
-# Defines an enumeration of generalized resource types that describe the
-# type of resource the planted ShapeTree is expected to validate against
-# Implementations of ShapeTree will map these generalized values to
-# specific implemtnations (LDP, etc.)
-#############################################################################
-:ShapeTreeExpectedResourceType 
-  a rdfs:Class ;
-  rdfs:comment "Defines an enumerable set of resource types expected by a given ShapeTree"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeExpectedResourceType"@en .
-
-
-# ShapeTreeContainer class
-#############################################################################
-# A sub-class of ShapeTreeExpectedResourceType this class represents
-# a generalized container
+# An IRI that represents a generalized container used in a ShapeTree
 #############################################################################
 :ShapeTreeContainer 
-  a rdfs:Class ;
-  rdfs:subClassOf :ShapeTreeExpectedResourceType ;
   rdfs:comment "Describes a generalized container within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeContainer"@en .
 
 
-# ShapeTreeResource class
+# ShapeTreeResource IRI
 #############################################################################
-# A sub-class of ShapeTreeExpectedResourceType this class represents
-# a generalized resource
+# An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
 :ShapeTreeResource 
-  a rdfs:Class ;
-  rdfs:subClassOf :ShapeTreeExpectedResourceType ;
   rdfs:comment "Describes a generalized resource (non-container) within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeResource"@en .
@@ -128,11 +111,13 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeReference"@en .
 
+#
 # Properties in domain of ShapeTreeReference
-#########################################################
+#
 :traversedViaShapePath
-  a rdf:Property ;
+  a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeReference ;
+  rdfs:range xsd:string ;
   rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Traversed Via ShapePath"@en .
@@ -153,7 +138,7 @@
 # Properties in domain of UiStringsIndex
 #########################################################
 :hasSeries
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :UiStringsIndex ;
   rdfs:range :UiStringsSeries ;
   rdfs:comment "Links between a UiStringsIndex and a UiStringsSeries"@en ;
@@ -172,10 +157,11 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "UiStringsSeries"@en .
 
+#
 # Properties in domain of UiStringsSeries
-#########################################################
+#
 :hasStringsHierarchy
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :UiStringsSeries ;
   rdfs:range :UiStringsHierarchy ;
   rdfs:comment "Links between a UiStringsSeries and a UiStringsHierarchy"@en ;
@@ -197,21 +183,23 @@
 # Properties in domain of UiStringsHierarchy
 #########################################################
 :hasVersion
-  a rdf:Property ;
+  a owl:DatatypeProperty ;
   rdfs:domain :UiStringsHierarchy ;
+  rdfs:range xsd:string ;
   rdfs:comment "Describes the version of a UiStringsSeries"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Version"@en .
 
 :hasSHA3256Hash
-  a rdf:Property ;
+  a owl:DatatypeProperty ;
   rdfs:domain :UiStringsHierarchy ;
+  rdfs:range xsd:string ;
   rdfs:comment "Describes the SHA3-256 of a UiStringsSeries"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has SHA3-256 Hash"@en .
 
 :hasSkosGraph
-  a rdf:Property ;
+  a owl:ObjectProperty ;
   rdfs:domain :UiStringsHierarchy ;
   rdfs:range :ShapeTreeLabel ;
   rdfs:comment "Represents the IRI to the SKOS graph described by UiStringsHierarchy instance"@en ;
@@ -228,4 +216,3 @@
   rdfs:comment "Describes the association between a SKOS label and a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeLabel"@en .
-
