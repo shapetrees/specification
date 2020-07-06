@@ -8,7 +8,7 @@
 
 <>
   dcterms:issued "2020-07-01"^^xsd:date ;
-  dcterms:modified "2020-07-01"^^xsd:date ;
+  dcterms:modified "2020-07-06"^^xsd:date ;
   rdfs:label "ShapeTree terms"@en .
 
 
@@ -34,52 +34,76 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
 
-:hasContents 
+:contains 
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
-  rdfs:range :ShapeTree ;
+  rdfs:range :ShapeTree  ;
   rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted container"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Contents"@en .
+  rdfs:label "Contains"@en .
 
-:hasReferences 
+:references 
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTreeReference ;
   rdfs:isDefinedBy <> ;
   rdfs:comment "Links a ShapeTree to a ShapeTreeReference"@en ;
-  rdfs:label "Has References"@en .
+  rdfs:label "References"@en .
 
-:nameTemplatedBy 
+:matchesUriTemplate 
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range xsd:string ;
   rdfs:comment "Describes a URI Template (RFC 6570) that governs the naming of resources of this ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Name Templated By"@en .
+  rdfs:label "Matches URI Template"@en .
 
-:validatedBy 
+:validatedBy
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:comment "Links a ShapeTree to a Shape"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Validated By"@en .
 
-# Properties in the range of ShapeTree
-#############################################################################
-# usesTree is a generalized property for when a a reference 
-# to a ShapeTree is required
-#############################################################################
-:usesTree 
-  a owl:ObjectProperty ;
-  rdfs:domain [ owl:oneOf ( :ShapeTreeLabel :ShapeTreeReference ) ] ;
-  rdfs:range :ShapeTree ;
-  rdfs:comment "Links to a ShapeTree"@en ;
+
+
+#
+# Specific IRIs used by :contains predicate to define behavior 
+# when a matching ShapeTree with a URI Template is not found.
+# These values can be combined, for example,
+# :contains :AllowResources :AllowContainers :AllowNonRDFSource is equivalent to :AllAll
+#
+:AllowResources
+  a :ShapeTree ;
+  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeResource"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Uses ShapeTree"@en .
+  rdfs:label "AllowResources"@en .
 
+:AllowContainers
+  a :ShapeTree ;
+  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeContainer"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "AllowContainers"@en .
 
-# ShapeTreeContainer IRI
+:AllowNonRDFSource
+  a :ShapeTree ;
+  rdfs:comment "If no matching :contains ShapeTree is found, only allow if the requested content is a :ShapeTreeNonRDFResource"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "AllowNonRDFSource"@en .
+
+:AllowAll
+  a :ShapeTree ;
+  rdfs:comment "If no matching :contains ShapeTree is found, allow all types of unexpected content"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "AllowAll"@en .
+
+:AllowNone
+  a :ShapeTree ;
+  rdfs:comment "If no matching :contains ShapeTree is found, do not allow any content"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "AllowNone"@en .
+
+# ShapeTreeContainer IRI (maps to ldp:Container)
 #############################################################################
 # An IRI that represents a generalized container used in a ShapeTree
 #############################################################################
@@ -89,12 +113,21 @@
   rdfs:label "ShapeTreeContainer"@en .
 
 
-# ShapeTreeResource IRI
+# ShapeTreeResource IRI (maps to ldp:Resource)
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
 :ShapeTreeResource 
   rdfs:comment "Describes a generalized resource (non-container) within a ShapeTree ecosystem"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "ShapeTreeResource"@en .
+
+# ShapeTreeNonRDFResource IRI (maps to ldp:NonRDFSource)
+#############################################################################
+# An IRI that represents a generalized resource used in a ShapeTree
+#############################################################################
+:ShapeTreeNonRDFResource 
+  rdfs:comment "Describes a generalized non RDF / binary content within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeResource"@en .
 
@@ -113,13 +146,13 @@
 #
 # Properties in domain of ShapeTreeReference
 #
-:traversedViaShapePath
+:traverseViaShapePath
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeReference ;
   rdfs:range xsd:string ;
   rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Traversed Via ShapePath"@en .
+  rdfs:label "Traverse Via ShapePath"@en .
 
 
 # ShapeTreeDecoratorIndex class
@@ -257,13 +290,6 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Has ShapeTree Instance Root"@en .
 
-:hasShapeTree
-  a owl:ObjectProperty ;
-  rdfs:domain :ShapeTree ;
-  rdfs:comment "Represents the IRI of a ShapeTree that "@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Instance Root"@en .
-
 :hasRootShapeTree
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeLocator ;
@@ -272,3 +298,13 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Root ShapeTree"@en .
 
+
+################################################################
+# A generalized predicate for linking a class to a ShapeTree
+################################################################
+:hasShapeTree
+  a owl:ObjectProperty ;
+  rdfs:range :ShapeTree ;
+  rdfs:comment "Represents the IRI of a ShapeTree that "@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Instance Root"@en .
