@@ -122,96 +122,153 @@
   rdfs:label "Traversed Via ShapePath"@en .
 
 
-# UiStringsIndex class
+# ShapeTreeDecoratorIndex class
 #############################################################################
-# A UiStringsIndex details a ShapeTree in a human-readable way.
+# A ShapeTreeDecoratorIndex details a ShapeTree in a human-readable way.
 # It is primarily used for use cases where a ShapeTree must be described to
 # a user for purposes of authorization.
 #############################################################################
-:UiStringsIndex 
+:ShapeTreeDecoratorIndex 
   a rdfs:Class ;
   rdfs:comment "Provides an index of SKOS poly-hierarchies which can be used to describe a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "UiStringsIndex"@en .
+  rdfs:label "ShapeTreeDecoratorIndex"@en .
 
-# Properties in domain of UiStringsIndex
+# Properties in domain of ShapeTreeDecoratorIndex
 #########################################################
 :hasSeries
   a owl:ObjectProperty ;
-  rdfs:domain :UiStringsIndex ;
-  rdfs:range :UiStringsSeries ;
-  rdfs:comment "Links between a UiStringsIndex and a UiStringsSeries"@en ;
+  rdfs:domain :ShapeTreeDecoratorIndex ;
+  rdfs:range :ShapeTreeDecoratorSeries ;
+  rdfs:comment "Links between a ShapeTreeDecoratorIndex and a ShapeTreeDecoratorSeries"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Series"@en .
 
-# UiStringsSeries class
+# ShapeTreeDecoratorSeries class
 #############################################################################
-# A UiStringsSeries details a versioned set of UiStringsHierarchy classes
-# Primary use is grouping UiStringsHierarchy instances by a common discriminator
+# A ShapeTreeDecoratorSeries details a versioned set of ShapeTreeDecoratorHierarchy classes
+# Primary use is grouping TreeDecoratorHierarchy instances by a common discriminator
 # such as language or intended audience
 #############################################################################
-:UiStringsSeries 
+:ShapeTreeDecoratorSeries 
   a rdfs:Class ;
-  rdfs:comment "Groups a set of UiStringsHierarchy by a given discriminator"@en ;
+  rdfs:comment "Groups a set of ShapeTreeDecoratorHierarchy by a given discriminator"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "UiStringsSeries"@en .
+  rdfs:label "ShapeTreeDecoratorSeries"@en .
 
 #
-# Properties in domain of UiStringsSeries
+# Properties in domain of ShapeTreeDecoratorSeries
 #
-:hasStringsHierarchy
+:hasHierarchy
   a owl:ObjectProperty ;
-  rdfs:domain :UiStringsSeries ;
-  rdfs:range :UiStringsHierarchy ;
-  rdfs:comment "Links between a UiStringsSeries and a UiStringsHierarchy"@en ;
+  rdfs:domain :ShapeTreeDecoratorSeries ;
+  rdfs:range :ShapeTreeDecoratorHierarchy ;
+  rdfs:comment "Links between a ShapeTreeDecoratorSeries and a ShapeTreeDecoratorHierarchy"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Strings Hierarchy"@en .
+  rdfs:label "Has Tr Hierarchy"@en .
 
-# UiStringsHierarchy class
+# ShapeTreeDecoratorHierarchy class
 #############################################################################
-# A UiStringsHierarchy details a versioned SKOS poly-hierarchy that describes
+# A ShapeTreeDecoratorHierarchy details a versioned SKOS poly-hierarchy that describes
 # a ShapeTree in a given language or format for an intended audience 
 # (decreased cognitivty ability, etc.)
 #############################################################################
-:UiStringsHierarchy 
+:ShapeTreeDecoratorHierarchy 
   a rdfs:Class ;
   rdfs:comment "Describes a SKOS poly-hierarchy for purproses of labeling a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "UiStringsHierarchy"@en .
+  rdfs:label "ShapeTreeDecoratorHierarchy"@en .
 
-# Properties in domain of UiStringsHierarchy
+# Properties in domain of ShapeTreeDecoratorHierarchy
 #########################################################
 :hasVersion
   a owl:DatatypeProperty ;
-  rdfs:domain :UiStringsHierarchy ;
+  rdfs:domain :ShapeTreeDecoratorHierarchy ;
   rdfs:range xsd:string ;
-  rdfs:comment "Describes the version of a UiStringsSeries"@en ;
+  rdfs:comment "Describes the version of a ShapeTreeDecoratorHierarchy"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Version"@en .
 
 :hasSHA3256Hash
   a owl:DatatypeProperty ;
-  rdfs:domain :UiStringsHierarchy ;
+  rdfs:domain :ShapeTreeDecoratorHierarchy ;
   rdfs:range xsd:string ;
-  rdfs:comment "Describes the SHA3-256 of a UiStringsSeries"@en ;
+  rdfs:comment "Describes the SHA3-256 of a ShapeTreeDecoratorHierarchy"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has SHA3-256 Hash"@en .
 
 :hasSkosGraph
   a owl:ObjectProperty ;
-  rdfs:domain :UiStringsHierarchy ;
+  rdfs:domain :ShapeTreeDecoratorHierarchy ;
   rdfs:range :ShapeTreeLabel ;
-  rdfs:comment "Represents the IRI to the SKOS graph described by UiStringsHierarchy instance"@en ;
+  rdfs:comment "Represents the IRI to the SKOS graph described by ShapeTreeDecoratorHierarchy instance"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has SKOS Graph"@en .
 
 # ShapeTreeLabel class
 #############################################################################
 # A ShapeTreeLabel details the association between a label within a SKOS graph
-# (detailed by UiStringsHierarchy) and a ShapeTree
+# (detailed by ShapeTreeDecoratorHierarchy) and a ShapeTree
 #############################################################################
 :ShapeTreeLabel 
   a rdfs:Class ;
   rdfs:comment "Describes the association between a SKOS label and a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeLabel"@en .
+
+
+# Properties in the range of ShapeTreeLocator
+#########################################################
+:hasShapeTreeLocator
+  a owl:ObjectProperty ;
+  rdfs:range :ShapeTreeLocator ;
+  rdfs:comment "Represents the association between a subject an one or more ShapeTreeLocator"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Locator"@en .
+
+
+# ShapeTreeLocator class
+#############################################################################
+# A ShapeTreeLocator describes a planted ShapeTree in a container with enough 
+# information to traverse from the current container to the root
+#############################################################################
+:ShapeTreeLocator 
+  a rdfs:Class ;
+  rdfs:comment "Describes a planted ShapeTree in a container with enough information to traverse from the current container to the root"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "ShapeTreeLocator"@en .
+
+# Properties in domain of ShapeTreeLocator
+#########################################################
+
+:hasShapeTreeInstancePath
+  a owl:DatatypeProperty ;
+  rdfs:domain :ShapeTreeLocator ;
+  rdfs:range xsd:string ;
+  rdfs:comment "Describes a relative path between the root of a planted ShapeTree hierarchy and the current container"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Instance Path"@en .
+
+
+:hasShapeTreeInstanceRoot
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTreeLocator ;
+  rdfs:comment "Represents the IRI of a root of a planted ShapeTree hierarchy"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Instance Root"@en .
+
+:hasShapeTree
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTree ;
+  rdfs:comment "Represents the IRI of a ShapeTree that "@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Instance Root"@en .
+
+:hasRootShapeTree
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTreeLocator ;
+  rdfs:range :ShapeTree ;
+  rdfs:comment "Represents the ShapeTree that is planted at the root of the ShapeTree hierarchy.  For flat structures, hasRootShapeTree and hasShapeTree will be the same."@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has Root ShapeTree"@en .
+
