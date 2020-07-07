@@ -71,7 +71,7 @@
 # Specific IRIs used by :contains predicate to define behavior 
 # when a matching ShapeTree with a URI Template is not found.
 # These values can be combined, for example,
-# :contains :AllowResources :AllowContainers :AllowNonRDFSource is equivalent to :AllAll
+# :contains :AllowResources :AllowContainers :AllowNonRDFSources is equivalent to :AllowAll
 #
 :AllowResources
   a :ShapeTree ;
@@ -85,11 +85,11 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "AllowContainers"@en .
 
-:AllowNonRDFSource
+:AllowNonRDFSources
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, only allow if the requested content is a :ShapeTreeNonRDFResource"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowNonRDFSource"@en .
+  rdfs:label "AllowNonRDFSources"@en .
 
 :AllowAll
   a :ShapeTree ;
