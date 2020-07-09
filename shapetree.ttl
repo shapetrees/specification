@@ -65,7 +65,13 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Validated By"@en .
 
-
+:supports
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTree ;
+  rdfs:range :ShapeTree ;
+  rdfs:comment "Describes a relationship wherein a ShapeTree acts as a support for another, for purposes of indexing, aggregation, etc." ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Supports"@en .
 
 #
 # Specific IRIs used by :contains predicate to define behavior 
