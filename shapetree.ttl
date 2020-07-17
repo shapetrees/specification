@@ -161,6 +161,15 @@
   rdfs:label "Traverse Via ShapePath"@en .
 
 
+#
+# Properties in range of ShapeTreeDecoratorIndex
+#
+:hasShapeTreeDecoratorIndex
+  a owl:ObjectProperty ;
+  rdfs:range :ShapeTreeDecoratorIndex ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Has ShapeTree Decorator Index"@en .
+
 # ShapeTreeDecoratorIndex class
 #############################################################################
 # A ShapeTreeDecoratorIndex details a ShapeTree in a human-readable way.
@@ -204,7 +213,7 @@
   rdfs:range :ShapeTreeDecoratorHierarchy ;
   rdfs:comment "Links between a ShapeTreeDecoratorSeries and a ShapeTreeDecoratorHierarchy"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Tr Hierarchy"@en .
+  rdfs:label "Has Hierarchy"@en .
 
 # ShapeTreeDecoratorHierarchy class
 #############################################################################
