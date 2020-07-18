@@ -19,9 +19,9 @@
 #############################################################################
 :ShapeTree 
   a rdfs:Class ;
-  rdfs:comment "Defines a tree of related resources which combine to enable some task"@en ;
+  rdfs:comment "Defines a composite data structure including a tree of resources and validation criteria"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTree"@en .
+  rdfs:label "Shape Tree"@en .
 
 #
 # Properties in domain of ShapeTree
@@ -30,7 +30,7 @@
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range [ owl:oneOf ( :ShapeTreeContainer :ShapeTreeResource ) ] ;
-  rdfs:comment "Describes the expected type of resource the ShapeTree will create."@en ;
+  rdfs:comment "Describes the expected type of resource the ShapeTree will validate against."@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
 
@@ -38,7 +38,7 @@
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTree  ;
-  rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted container"@en ;
+  rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted ShapeTreeContainer"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Contains"@en .
 
@@ -54,7 +54,7 @@
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range xsd:string ;
-  rdfs:comment "Describes a URI Template (RFC 6570) that governs the naming of resources of this ShapeTree"@en ;
+  rdfs:comment "Describes a URI Template (RFC 6570) that governs the naming of resources of this Shape Tree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Matches URI Template"@en .
 
@@ -78,36 +78,37 @@
 # when a matching ShapeTree with a URI Template is not found.
 # These values can be combined, for example,
 # :contains :AllowResources :AllowContainers :AllowNonRDFSources is equivalent to :AllowAll
+# Example -- <#containerShapeTree> tree:contains <#childShapeTree>, tree:AllowResources 
 #
 :AllowResources
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeResource"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowResources"@en .
+  rdfs:label "Allow Resources"@en .
 
 :AllowContainers
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeContainer"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowContainers"@en .
+  rdfs:label "Allow Containers"@en .
 
 :AllowNonRDFSources
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, only allow if the requested content is a :ShapeTreeNonRDFResource"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowNonRDFSources"@en .
+  rdfs:label "Allow NonRDFSources"@en .
 
 :AllowAll
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, allow all types of unexpected content"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowAll"@en .
+  rdfs:label "Allow All"@en .
 
 :AllowNone
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, do not allow any content"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "AllowNone"@en .
+  rdfs:label "Allow None"@en .
 
 # ShapeTreeContainer IRI (maps to ldp:Container)
 #############################################################################
@@ -124,7 +125,7 @@
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
 :ShapeTreeResource 
-  rdfs:comment "Describes a generalized resource (non-container) within a ShapeTree ecosystem"@en ;
+  rdfs:comment "Describes a generalized RDF resource (non-container) within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeResource"@en .
 
@@ -241,9 +242,9 @@
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeDecoratorHierarchy ;
   rdfs:range xsd:string ;
-  rdfs:comment "Describes the SHA3-256 of a ShapeTreeDecoratorHierarchy"@en ;
+  rdfs:comment "Describes the SHA-256 of a ShapeTreeDecoratorHierarchy"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has SHA3-256 Hash"@en .
+  rdfs:label "Has SHA-256 Hash"@en .
 
 :hasSkosGraph
   a owl:ObjectProperty ;
@@ -320,6 +321,6 @@
 :hasShapeTree
   a owl:ObjectProperty ;
   rdfs:range :ShapeTree ;
-  rdfs:comment "Represents the IRI of a ShapeTree that "@en ;
+  rdfs:comment "Represents the IRI of a ShapeTree that is referenced by some subject"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has ShapeTree Instance Root"@en .
