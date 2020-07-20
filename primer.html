@@ -117,11 +117,6 @@ li.choice > ul > li {
         Since the ShapeTree boundaries that establish these groupings are easily understood by humans, it allows them to perform these operations intuitively.
       </p>
       <p>
-        The hierarchy implied by the ShapeTree provides a default resource layout.
-        When a new instance is needed for storage, an application can plant a new instance.
-        However, in the spirit of any good REST application, the application should not require the arrangement of data resources to conform to the ShapeTree.
-      </p>
-      <p>
         ShapeTrees are defined as an RDF graph structure and a set of expected behaviors of agents respecting that graph structure.
         These semantics can be implemented by a server, a client-side library, or a privilenged third-party helper application.
         Communication, including error reporting, is defined in terms of HTTP; allowing a single definition to define the behaviors for servers, clients and third-party applications.
@@ -158,38 +153,19 @@ li.choice > ul > li {
       <div id="img1">
 <span>Shapes (ShEx)</span>
 <span>ShapeTree (Turtle)</span>
-<span>Resource Tree</span>
-        <!-- div style="float:left; width:30%; font-size: 1.2ex;">
-          <span style="text-decoration: underline; padding-left: 10ex;">ShapeTree (Turtle)</span>
-          <pre style="border-width: medium; border-left-style:solid; border-right-style:solid; border-color: #3366aa; background-color: #f3f6ff; border-top-style:solid; border-top-color: black;">&lt;#container&gt; tree:typ/e ldp:Container ;
-  tree:contents &lt;#note&gt; .</pre>
-
-          <pre style="border-width: medium; border-left-style:solid; border-right-style:solid; border-color: #aa3366; background-color: #fff3f6;">&lt;#note&gt; tree:expectedType ldp:Container ;
-  tree:uriTemplate "{noteName}" ;
-  tree:shape &lt;CommonNote#Note&gt; ;
-  tree:contents &lt;#citation&gt;,&lt;#image&gt;.</pre>
-
-          <pre style="border-width: medium; border-left-style:solid; border-right-style:solid; border-color: #6633aa; background-color: #f6f3ff;">&lt;#citation&gt; tree:expectedType ldp:Resource ;
-  tree:uriTemplate "inc-{name}" ;
-  tree:shape &lt;CommonNote#Citation&gt; .</pre>
-
-          <pre style="border-width: medium; border-left-style:solid; border-right-style:solid; border-color: #66aa33; background-color: #f6fff3;; border-bottom-style:solid; border-bottom-color: black;">&lt;#image&gt; tree:expectedType ldp:NonRDFSource ;
-  tree:uriTemplate "img-{name}" .</pre>
-        </div -->
-        <!-- <img style="float:left;width:70%" src="shape-tree.svg" alt="colored example of ShEx schema, ShapeTree structure, and resource hierarchy"/> -->
-        <!-- <div style="clear:both;"></div> -->
+<span>Resources</span>
         <img src="shape-tree.svg" alt="colored example of ShEx schema, ShapeTree, and resource hierarchy"/>
       </div>
       <p>
-        Here, <code style="color: #005555;">/data/medicalNotes</code> and <code style="color: #005555;">/data/astronomy/notes</code> are both <span class="imprint-label plural">imprints</span> of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree step.
-        They are both LDP Containers per <code style="color: #005555;">&lt;#container&gt; tree:expectedType ldp:Container</code> and could contain any number of note ShapeTrees per <code style="color: #005555;">tree:contents &lt;#note&gt;</code>.
-        In this example, <code style="color: #770033;">xrays-2019-08</code>, <code style="color: #770033;">GP-2020-04-18</code> and <code style="color: #770033;">blue-shift</code> respectively are instances of the <code style="color: #770033;">&lt;#note&gt;</code> ShapeTree.
+        Here, <code style="color: #005555;">/data/medicalNotes</code> and <code style="color: #005555;">/data/astronomy/notes</code> are both plants of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree step.
+        They are both LDP Containers per <code style="color: #005555;">&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer</code> and could contain any number of note data instance per <code style="color: #005555;">tree:contains &lt;#note&gt;</code>.
+        In this example, <code style="color: #770033;">xrays-2019-08</code>, <code style="color: #770033;">GP-2020-04-18</code> and <code style="color: #770033;">blue-shift</code> respectively are data instances of the <code style="color: #770033;">&lt;#note&gt;</code> ShapeTree.
         Each contains a binary <code style="color: #337700;">image</code> and blue-shift has a <code style="color: #330077;">citation</code>.
       </p>
       <p>
-        The ShapeTree is broken up into steps. A given step in a ShapeTree can be referenced and used on its own as a standalone ShapeTree.
-        The step describing the <code style="color: #330077;">citation</code> has the subject node <code style="color: #330077;">&lt;#citation&gt;</code>.
-        This step asserts that associated resources (e.g. <code style="color: #330077;">cit-M33.ttl</code>) must be LDP Resources per <code style="color: #330077;">&lt;#citation&gt; tree:expectedType ldp:Resource</code>, must have a name matching a URI template (i.e. must start with "cit-") per <code style="color: #330077;">&lt;#citation&gt; tree:uriTemplate "cit-{name}"</code>, and must conform to the shape <code style="color: #330077;">&lt;CommonNote#Citation&gt;</code> per <code style="color: #330077;">&lt;#citation&gt; tree:shape &lt;CommonNote#Citation&gt;</code>.
+        A ShapeTree document can contain multiple ShapeTree subjects. A given subject in a ShapeTree resource can be referenced and used on its own as a standalone ShapeTree, or as part of a more connected tree of ShapeTrees.
+        The ShapeTree describing the <code style="color: #330077;">citation</code> has the subject node <code style="color: #330077;">&lt;#citation&gt;</code>.
+        This ShapeTree asserts that associated resources (e.g. <code style="color: #330077;">cit-M33.ttl</code>) must be LDP Resources per <code style="color: #330077;">&lt;#citation&gt; tree:expectsType tree:ShapeTreeResource</code>, must have a name matching a URI template (i.e. must start with "cit-") per <code style="color: #330077;">&lt;#citation&gt; tree:matchesUriTemplate "cit-{name}"</code>, and must conform to the shape <code style="color: #330077;">&lt;CommonNote#Citation&gt;</code> per <code style="color: #330077;">&lt;#citation&gt; tree:validatedBy &lt;CommonNote#Citation&gt;</code>.
       </p>
         <style>
 #img2 > img {
@@ -220,7 +196,9 @@ li.choice > ul > li {
         <div id="img2">
           <div>
             <p>
-              The above resource hierarchy includes multiple instances for medical and astronomy notes.
+              The above resource hierarchy includes multiple locations where data instances of the ShapeTree CommonNote 
+              <code style="color: #770033;">&lt;#note&gt;</code>
+              can be stored (medicalNotes and astronomy/notes).
               Many systems make life simpler for users by providing dedicated places to store specific types of data structures.
               This provides applications with the ability to store data without prompting the user for a storage target.
             </p>
@@ -236,16 +214,16 @@ li.choice > ul > li {
       <div style="clear:both"></div>
       <div class="issue">
         <p>
-          Should ShapeTrees include a step for their managed container?
+          Should ShapeTree resources include a ShapeTree for their managed container?
           In the above ShapeTree, the triples:
         </p>
         <pre style="color: #005555;" class="plaintext">
-&lt;#container&gt; tree:expectedType ldp:Container ;
-  tree:contents &lt;#note&gt; .
+&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer ;
+  tree:contains &lt;#note&gt; .
         </pre>
         <p>
           describe not an instance of a note but a container of such instances.
-          Without these triples, the outer-most step (the one that is not the object of any <code>tree:contents</code> arcs) is <code>&lt;#note&gt;</code>.
+          Without these triples, the outer-most step (the one that is not the object of any <code>tree:contains</code> arcs) is <code>&lt;#note&gt;</code>.
           This makes it easier to, at a high-level, assert that the ShapeTree is about Notes rather than containers of notes.
         </p>
         <div class="proscons">
@@ -254,16 +232,18 @@ li.choice > ul > li {
             <ol>
               <li>Simplifies message.</li>
               <li>Aligns with traditional patterns for data modeling and separation of concern</li>
-              <li>Could either:<ul>
-              <li>Describe outer container with a second ShapeTree,</li>
-              <li>Leave content model of outer container implicit in the existance of any ShapeTree doc (i.e. system automatically creates a container for it).</li>
-            </ul></li>
+              <li>Could either:
+              <ul>
+                <li>Describe outer container with a second ShapeTree,</li>
+                <li>Leave content model of outer container implicit in the existance of any ShapeTree doc (i.e. system automatically creates a container for it).</li>
+              </ul>
+            </li>
             </ol>
           </div>
           <div>
             <p>Reasons to include</p>
             <ol>
-              <li>Re-uses existing mechanism (<code>tree:contents</code>) for declaring a container content model.<br/>
+              <li>Re-uses existing mechanism (<code>tree:contains</code>) for declaring a container content model.<br/>
               This works for homogeneous and heterogeneous (those with multiple types of members)</li>
               <li>avoids either:<ul>
               <li>Second ShapeTree,</li>
@@ -275,96 +255,62 @@ li.choice > ul > li {
         </div>
       </div>
       <p>
-        A ShapeTree is a tree structure of <dfn>steps</dfn> which in turn describes a tree structure of Resources (effectively a hierarchy of directories and files).
-        Each step can be referenced and used on its own as a standalone ShapeTree. Each file or directory is described by <a>step</a>.
+        A ShapeTree is a tree structure of one or more ShapeTree subjects which in turn describes a tree structure of Resources (effectively a hierarchy of containers and resources).
+        Each ShapeTree can be referenced and used on its own as a standalone ShapeTree. Each container or resource is described by <dfn>ShapeTree</dfn>.
       </p>
       <p>
-        A step consists of:
+        A ShapeTree consists of:
       </p>
       <ul>
-        <li>an <dfn>id</dfn>: an addressable label for this step.<br/>
+        <li>an <dfn>id</dfn>: an addressable label for this ShapeTree.<br/>
         As with all RDF structures, providing an id makes is possible to address this entity from outside the document.</li>
-        <li>an <dfn>expectedType</dfn>: LDP type of the associated resource: <code>BasicContainer</code> OR <code>Resource</code>.<br/>
-        Each step in a ShapeTree defines a resource in an LDP hierarchy.
-        The expectedType specifies whether the associated resources should be LDP:BasicContainers or LDP:Resources.</li>
+        <li>an <dfn>expectsType</dfn>: type of the associated resource: <code>tree:ShapeTreeContainer</code>, <code>tree:ShapeTreeResource</code> OR <code>tree:ShapeTreeNonRDFResource</code>.<br/>
+        The expectsType specifies whether the associated resources should be a container, a normal resource, or an non-RDF source.  ShapeTree implementations
+        will map these resource types to the appropriate constructs for the intended platform (i.e. in an LDP environment tree:ShapeTreeResource would map to ldp:Resource).
+        </li>
         <li class="choice"><span class="either">either of:</span>
         <ul>
           <li>a <dfn>label</dfn>: label for a resource which will always be created;<br/>
           This is used when resources with specific names will appear in the resource hierarchy.</li>
-          <li>a <dfn>uriTemplate</dfn>: pattern for a resource to be matched against a POSTed Slug: header <a class="excode" href="https://github.com/shapetrees/specification/blob/master/util/shape-tree.js#L280-L297"></a>.<br/>
-          This is used when the client gets to choose the name of a resource by including a Slug header in the request.</li>
+          <li>a <dfn>matchesUriTemplate</dfn>: pattern for a resource to be matched against a POSTed Slug: header or a resource name in a PUT/PATCH.<br/>
+          This is used to constrain resource creation based resource name patterns.</li>
         </ul>
         </li>
-        <li>any number of <dfn>uses</dfn>: identifies related ShapeTrees.<br/>
-        These provide advice that the data in resources described by this step references another ShapeTree.</li>
-        <li class="choice"><span class="either">either of:</span>
-        <ul>
-          <li>a <dfn>shape</dfn>: The RDF graph structure of any POSTed or PUT resource must conform to this shape;<br/>
+        <li>a <dfn>validatedBy</dfn>: The RDF graph structure of any POSTed or PUT resource must conform to this shape;<br/>
           This allows ShapeTrees to ensure that the data in the resource hierarchy conforms to the expected schemas.</li>
-          <li>a <dfn>mediaType</dfn>: any non-RDF type must specify a media type or a media tree.<br/>
-          This specifies the expected media type or media tree for non-RDF resources.</li>
-        </ul>
         </li>
-        <li>an optional <dfn>contents</dfn>: a list of nested steps.<br/>
-        This captures the containership of a conforming resource hierarchy.</li>        
+        <li>an optional <dfn>supports</dfn>: an IRI to another ShapeTree.<br/>
+        This captures a relationship where a ShapeTree is dependent on another for purposes of ancillary tasks like indexing.  It is expected to describe resources which extend or another ShapeTree.
+        </li>
+        <li>an optional <dfn>contains</dfn>: a list of nested ShapeTrees.<br/>
+        This captures the containership of a conforming resource hierarchy.  In addition to containing other ShapeTrees, this list may include
+        <code>tree:AllowNone</code>, <code>tree:AllowAll</code>, <code>tree:AllowContainers</code>, <code>tree:AllowResources</code>, <code>tree:AllowNonRDFSources</code> which described the intended behavior when a resource is created that does not adhere to any matching matchesUriTemplate predicates.
+      </li>
+        <li>an optional <dfn>references</dfn>: a list of referenced ShapeTrees.<br/>
+        These provide advice that the data in resources described by this ShapeTree references another ShapeTree.  This enables connectivity of ShapeTrees
+        without requiring direct nesting/containment of those relationships.
+        </li>
       </ul>
-      <p>Annotating all steps is an optional <dfn>skosIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
+      <p>Annotating all ShapeTrees within a given resource is an optional <dfn>hasShapeTreeDecoratorIndex</dfn>: An IRI containing an index of SKOS graphs.<br/>
 
-         As detailed in <a href="#describing">Describing Shape Trees</a> below, SKOS provides an extensible means to describe a shape tree in human-readable terms.  The skosIndex: allows shape tree maintainers to provide a reference to SKOS graphs that accurately and reliably describe the shape tree as intended.  
+         As detailed in <a href="#describing">Describing Shape Trees</a> below, SKOS provides an extensible means to describe a shape tree in human-readable terms.  The <code>tree:hasShapeTreeDecoratorIndex</code> allows shape tree maintainers to provide a reference to SKOS graphs that accurately and reliably describe the shape tree as intended, which is important for authorization use cases.  
        </li>
-
-      <!--
-      <p>
-        The outer-most step must have an <a>id</a>, has neither a <a>label</a> nor a <a>uriTemplate</a> and has at least one <a>contents</a> arc.
-        The PhotoApp has a simple ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/photo/PhotoShapeTree.jsonld"></a> <span class="issue">Finding it hard to extract much from this example.</span>:
-      </p>
-      <div>
-        <pre><code class="json">
-{ "@id": "#root", "expectedType":"ldp:BasicContainer", "contents":[
-  { "@id": "#image",
-    "expectedType": "ldp:BinaryResource",
-    "uriTemplate": "{entryName}",
-    "shape": "Photo#Photo"
-  }
-] }</code></pre>
-      </div>
-      <p>
-        The PhotoAlbumApp&apos;s ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/album/PhotoAlbumShapeTree.jsonld"></a> uses uriTemplates to discriminate between different types of Resource.
-        The top Container holds both images and references.
-        They are distinguised by their name, either "img-..." or "ref-...".
-        Any entry which is POSTed to the Container must have a Slug: header which matches one of the <a>uriTemplates</a>.
-        That match determines the shape for validation and the metadata that the POD will store about the new-created Container member:
-      </p>
-      <div>
-        <pre><code class="json">
-{ "@id": "#root", "expectedType": "ldp:BasicContainer", "contents": [
-  { "@id": "#img-ref", "expectedType": "ldp:Resource",
-    "uriTemplate": "ref-{entryNo}", "shape": "PhotoAlbum#PhotoReference" },
-  { "@id":  "#image", "expectedType": "ldp:BinaryResource",
-    "uriTemplate": "img-{entryNo}"}
-] }
-</code></pre>
-      </div>
-      <p>
-        For an example of a complex ShapeTree, the GitApp has a deeply-nested ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/gh/ghShapeTree.jsonld"></a>.
-      </p>
-      -->
     </section>
 
     <section id="creating">
-      <h2>Creating a New Container for ShapeTrees</h2>
+      <h2>Planting a ShapeTree</h2>
       <p>
         The above example describes an instance at <code style="color: #005555;">/data/CommonNotes</code>.
         This is an LDP Container which is constrained to contain only instances of <code>&lt;CommonNoteShapeTree#note&gt;</code>.
         This container is described by the ShapeTree <code>&lt;CommonNoteShapeTree#container&gt;</code>:
       </p>
       <pre><code class="nohighlight" style="color: #005555;">
-&lt;#container&gt; tree:expectedType ldp:Container ;
-  tree:contents &lt;#note&gt; .
+&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer ;
+  tree:contains &lt;#note&gt; .
       </code></pre>
       <p>
-        In order to create this, an application like NeverNote would use a <b>plant</b> operation to create an instance of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree step.
-        This plant operation is a POST to the parent Container with a <code>rel="ShapeTree"</code> Link header <a class="excode" href="https://github.com/shapetrees/specification/blob/master/test/test-harness.js#L63-L69"></a>.
+        In order to create this, an application like NeverNote would use a <b>plant</b> operation to create an instance of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree.
+        This plant operation is a POST to the parent Container with one or more <code>rel="ShapeTree"</code> Link header <a class="excode" href="https://github.com/shapetrees/specification/blob/master/test/test-harness.js#L63-L69"></a>.
         The resulting LDP Container for CommonNotes is expected to be shared with other applications.
         Below, we use the name "OtherNote" as an example of another application which can consume and process data conforming to the shapes referenced by the CommonNote ShapeTree.
       </p>
@@ -385,87 +331,52 @@ Link: &lt;<a href="https://github.com/shapetrees/specification/blob/master/solid
       </style>
       <div>
         <p class="caption">HTTP Response</p>
-        <pre><code class="example footprint turtle">
+        <pre><code class="example shapetree turtle">
 HTTP 201 CREATED
 Location: http://pod.example/data/CommonNotes/
 Content-type: text/turtle; charset=utf-8
 Content-length: 396
-
-@prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt;.
-@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-
-[]  <!-- tree:app &lt;https://apps.example/NeverNoteApp&gt;; -->
-    tree:shapeTreeRoot &lt;https://commonnote.example/CommonNoteShapeTree#container&gt;;
-    tree:shapeTreeInstancePath &lt;/data/CommonNotes/&gt;.
-<!-- &lt;https://store.example/NeverNoteApp&gt; tree:name "NeverNoteApp".
-&lt;https://localhost:12345/Apps/NeverNoteApp&gt; tree:installedIn _:b3. -->
         </code></pre>
       </div>
 
       <!-- <section id="[planted-image"> -->
       <!--   <h3>Resulting ShapeTree Instance on a Pod</h3> -->
         <p>
-          Planting an instance results in a new LDP Container in the resource hierarchy.
-          This information in this LDP Container is similar to the HTTP response to the plant operation:
+          Planting a ShapeTree results in a new LDP Container in the resource hierarchy.
+          Metadata associated with this container describes the planted ShapeTree that manages the contents of the container.
         </p>
-        <p class="caption">Contents of http://pod.example/data/CommonNotes/</p>
-        <pre><code class="example footprint turtle">
+        <p class="caption">Contents of http://pod.example/data/CommonNotes/ related metadata</p>
+        <pre><code class="example shapetree turtle">
 @prefix ldp: &lt;http://www.w3.org/ns/ldp#&gt;.
 @prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
 @prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt;.
 @prefix dc: &lt;http://purl.org/dc/terms/&gt;.
 @prefix dcterms: &lt;http://purl.org/dc/terms/&gt;.
 
-&lt;&gt; a ldp:BasicContainer;
-    dcterms:title "container for CommonNoteShapeTree#container";
-    tree:shapeTreeRoot &lt;https://commonnote.example/CommonNoteShapeTree#container&gt;;
-    tree:shapeTreeInstancePath ".";
-    tree:shapeTreeInstanceRoot &lt;&gt;.
+&lt;&gt; 
+  tree:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
+
+&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
+  tree:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+  tree:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+  tree:hasShapeTreeInstancePath "." ;
+  tree:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
         </code></pre>
-        <p>
-          The agent handling the plant request manages the container artifact and any indexing of <span class="imprint-label plural">imprints</span>.
-          It must:
-        </p>
-        <ul>
-          <li>Create a Container for that instance (the name of which might respect the Slug: header).
-          <!-- ul>
-            <li>Create any nested-Containers which have <code>rdfs:label</code>s in the ShapeTree.
-            <code>&lt;CommonNoteShapeTree#note&gt;</code> defines a heterogeneous container which can contain both citations (prefixed by "cit-") and images (prefixed by "img-").
-            An alternate design would be to contain to homogeneous containers with fixed <code>rdfs:label</code>s:
-            <pre><code class="nohighlight" style="color: #330077;">
-&lt;#citation&gt; tree:expectedType ldp:Container ;
-  rdfs:label "citations" ;
-  tree:shape &lt;CommonNote#Citation&gt; .
-            </code></pre>
-            <pre><code class="nohighlight" style="color: #337700;">
-&lt;#image&gt; tree:expectedType ldp:NonRDFSource ;
-  rdfs:label "images" .
-            </code></pre>
-            In this case, every instance of a note would dictate the creation of two nested containers <code>citations</code> and <code>images</code>.
-            An agent executing the ShapeTree semantics would be expected to create those resources.
-          </li>
-          </ul -->
-          </li>
-          <!-- li>optionally index the ShapeTree. This depends on the ecosystem; see the <a href="#crh-index-footprint">indexing a ShapeTree in CRE</a> for a concrete example.</li -->
-          <!-- <li>optionall register the application. This depends on the ecosystem; see the <a href="#crh-index-footprint">registering an agent in CRE</a> for a concrete example.</li> -->
-        </ul>
       <!-- </section> -->
     </section>
 
     <section id="updating">
-      <h2>Updating ShapeTree Instances <a class="cross" href="spec#post-managed"></a></h2>
+      <h2>Creating Data Instances <a class="cross" href="spec#post-managed"></a></h2>
       <p>
         Despite NeverNote having planted the LDP Container <code>/data/CommonNotes</code>, it could be another application, OtherNote, which first creates data there.
-        <!-- When an client application plants a ShapeTree <a class="excode" href="https://github.com/janeirodigital/shapetrees/blob/master/ldpServer.js#L47-L78"></a>, the POD will record the association between the create a an <code>instantiation</code> of tha.
-        This defines -->
       </p>
       <p>
-        When POSTing to any Instance Container, there will be a corresponding step in the ShapeTree.
-        If the step includes a shape, the POST must include a Link: rel="root" header to identify the node in the POSTed data that should conform to that shape.
+        When POSTing to any managed Container, there will be a corresponding step in the ShapeTree.
+        If the step includes a shape, the POST must include a Link: rel="focusNode" header to identify the node in the POSTed data that should conform to that shape.
       </p>
-          <pre><code class="example footprint turtle">
+          <pre><code class="example shapetree turtle">
 POST /data/CommonNotes/
-Link: &lt;#note1&gt;; rel="root"
+Link: &lt;#note1&gt;; rel="focusNode"
 
 PREFIX : &lt;http://nevernote.example/ns#&gt;
 PREFIX ldp: &lt;http://www.w3.org/ns/ldp#&gt;
@@ -479,103 +390,92 @@ PREFIX geo: &lt;http://www.opengis.net/ont/geosparql#&gt;
   :tagNames ("tag1" "tag2") .
           </code></pre>
       <p>
-        When an application POSTs to a Managed Container, the ShapeTree-aware agent handling the POST locates the corresponding step in the ShapeTree.
-        If the step includes a shape, the POST body is parsed and the root node is tested for conformance.
-        If it&apos;s invalid, the requested with a 422 Unprocessable Entity message.
-        If it&apos;s valid or has no associated shape, the typical LDP processing will create an entity whose contents include the POSTed body.
+        When an application POSTs to a Managed Container, the ShapeTree-aware agent handling the POST locates the appropriate ShapeTree that is contained,
+        via the <code>tree:contains</code> predicate, that matches its URI template.
+        <ul>
+          <li>If the ShapeTree includes a <code>tree:validatedBy</code> predicate, the POST body is parsed and the focus node is tested for conformance.</li>
+          <li>If the posted resource is invalid, it will return with a 422 Unprocessable Entity message.</li>
+          <li>If no matching ShapeTree is found, the agent will use any present <code>tree:Allow*</code> IRIs to determine whether to allow the new resource.</li>
+          <li>If the posted resource is valid, the typical LDP processing will create an entity whose contents include the POSTed body.</li>
+        </ul>
       </p>
-      <!-- p>If processing produces no errors, the POD will again Create any sub-Containers which have <code>rdfs:label</code>s in the ShapeTree.
-      For instance, the <a href="https://github.com/janeirodigital/shapetrees/blob/master/solidApps/staticRoot/gh/ghShapeTree.ttl#L21">GitHub ShapeTree step for {userName}</a> has a nested Containers <code>Subscriptions</code>s (and many others).
-      </p -->
-          <p>Otherwise, the response will identify the newly-created resource:</p>
-          <pre><code class="example footprint turtle">
-201 CREATED
-Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
-          </code></pre>
-          <p>and the resource hierarchy will include that resource:</p>
-          <pre><code class="example footprint turtle">
-@prefix ldp: &lt;http://www.w3.org/ns/ldp#&gt;.
-@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-@prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt;.
-@prefix dc: &lt;http://purl.org/dc/terms/&gt;.
-@prefix dcterms: &lt;http://purl.org/dc/terms/&gt;.
-
-&lt;&gt; a ldp:BasicContainer;
-    dcterms:title "@@@ .";
-    tree:shapeTreeRoot &lt;/data/CommonNotesShapeTree#container&gt;;
-    tree:shapeTreeInstancePath ".";
-    tree:shapeTreeInstanceRoot &lt;&gt;.
-          </code></pre>
     </section>
 
     <section id="describing">
       <h2>Describing Shape Trees <a class="cross" href="spec#describing-shapetrees"></a></h2>
       <p>
-        To aid in the human-readability of Shape Trees, a SKOS graph can be used to provide a textual representation of the structure.
+        To aid in the human-readability of Shape Trees, one or more SKOS graphs can be used to provide a textual representation of the structure.
       </p>
       <p>
-        Making use of the <code>tree:step</code> predicate, labels can be applied to specific steps in a Shape Tree using any language.
+        Making use of the <code>tree:hasShapeTree</code> predicate, labels can be applied to specific Shape Trees using any language.
         A SKOS index document allows for discovery of multiple definitions of a Shape Tree supporting multiple language preferences and cognitive abilities.
         The convention on how this index of SKOS graphs is structured and used, along with the rules to govern the selection of the appropriate graph for a user is the responsibility of the ecosystem using Shape Trees.
       </p>
       <p>
         A sample SKOS index document, with references to English and Russian representations of the CommonNotes Shape Tree:
       </p>
-      <pre><code class="example footprint turtle">
+      <pre><code class="example shapetree turtle">
 <#index>
-  a treeIndex:UiStringsIndex ;
-  tree:shapeTreeRoot <https://commonnote.example/CommonNoteShapeTree#container> ;
-  treeIndex:series <#en>, <#ru> .
-<#en> a treeIndex:UiStringsSeries ;
-  treeIndex:hasMember <#en-v1>, <#en-v1.1> .
+  a tree:ShapeTreeDecoratorIndex ;
+  treeIndex:hasSeries <#en>, <#ru> .
+
+<#en> 
+  a tree:ShapeTreeDecoratorSeries ;
+  tree:hasHierarchy <#en-v1>, <#en-v1.1> .
+
 <#en-v1>
+  a tree:ShapeTreeDecoratorHierarchy ;
   xsd:lang "en" ;
-  treeIndex:version "1.0" ;
-  treeIndex:uiStringsHierarchy <https://commonnote.example/CommonNoteGraph-en-v1#root> ;
-  treeIndex:sha326Hash: "92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47" .
+  tree:hasVersion "1.0" ;
+  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-en-v1#root> ;
+  tree:hasSHA3256Hash: "92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47" .
+
 <#en-v1.1>
-  a treeIndex:UiStringsHierarchy ;
+  a tree:ShapeTreeDecoratorHierarchy ;
   xsd:lang "en" ;
-  treeIndex:version "1.1" ;
-  treeIndex:uiStringsHierarchy <https://commonnote.example/CommonNoteGraph-en-v1.1#root> ;
-  treeIndex:sha326Hash: "74a468adf584231d0aa3b3277fd21b13bdf0246832c992701666921c2676ca29" .
-<#ru> a treeIndex:UiStringsSeries ;
-  treeIndex:hasMember <#ru-v1> .
+  tree:hasVersion "1.1" ;
+  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-en-v1.1#root> ;
+  tree:hasSHA3256Hash: "74a468adf584231d0aa3b3277fd21b13bdf0246832c992701666921c2676ca29" .
+
+<#ru> 
+  a tree:ShapeTreeDecoratorSeries ;
+  treeIndex:hasHierarchy <#ru-v1> .
+
 <#ru-v1>
-  a treeIndex:UiStringsHierarchy ;
+  a tree:ShapeTreeDecoratorHierarchy ;
   xsd:lang "ru" ;
-  treeIndex:version "1.0" ;
-  treeIndex:uiStringsHierarchy <https://commonnote.example/CommonNoteGraph-ru-v1#root> ;
-  treeIndex:sha326Hash: "7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c" .
+  tree:hasVersion "1.0" ;
+  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-ru-v1#root> ;
+  tree:hasSHA3256Hash: "7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c" .
       </code></pre>
       <p>
         A sample SKOS graph <code>(<#en-v1>)</code>, in English, defining the terms in the CommonNotes Shape Tree:
       </p>
-      <pre><code class="example footprint turtle">
+      <pre><code class="example shapetree turtle">
 @prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
 @prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt; .
 @prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
 @prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
 
-<#root> a tree:NavigationStep ; tree:step f:root ; skosxl:prefLabel [ skosxl:literalForm "Note Container"@en ] ; skos:narrower <#note> .
-   <#note> a tree:NavigationStep ; tree:step f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower <#citation>, <#image> .
-      <#citation> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
-      <#image> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .
+<#root> a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "Note Container"@en ] ; skos:narrower <#note> .
+   <#note> a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower <#citation>, <#image> .
+      <#citation> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
+      <#image> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .
           </code></pre>
 
       <p>
         A sample SKOS graph <code>(<#ru-v1>)</code>, in Russian, describing the same CommonNotes Shape Tree:
       </p>
-      <pre><code class="example footprint turtle">
+      <pre><code class="example shapetree turtle">
 @prefix f: &lt;/data/CommonNotesShapeTree#container&gt; .
 @prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt; .
 @prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
 @prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
 
-<#root> a tree:NavigationStep ; tree:step f:root ; skosxl:prefLabel [ skosxl:literalForm "контейнер для заметок"@ru ] ; skos:narrower <#note> .
-   <#note> a tree:NavigationStep ; tree:step f:note ; skosxl:prefLabel [ skosxl:literalForm "текстовое содержание заметки"@ru ] ; skos:narrower <#citation>, <#image> .
-      <#citation> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Цитирование другого документа в заметке"@ru ] .
-      <#image> a tree:NavigationStep ; tree:step f:citation ; skosxl:prefLabel [ skosxl:literalForm "Встроенное изображение или изображение в заметке"@ru ] .
+<#root> a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "контейнер для заметок"@ru ] ; skos:narrower <#note> .
+   <#note> a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "текстовое содержание заметки"@ru ] ; skos:narrower <#citation>, <#image> .
+      <#citation> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Цитирование другого документа в заметке"@ru ] .
+      <#image> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Встроенное изображение или изображение в заметке"@ru ] .
           </code></pre>
 
     </section>    
@@ -584,39 +484,6 @@ Location: http://pod.example/data/CommonNotes/note1<!-- /img-M33_IR.jpg -->
     <script src="http://www.w3.org/2019/Talks/1209-swat4ls-egp/highlight-shexc.js"></script>
     <!-- <script src="WWW/2019/Talks/1209-swat4ls-egp/highlight-shexc.js"></script> -->
     <script>
-      if (false && location.search) {
-        const [blueprint, imprint, stamp] = location.search.substr(1).split(/,/).map(unescape);
-        function cap (elt, str) {
-          return elt.classList.contains('capitol')
-            ? str.substr(0, 1).toUpperCase() + str.substr(1)
-            : str;
-        }
-        function pl (elt, str) {
-          return elt.classList.contains('plural')
-            ? str + 's'
-            : str;
-        }
-        function trimVowel (str) {
-          return str.match(/[aeiou]$/)
-            ? str.substr(0, str.length - 1)
-            : str;
-        }
-        document.title = blueprint.substr(0, 1).toUpperCase() + blueprint.substr(1) + 's Primer';
-        document.querySelectorAll('.blueprint-label').forEach(elt => {
-          elt.innerText = pl(elt, cap(elt, blueprint));
-        })
-        document.querySelectorAll('.imprint-label').forEach(elt => {
-          elt.innerText = pl(elt, cap(elt, imprint));
-        })
-        document.querySelectorAll('.stamp-label').forEach(elt => {
-          let text = cap(elt, stamp);
-          if (elt.classList.contains('gerund'))
-            text = trimVowel(text) + 'ing';
-          if (elt.classList.contains('past'))
-            text = trimVowel(text) + 'ed';
-          elt.innerText = text;
-        })
-      }
       // TODO: add ShEx highlighter to respec
       hljs.registerLanguage('shexc', hljsDefineShExC);
       hljs.registerLanguage('turtle', hljsDefineTExpr);

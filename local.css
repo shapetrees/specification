@@ -16,7 +16,7 @@ a[href].cross:visited { border-bottom: none !important; }
 .hljs { display: inline-block !important; }
 code.shexc { background-color: #f4f4ff !important; }
 code.turtle { background-color: #f4fff4 !important; }
-code.footprint { background-color: #fff4f4 !important; }
+code.shapetree { background-color: #fff4f4 !important; }
 .done { text-decoration: line-through; }
 
 span.done {
