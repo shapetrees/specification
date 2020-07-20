@@ -238,7 +238,7 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Version"@en .
 
-:hasSHA3256Hash
+:hasSHA256Hash
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeDecoratorHierarchy ;
   rdfs:range xsd:string ;
