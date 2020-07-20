@@ -15,6 +15,7 @@
         editors:  [
           { name: "Eric Prud'hommeaux" , w3cid: "2112" },
           { name: "Justin Bingham" }
+          { name: "Josh Collins" }
         ],
         cg: "Solid",
         wgURI: "https://www.w3.org/community/solid/",
@@ -58,7 +59,7 @@
         This document defines the structure and use of Shape trees for [[[LDP]]] [[LDP]] Resources.
       </p>
       <p>
-        A <span class="blueprint-label">shape tree</span> is defined as an RDF graph structure and the behaviors of agents respecting that graph structure.
+        A shape tree is expressed as an RDF graph structure and the behaviors of agents respecting that graph structure.
         These semantics can be implemented by a server, a client-side library, or a privilenged third-party helper application.
         Communication, including error reporting, is defined in terms of HTTP; allowing a single definition to define the behaviors for servers, clients and third-party applications.
       </p>
@@ -67,57 +68,67 @@
     <section id="structure">
       <h2>Shape Tree Structure <a class="cross" href="primer#structure"></a></h2>
       <p>
-        A <dfn>Shape Tree</dfn> is a machine-readable template describing the expected layout of a tree of LDP Resources in a POD.
-        The Shape Tree structure is a tree that can be expressed in JSON-LD as nested JSON objects or as a hierarchical RDF graph.
-        It is composed of a set of steps in hierarchy captured by <code>tree:contents</code> links:
+        A <dfn>Shape Tree</dfn> is a machine-readable template describing the expected layout of a tree of LDP Resources in a Pod.
+        A Shape Tree links to other Shape Trees to form a resource hierarchy captured by <code>tree:contains</code> links:
       </p>
       <div>
         <pre><code class="shexc">
-&lt;#Step&gt; {
-  tree:instanceType [ldp:BasicContainer ldp:Resource] ;
-  (rdfs:label xsd:string | tree:uriTemplate xsd:string) ;
-  tree:uses IRI ? ;
-  (tree:shape IRI | tree:mediaType xsd:string )? ;
-  tree:contents @&lt;#Step&gt;* 
+&lt;#ShapeTree&gt; {
+  tree:expectsType [ tree:ShapeTreeContainer tree:ShapeTreeResource tree:ShapeTreeNonRDFResource ] ;
+  (rdfs:label xsd:string | tree:matchesUriTemplate xsd:string) ;
+  tree:validatedBy IRI ? ;
+  tree:supports IRI ? ;
+  tree:references @&lt;#ReferencedShapeTree&gt; * ;
+  tree:contains @&lt;#ShapeTree&gt;* .
+}
+
+&lt;#ReferencedShapeTree&gt; {
+  tree:hasShapeTree IRI ;
+  tree:traverseViaShapePath xsd:string
 }
 
         </code></pre>
       </div>
       <p>
-        The <code>tree:contents</code> property MUST NOT introduce any cycles into the RDF graph.
+        The <code>tree:contains</code> property MUST NOT introduce any cycles into the RDF graph.
       </p>
       <p>
         The realization of a <a>shape tree</a> is an <dfn>instance tree</dfn>.
         The the upper-most Container of that tree is an <dfn>instance root</dfn>.
-        Let <code>F</code> be a <a>shape tree</a>; let <code>T</code> be a corresponding <a>instance tree</a><!-- ; let <code>R</code> be its <a>instance root</a> -->.
-        For any step <code>S</code> in <code>F</code>:
+        Let <code>ST</code> be a <a>shape tree</a>; let <code>T</code> be a corresponding <a>instance tree</a><!-- ; let <code>R</code> be its <a>instance root</a> -->.
+        For any ShapeTree <code>S</code> linked in <code>ST</code>:
       </p>
       <ul>
-        <li>The rdf:type arc (written 'a' above) identifies the type of a corresponding Resource <code>R</code> in <code>T</code>.</li>
+        <li>The tree:expectsType arc identifies the type of a corresponding resource <code>R</code> in <code>T</code>.</li>
         <li>An { <code>S</code> <code>rdfs:label</code> <code>L</code> } arc indicates that there is exactly one corresponding Resource <code>R</code> and it has the name <code>L</code>.</li>
-        <li>An { <code>S</code> <code>tree:uriTemplate</code> <code>L</code> } arc indicates that there are an arbitrary number of corresponding Resources <code>R</code> and each will have a name that matches the URI template [[RFC6570]] <code>L</code>.</li>
-        <li>An { <code>S</code> <code>tree:shape</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to <code>Sh</code>.</li>
-        <li>Any { <code>S</code> <code>tree:contents</code> <code>S2</code> } arcs indicate there is a nested step and corresponding nested Resource <code>R2</code>.</li>
+        <li>An { <code>S</code> <code>tree:matchesUriTemplate</code> <code>L</code> } arc indicates that there are an arbitrary number of corresponding resources <code>R</code> and each will have a name that matches the URI template [[RFC6570]] <code>L</code>.</li>
+        <li>An { <code>S</code> <code>tree:validatedBy</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to shape <code>Sh</code>.</li>
+        <li>Any { <code>S</code> <code>tree:contains</code> <code>S2</code> } arcs indicate there is a nested ShapeTree and corresponding nested resource <code>R2</code>.</li>
       </ul>
       <p>
-        A { <code>tree:skosIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>F</code> .
+        A { <code>tree:hasShapeTreeDecoratorIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>ST</code> .
       </p>
         <div class="issue">
           <p>
-            The shape above could be more precise, allowing only for <code>tree:contents</code> arcs if the type is a Container:
+            The shape above could be more precise, allowing only for <code>tree:contains</code> arcs if the type is a Container:
           </p>
           <pre><code class="shexc">
-&lt;#Step&gt; {
+&lt;#ShapeTree&gt; {
   (
-    a [ldp:BasicContainer] ;
-    (rdfs:label xsd:string | tree:uriTemplate xsd:string) ;
-    tree:contents @&lt;#Step&gt; +
+    a [tree:ShapeTreeContainer] ;
+    (rdfs:label xsd:string | tree:matchesUriTemplate xsd:string) ;
+    tree:contains @&lt;#ShapeTree&gt; +
   |
-    a [ldp:Resource] ;
-    tree:uriTemplate xsd:string
+    a [tree:ShapeTreeResource tree:ShapeTreeNonRDFResource] ;
+    tree:matchesUriTemplate xsd:string
   ) ;
-  tree:uses IRI ? ;
-  (tree:shape IRI | tree:mediaType xsd:string )? ;
+  tree:references @&lt;#ReferencedShapeTree&gt; * ;
+  tree:validatedBy IRI ? ;
+}
+
+&lt;#ReferencedShapeTree&gt; {
+  tree:hasShapeTree IRI ;
+  tree:traverseViaShapePath xsd:string
 }
           </code></pre>
           <p>Is that too meticulous?</p>
@@ -135,12 +146,11 @@
         <li>types:
         <ul>
           <li><dfn>Container</dfn> -- a [[[LDP]]] [[LDP]] Container</li>
-          <li><dfn>Managed Container</dfn> -- any LDP Container in an <a>Instance Tree</a>. A Managed Container may be an <a>Instance Root</a> or hierarchically nested within an <a>Instance Tree</a>.<span class="issue">Consider calling this an Instance Container instead</span></li>
-          <li><dfn>Unmanaged Container</dfn> -- any LDP Container which is not in an <a>Instance Tree</a>.<span class="issue">Just a regular LDP container then?</span></li>
+          <li><dfn>Managed Container</dfn> -- any LDP Container in a <a>Planted ShapeTree</a>. A Managed Container may be an <a>Instance Root</a> or hierarchically nested within the resource hierarchy.</li>
+          <li><dfn>Unmanaged Container</dfn> -- any LDP Container which is not described by a Shape Tree</li>
           <li><dfn>Supported RDF Format</dfn> -- a textual representation of an RDF graph in a format that can be accurately and losslessly parsed to that RDF graph.</li>
           <li><dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an HTTP request with a parser determined by the Content-type: header of that HTTP request.</li>
-          <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource.</li>
-          <li><dfn>Dynamic Container</dfn> -- an LDP Container .</li>
+          <li><dfn>Static Container</dfn> -- an LDP Container which is implied by the existence of the parent resource, denoted by a rdfs:label predicate.</li>
           <li><dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of a GET on an LDP Resource.</li>
           <li><dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]] [[skos-reference]] data model
         </ul>
@@ -159,51 +169,53 @@
       </ul>
     </section>
 
-    <section id="stomp">
-      <h2>Creating New Shape Tree Instances <a class="cross" href="primer#creating"></a></h2>
+    <section id="plant">
+      <h2>Planting a Shape Tree <a class="cross" href="primer#creating"></a></h2>
       <p>
-        Creating a new shape tree instance starts with a POST P to a Regular Container <code>parent</code> to establish the Shape Tree <a>Instance Root</a> with a request body Content-type of some supported RDF Format.
+        Creating a new shape tree container starts with a POST P to a Regular Container <code>parent</code> to establish the Shape Tree <a>Instance Root</a> with a request body Content-type of some supported RDF Format and one or more Link header with a rel="ShapeTree".
         The <a>Instance Root</a> and <b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, ".")
       </p>
     </section>
 
     <section>
-      <h2>Navigating Shape Tree Instances</h2>
+      <h2>Navigating Planted Shape Trees</h2>
       <p>
-        The Shape Tree describes instances which are hierarchies in an LDP Container hierarchy.
-        Every Managed Container expresses these data for navigation purposes:
+        The Shape Tree describes data instances which are resource hierarchies in an LDP Container hierarchy.
+        Every Managed Container has metadata that expresses "where" that managed container is located in reference to the Instance Root of the planted Shape Tree:
       </p>
       <ul>
-        <li><b>Shape Tree Instantiation Root</b> &mdash; the URL of a Shape Tree .</li>
-        <li><b>Shape Tree Instantiation Path</b> &mdash; a relative IRI identifying a location within a shape tree instance. This is represented in RDF as a literal.</li>
-        <li><b>Shape Tree Instantiation Step</b> &mdash; a location within a shape tree identified by the IRI of the subject node of that step in the shape tree.</li>
+        <li><b>Shape Tree Instantiation Root</b> &mdash; the IRI of the container that represents the planted Shape Tree .</li>
+        <li><b>Shape Tree Instantiation Path</b> &mdash; a relative IRI identifying a location within a shape tree instance. This is represented in RDF as a string literal.</li>
+        <li><b>Root Shape Tree</b> &mdash; the IRI of the planted Shape Tree's subject</li>
+        <li><b>Current Shape Tree</b> &mdash; a location within a shape tree identified by the IRI of the subject node of that Shape Tree in the shape tree hierarchy.</li>
       </ul>
       <p>
-        <dfn>instantiate static</dfn> (<code>shapeTreeInstantiationStep</code>, <code>shapeTreeStep</code>) instantiates the Static Containers implied by shapeTreeInstantiationStep <a class="excode" href="https://github.com/shapetrees/specification/blob/master/util/shapetree.js#L309-L331"></a>
+        <dfn>instantiate static</dfn> (<code>shapeTreeInstantiationShapeTree</code>, <code>shapeTreeS</code>) instantiates the Static Containers implied by shapeTreeInstantiationShapeTree <a class="excode" href="https://github.com/shapetrees/specification/blob/master/util/shapetree.js#L309-L331"></a>
       </p>
       <ol>
         <li>
           <p>
-            instantiate a <b>shape tree instance step</b> &mdash; an LDP Container with a Resource Graph conformant to <span class="hljs-name">&lt;#ShapeTreeInstanceStep&gt;</span> below:
+            instantiate a <b>shape tree instance</b> &mdash; an LDP Container with a Resource Graph conformant to <span class="hljs-name">&lt;#ShapeTreeInstanceStep&gt;</span> below:
           </p>
           <div>
             <pre><code class="shexc">
 &lt;#ShapeTreeInstanceStep&gt; {
-  a [ldp:BasicContainer] ;
+  a [tree:ShapeTreeLocator] ;
   dc:title xsd:string;
   tree:shapeTreeRoot IRI;
   tree:shapeTreeInstancePath xsd:string;
   tree:shapeTreeInstanceRoot IRI;
+  tree:hasShapeTree IRI;
   ldp:contains IRI *.
 }
             </code></pre>
           </div>
         </li>
-        <li>for each <code>child step</code> in { <code>shapeTreeInstantiationStep</code>, tree:contents, * }
+        <li>for each <code>child shape tree</code> in { <code>shapeTreeInstantiationShapeTree</code>, tree:contains, * }
           <ul>
-            <li>if <code>child step</code> has an rdf:label <code>directory label</code>
+            <li>if <code>child shape tree</code> has an rdfs:label <code>container label</code>
             <ul>
-              <li>apply <a>instantiate static</a>(<code>child step</code>, path.join(<code>shapeTreeStep</code>, <code>directory label</code>))</li>
+              <li>apply <a>instantiate static</a>(<code>child shape tree</code>, path.join(<code>shapeTree</code>, <code>container label</code>))</li>
             </ul>
             </li>
           </ul>
@@ -212,33 +224,28 @@
     </section>
 
     <section id="post-managed">
-      <h2>Updating Shape Tree Instances <a class="cross" href="primer#updating"></a></h2>
-      <div class="issue">
-        <p>
-          Require slight refactoring for client-side handling.
-        </p>
-      </div>
+      <h2>Creating Data Instances <a class="cross" href="primer#updating"></a></h2>
       <p>
-        For any POST <code>P</code> to any Managed Container <code>parent</code>:
+        For any POST, PUT, PATCH <code>P</code> to any Managed Container <code>parent</code>:
       </p>
       <ol>
-        <li>If <code>P</code> does not have a Link: header with rel="root" and href=<code>H</code>, the request is rejected with a status code of 400.</li>
+        <li>If <code>P</code> does not have a Link: header with rel="focusNode" and href=<code>H</code>, the request is rejected with a status code of 400.</li>
         <li>Let <code>N</code> be <code>H</code> resolved against he base of parent's URL overloaded by any BASE or PREFIXes defined in the Resource Body.</li>
         <li>Let <code>RG</code> be the container's Resource Graph.</li>
         <li>Let <code>IR</code> be the Shape Tree Instantiation Root.</li>
         <li>Let <code>IP</code> be the Shape Tree Instantiation Path.</li>
         <li>Let <code>IS</code> be the Shape Tree Instantiation Step found by following IP through the Shape Tree hierarchy.</li>
-        <li>Let <code>S</code> be the the tree:shape included in IS.</li>
+        <li>Let <code>S</code> be the the tree:validatedBy included in IS.</li>
         <li>Let <code>R</code> be the results of validating the ShapeMap <code>N@S</code>.</li>
         <li>If <code>R</code> is an error, the request is rejected with a status code of 422 (Unprocessable Entity).</li>
-        <li>Otherwise the POD creates a new entity <code>Name</code>, where name may have been influenced by the Slug: header:
+        <li>Otherwise the Pod creates a new entity <code>Name</code>, where name may have been influenced by the Slug: header:
         <ul>
           <li>If <code>P</code> has a Link: header with rel="type" and href=ldp:Container,
           <ul>
             <li><b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, <code>IP</code> + "/" + <code>Name</code>))</li>
           </ul>
           </li>
-          <li>The request is processed according to POST to an [[!LDP]] Container.</li>
+          <li>The request is processed according to POST/PUT/PATCH to an [[!LDP]] Container.</li>
         </ul>
         </li>
       </ol>
@@ -249,7 +256,7 @@
       <p>
         External graphs adhering to the SKOS data model can be optionally used to describe the Shape Tree in human-readable terms.
 
-        Specifying a <code>tree:skosIndex</code> predicate within Shape Tree definition enables clients to discover available human-readable definitions of that Shape Tree.
+        Specifying a <code>tree:hasShapeTreeDecoratorIndex</code> predicate within Shape Tree definition enables clients to discover available human-readable definitions of that Shape Tree.
       </p>
     </section>
 
