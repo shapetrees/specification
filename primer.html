@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
-    <title>ShapeTrees Primer</title>
+    <title>Shape Trees Primer</title>
     <script async class="remove" src="//www.w3.org/Tools/respec/respec-w3c-common">
     </script>
     <script class="remove">
@@ -78,8 +78,7 @@ li.choice > ul > li {
 
     <section id="abstract">
       <p>
-        Semantic Web Applications interoperate by sharing semantics of terms and constellations of data structures.
-        This primer introduces ShapeTrees and describes how Semantic Web Applications use them to consistently interoperate over constellations of data structures organized in resource hierarchies used by protocols such as <a href="https://www.w3.org/TR/ldp/">LDP</a> and <a href="https://www.solidproject.org">Solid</a>.
+        This primer introduces shape trees and describes how Semantic Web Applications use them to consistently interoperate over constellations of data structures organized in resource hierarchies used by protocols such as <a href="https://www.w3.org/TR/ldp/">LDP</a> and <a href="https://www.solidproject.org">Solid</a>.
       </p>
     </section>
 
@@ -99,27 +98,19 @@ li.choice > ul > li {
       <p>
         Application interoperability depends on applications sharing semantics for relationships and data structures.
         RDF&apos;s foundation in unambiguous identifiers provides an infrastructure that allows for interoperability without specifically encouraging it.
-        Within a single resource, shapes languages (e.g. ShEx and SHACL) provide machine-readable, enforceable data structure definitions.
-        For applications that operate on constellations of resources, ShapeTrees express the layout of those resources and associate them with their respective shapes.
+        Within a single resource, shape languages (e.g. [[ShEx]] and [[SHACL]]) provide machine-readable, enforceable data structure definitions.
+        For applications that operate on constellations of resources, Shape Trees express the layout of those resources and associate them with their respective shapes.
       </p>
       <p>
         ShapeTrees marry RDF vocabularies, shapes, and resources into "little trees" that
-        provide detailed ShapeTrees for machine to machine interoperability,
-        while at the same time creating models and representions that humans can
+        provide machine to machine interoperability,
+        while at the same time creating concepts that humans can
         easily comprehend, such as medical records, notes, notebooks,
-        calendars, and financial records. Consequently, we can use ShapeTrees to provide
-        data boundaries that machines can interoperate with and humans can understand.
+        calendars, and financial records.  This allows one to treat a set of related resources as a single grouping, and apply that to a range of operations including access control, data organization, data validation, and data migration.
       </p>
       <p>
-        A ShapeTree defines a prospective tree of related resources which can be read and written by applications.
-        The ShapeTree associates each of these resources with a shape.
-        This allows one to treat a set of related resources as a single grouping, and apply that to a range of operations including access control, data organization, data validation, and data migration.
-        Since the ShapeTree boundaries that establish these groupings are easily understood by humans, it allows them to perform these operations intuitively.
-      </p>
-      <p>
-        ShapeTrees are defined as an RDF graph structure and a set of expected behaviors of agents respecting that graph structure.
-        These semantics can be implemented by a server, a client-side library, or a privilenged third-party helper application.
-        Communication, including error reporting, is defined in terms of HTTP; allowing a single definition to define the behaviors for servers, clients and third-party applications.
+        ShapeTrees are defined as an RDF graph structure that expresses a set of expected behaviors by agents that work with them.
+        These semantics can be implemented by a server or a client-side library.
       </p>
     </section>
 
@@ -135,7 +126,7 @@ li.choice > ul > li {
       <ol>
         <li>Shape definitions (expressed in ShEx) for the resources described by the CommonNote ShapeTree</li>
         <li>A ShapeTree (expressed in Turtle) for CommonNote</li>
-        <li>Example instances of the CommonNote ShapeTree (a "resource hierarchy")</li>
+        <li>Example data instances adhering to the CommonNote ShapeTree (a "resource hierarchy")</li>
       </ol>
         <style>
 #img1 > img {
@@ -157,15 +148,20 @@ li.choice > ul > li {
         <img src="shape-tree.svg" alt="colored example of ShEx schema, ShapeTree, and resource hierarchy"/>
       </div>
       <p>
-        Here, <code style="color: #005555;">/data/medicalNotes</code> and <code style="color: #005555;">/data/astronomy/notes</code> are both plants of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree step.
-        They are both LDP Containers per <code style="color: #005555;">&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer</code> and could contain any number of note data instance per <code style="color: #005555;">tree:contains &lt;#note&gt;</code>.
-        In this example, <code style="color: #770033;">xrays-2019-08</code>, <code style="color: #770033;">GP-2020-04-18</code> and <code style="color: #770033;">blue-shift</code> respectively are data instances of the <code style="color: #770033;">&lt;#note&gt;</code> ShapeTree.
+        Here, <code style="color: #005555;">/data/medicalNotes</code> and <code style="color: #005555;">/data/astronomy/notes</code> are both shape tree instances of the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree.
+        They are both [[Containers]] per <code style="color: #005555;">&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer</code> and could contain any number of note shape tree instances per <code style="color: #005555;">tree:contains &lt;#note&gt;</code>.
+        In this example, <code style="color: #770033;">xrays-2019-08</code>, <code style="color: #770033;">GP-2020-04-18</code> and <code style="color: #770033;">blue-shift</code> respectively are shape tree instances of the <code style="color: #770033;">&lt;#note&gt;</code> ShapeTree.
         Each contains a binary <code style="color: #337700;">image</code> and blue-shift has a <code style="color: #330077;">citation</code>.
       </p>
       <p>
-        A ShapeTree document can contain multiple ShapeTree subjects. A given subject in a ShapeTree resource can be referenced and used on its own as a standalone ShapeTree, or as part of a more connected tree of ShapeTrees.
+        A ShapeTree document can contain multiple ShapeTree definitions. A given definition in a ShapeTree resource can be referenced and used on its own as a standalone ShapeTree, or as part of an interconnected hierarchy of ShapeTrees.
         The ShapeTree describing the <code style="color: #330077;">citation</code> has the subject node <code style="color: #330077;">&lt;#citation&gt;</code>.
-        This ShapeTree asserts that associated resources (e.g. <code style="color: #330077;">cit-M33.ttl</code>) must be LDP Resources per <code style="color: #330077;">&lt;#citation&gt; tree:expectsType tree:ShapeTreeResource</code>, must have a name matching a URI template (i.e. must start with "cit-") per <code style="color: #330077;">&lt;#citation&gt; tree:matchesUriTemplate "cit-{name}"</code>, and must conform to the shape <code style="color: #330077;">&lt;CommonNote#Citation&gt;</code> per <code style="color: #330077;">&lt;#citation&gt; tree:validatedBy &lt;CommonNote#Citation&gt;</code>.
+        This ShapeTree asserts that associated resources (e.g. <code style="color: #330077;">cit-M33.ttl</code>) must:
+        <ul>
+          <li>Be a Resource per <code style="color: #330077;">&lt;#citation&gt; tree:expectsType tree:ShapeTreeResource</code></li>
+          <li>Have a name matching a URI template (i.e. must start with "cit-") per <code style="color: #330077;">&lt;#citation&gt; tree:matchesUriTemplate "cit-{name}"</code></li>
+          <li>Conform to the shape <code style="color: #330077;">&lt;CommonNote#Citation&gt;</code> per <code style="color: #330077;">&lt;#citation&gt; tree:validatedBy &lt;CommonNote#Citation&gt;</code></li>
+        </ul>
       </p>
         <style>
 #img2 > img {
@@ -193,77 +189,15 @@ li.choice > ul > li {
     border-bottom: medium solid black;
 }
         </style>
-        <div id="img2">
-          <div>
-            <p>
-              The above resource hierarchy includes multiple locations where data instances of the ShapeTree CommonNote 
-              <code style="color: #770033;">&lt;#note&gt;</code>
-              can be stored (medicalNotes and astronomy/notes).
-              Many systems make life simpler for users by providing dedicated places to store specific types of data structures.
-              This provides applications with the ability to store data without prompting the user for a storage target.
-            </p>
-            <p>
-              The example on the right implies a single location to store all CommonNote <code style="color: #770033;">&lt;#note&gt;</code> instances.
-              The resource name for these individual <code style="color: #770033;">&lt;#note&gt;</code> instances could come from the ShapeTree name, a randomly generated sequence like a uuid, or some other opaque identifier invented by the system.
-              Validation by the <code style="color: #005555;">&lt;#container&gt;</code> ShapeTree step ensures that only <code style="color: #770033;">&lt;#note&gt;</code> instances can be stored.
-              Instances of <code style="color: #770033;">&lt;#note&gt;</code> ShapeTrees can be discovered easily in this scheme, and the layout is conducive to tag-based organization and access control.
-            </p>
-          </div>
-        <img src="mono-shape-tree.svg" alt="colored example of single-instance resource hierarchy"/>
-      </div>
       <div style="clear:both"></div>
-      <div class="issue">
-        <p>
-          Should ShapeTree resources include a ShapeTree for their managed container?
-          In the above ShapeTree, the triples:
-        </p>
-        <pre style="color: #005555;" class="plaintext">
-&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer ;
-  tree:contains &lt;#note&gt; .
-        </pre>
-        <p>
-          describe not an instance of a note but a container of such instances.
-          Without these triples, the outer-most step (the one that is not the object of any <code>tree:contains</code> arcs) is <code>&lt;#note&gt;</code>.
-          This makes it easier to, at a high-level, assert that the ShapeTree is about Notes rather than containers of notes.
-        </p>
-        <div class="proscons">
-          <div>
-            <p>Reasons not to include</p>
-            <ol>
-              <li>Simplifies message.</li>
-              <li>Aligns with traditional patterns for data modeling and separation of concern</li>
-              <li>Could either:
-              <ul>
-                <li>Describe outer container with a second ShapeTree,</li>
-                <li>Leave content model of outer container implicit in the existance of any ShapeTree doc (i.e. system automatically creates a container for it).</li>
-              </ul>
-            </li>
-            </ol>
-          </div>
-          <div>
-            <p>Reasons to include</p>
-            <ol>
-              <li>Re-uses existing mechanism (<code>tree:contains</code>) for declaring a container content model.<br/>
-              This works for homogeneous and heterogeneous (those with multiple types of members)</li>
-              <li>avoids either:<ul>
-              <li>Second ShapeTree,</li>
-              <li>Implicit containership semantics.</li>
-            </ul></li>
-            </ol>
-          </div>
-          <div style="clear:both;"></div>
-        </div>
-      </div>
-      <p>
-        A ShapeTree is a tree structure of one or more ShapeTree subjects which in turn describes a tree structure of Resources (effectively a hierarchy of containers and resources).
-        Each ShapeTree can be referenced and used on its own as a standalone ShapeTree. Each container or resource is described by <dfn>ShapeTree</dfn>.
-      </p>
+      TODO - when in bikeshed, make a subheading.
       <p>
         A ShapeTree consists of:
+        TODO - add example TTL with comments to label predicates
       </p>
       <ul>
         <li>an <dfn>id</dfn>: an addressable label for this ShapeTree.<br/>
-        As with all RDF structures, providing an id makes is possible to address this entity from outside the document.</li>
+        As with all RDF structures, providing an id makes it possible to address this entity from outside the document.</li>
         <li>an <dfn>expectsType</dfn>: type of the associated resource: <code>tree:ShapeTreeContainer</code>, <code>tree:ShapeTreeResource</code> OR <code>tree:ShapeTreeNonRDFResource</code>.<br/>
         The expectsType specifies whether the associated resources should be a container, a normal resource, or an non-RDF source.  ShapeTree implementations
         will map these resource types to the appropriate constructs for the intended platform (i.e. in an LDP environment tree:ShapeTreeResource would map to ldp:Resource).
