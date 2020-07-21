@@ -1,3 +1,4 @@
 
 .onsave
 .DS_Store
+.on-save.json
