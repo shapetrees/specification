@@ -67,7 +67,7 @@ A shape tree links to other shape trees to form a resource hierarchy captured by
 	&lt;#ReferencedShapeTree&gt; {
 	  tree:hasShapeTree IRI ;
 	  tree:traverseViaShapePath xsd:string
-	}	
+	}
 	</pre>
 </figure>
 
@@ -84,7 +84,7 @@ For any shape tree <code>S</code> linked in <code>ST</code>:
 * An { <code>S</code> <code>tree:validatedBy</code> <code>Sh</code> } arc indicates that <code>R</code> must have exactly one node which conforms to shape <code>Sh</code>.
 * Any { <code>S</code> <code>tree:contains</code> <code>S2</code> } arcs indicate there is a nested shape tree and corresponding nested resource <code>R2</code>.
 
-A { <code>tree:hasShapeTreeDecoratorIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>ST</code> 
+A { <code>tree:hasShapeTreeDecoratorIndex</code> <code>Si</code> } arc indicates the location of an index of SKOS hierarchies that describe <code>ST</code>
 
 Terms {#terms}
 =====================
@@ -155,7 +155,7 @@ For any POST, PUT, PATCH <code>P</code> to any Managed Container <code>parent</c
 1. Otherwise the Pod creates a new entity <code>Name</code>, where name may have been influenced by the Slug: header:
 	* If <code>P</code> has a Link: header with rel="type" and href=ldp:Container,
 		* <b>nested Static Containers</b> are created by applying <a>instantiate static</a>(<code>F</code>, <code>IP</code> + "/" + <code>Name</code>))
-	* The request is processed according to POST/PUT/PATCH to an [[!LDP]] Container.	
+	* The request is processed according to POST/PUT/PATCH to an [[!LDP]] Container.
 
 Describing Shape Trees {#describing}
 =====================

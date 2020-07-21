@@ -11,7 +11,7 @@ Editor: Justin Bingham
 Editor: Josh Collins
 Markup Shorthands: markdown yes
 Abstract:
-	This primer introduces shape trees and describes how Semantic Web Applications use them to consistently interoperate over constellations of data structures organized in resource hierarchies used by protocols such as LDP and Solid. 
+	This primer introduces shape trees and describes how Semantic Web Applications use them to consistently interoperate over constellations of data structures organized in resource hierarchies used by protocols such as LDP and Solid.
 </pre>
 
 <!-- For bikeshed style overrides -->
@@ -38,17 +38,21 @@ Introduction {#introduction}
 Realizing the value proposition of the Semantic Web lies in building useful and robust applications that can interoperate over linked data.
 Protocols such as [[LDP]] and Solid organize linked data graphs into resource hierarchies, providing a foundation upon which these robust and interoperable applications can be created.
 
-Application interoperability depends on applications sharing semantics for relationships and data structures.
-RDF&apos;s foundation in unambiguous identifiers provides an infrastructure that allows for interoperability without specifically encouraging it.
-Within a single resource, shape languages (e.g. [[SHEX]] and [[SHACL]]) provide machine-readable, enforceable data structure definitions.
-For applications that operate on constellations of resources, Shape Trees express the layout of those resources and associate them with their respective shapes.
+Application interoperability depends on applications sharing semantics for relationships and data structures.  Existing technologies fulfill portions of those dependencies:
+* RDF&apos;s foundation in unambiguous identifiers provides an infrastructure that allows for interoperability, but does not specifically encouraging or enforce it.
+* Shape languages (e.g. ShEx and [[SHACL]]) provide machine-readable, enforceable data structure definitions on single resources.
+
+For applications that operate on more interconnected resources, *Shape Trees* express the layout of those resources and associate them with their respective shapes.
 
 Shape trees marry RDF vocabularies, shapes, and resources into "little trees" that provide machine to machine interoperability,
 while at the same time creating concepts that humans can easily comprehend, such as medical records, notes, notebooks,
-calendars, and financial records.  This allows one to treat a set of related resources as a single grouping, and apply that to a range of operations including access control, data organization, data validation, and data migration.
+calendars, and financial records.
+
+This allows one to treat a set of related resources as a single grouping, and apply that to a range of operations including access control,
+data organization, data validation, and data migration.
 
 Shape trees are defined as an RDF graph structure that expresses a set of expected behaviors by agents that work with them.
-These semantics can be implemented by a server or a client-side library.
+These semantics can be implemented by a server or a client-side library that proxies requests to a server.
 
 Shape Tree Structure {#structure}
 =====================
@@ -74,7 +78,7 @@ The example image includes three columns:
 <img src="shape-tree.svg" width="100%" alt="colored example of ShEx schema, shape tree, and resource hierarchy" />
 
 Here, <code class="container">/data/medicalNotes</code> and <code class="container">/data/astronomy/notes</code> are both shape tree instances of the <code class="container">&lt;#container&gt;</code> shape tree.
-They are both [[Containers]] per <code class="container">&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer</code> and could contain any number of note shape tree instances per <code class="container">tree:contains &lt;#note&gt;</code>.
+They are both Containers per <code class="container">&lt;#container&gt; tree:expectsType tree:ShapeTreeContainer</code> and could contain any number of note shape tree instances per <code class="container">tree:contains &lt;#note&gt;</code>.
 In this example, <code class="notes">xrays-2019-08</code>, <code class="notes">GP-2020-04-18</code> and <code class="notes">blue-shift</code> respectively are shape tree instances of the <code class="notes">&lt;#note&gt;</code> shape tree.
 Each contains a binary <code class="image">image</code> and blue-shift has a <code class="citation">citation</code>.
 
@@ -111,12 +115,93 @@ A shape tree consists of:
 
 Annotating all shape trees within a given resource is an optional <dfn>hasShapeTreeDecoratorIndex</dfn>: An IRI containing an index of SKOS graphs.
 
-As detailed in <a href="#describing">Describing Shape Trees</a> below, SKOS provides an extensible means to describe a shape tree in human-readable terms.  The <code>tree:hasShapeTreeDecoratorIndex</code> allows shape tree maintainers to provide a reference to SKOS graphs that accurately and reliably describe the shape tree as intended, which is important for authorization use cases.  
+As detailed in <a href="#describing">Describing Shape Trees</a> below, SKOS provides an extensible means to describe a shape tree in human-readable terms.  The <code>tree:hasShapeTreeDecoratorIndex</code> allows shape tree maintainers to provide a reference to SKOS graphs that accurately and reliably describe the shape tree as intended, which is important for authorization use cases.
 
 Shape Tree Operations {#operations}
 =====================
 
+Working with shape trees entails using several higher-level operations -- each of which may represent one or more HTTP requests and/or processing logic.
+
+The key operations used to manage shape trees are:
+* Discover Shape Tree
+* [=Plant=]
+* Create Date Instance
+* Delete Data Instance
+
+## Discover Shape Tree ## {#discover}
+The discover shape tree operation entails discovering what, if any, shape trees are managing a given container.
+
+This is accomplished by:
+1. Performing a HEAD on the target container
+	<figure>
+		<figcaption>Discover Container Shape Tree Metadata - HEAD container - Request</figcaption>
+		<pre highlight="http">
+		HEAD /data/CommonNotes/
+		</pre>
+	</figure>
+
+	<figure>
+		<figcaption>Discover Container Shape Tree Metadata - HEAD container - Response</figcaption>
+		<pre highlight="http">
+		HTTP/1.1 200 OK
+		Link: &lt;/data/CommonNotes/?ext=shapetree&gt;; rel="http://shapetrees.org/#ShapeTree"
+		...other headers omitted...
+		</pre>
+	</figure>
+
+2. Performing a GET on the discovered Shape Tree metadata resource, specifically the Link with relation http://shapetrees.org/#ShapeTree
+	<figure>
+		<figcaption>Discover Container Shape Tree Metadata - Get Shape Tree metadata - Request</figcaption>
+		<pre highlight="http">
+		GET /data/CommonNotes/?ext=shapetree
+		</pre>
+	</figure>
+
+	<figure>
+		<figcaption>Discover Container Shape Tree Metadata - GET Shape Tree metadata - Response</figcaption>
+		<pre highlight="turtle">
+		@prefix tree: &lt;http://www.w3.org/ns/shapetree#&gt;.
+
+		&lt;#shapetree&gt;
+	  	tree:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
+
+		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
+			a tree:ShapeTreeLocator ;
+	  	tree:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+	  	tree:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+	  	tree:hasShapeTreeInstancePath "." ;
+	  	tree:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
+		</pre>
+	</figure>
+
+3. Observing any navigable shape trees
+
+	If a 404 is returned that indicates that no shape trees manage this container, and as such can be considered an [=Unmanaged Container=].
+
+	If the <#shapetree> subject has one or more tree:hasShapeTreeLocator predicates it means this container should be considered a [=Managed Container=].
+
+	The tree:hasShapeTree of each tree:ShapeTreeLocator instance specifies a shape tree managing this container.
+
+
+
 ## Plant ## {#plant}
+
+The plant operation is represented as a POST or PUT with one or more Link headers with the relation of http://shapetrees.org/#ShapeTree.
+
+A plant operation can be performed by either a client or server side agent.
+
+Key terms for planting:
+* <dfn>Parent Container</dfn> - The container that will contain the container representing the planted shape tree.  For POST, this will be the location URL.  For PUT, this will be the parent of the PUT container.
+* <dfn>Planted Container</dfn> - The container that will contain instances of the planted shape tree.
+* <dfn>Target Shapetree</dfn> - One or more shape trees to be planted by the plant operation.
+
+The below steps describe the how a shape tree is planted:
+### Preconditions ### {#plant-precondition}
+1. Ensure the [=Parent Container=].  If not, return a 404.
+
+### Static Validation of Shape Trees for Conflicts  ### {#plant-static-validation}
+1. Any existing shape trees should be discovered via the [=Planted Container=], if it already exists.
+
 
 ## Create Data Instance ## {#create-data-instance}
 
@@ -130,8 +215,8 @@ This container is described by the shape tree <code>&lt;CommonNoteShapeTree#cont
 
 <pre>
 	<code class="container">
-	&lt;#container&gt; 
-		tree:expectsType tree:ShapeTreeContainer ; 
+	&lt;#container&gt;
+		tree:expectsType tree:ShapeTreeContainer ;
 		tree:contains &lt;#note&gt; .
     </code>
  </pre>
@@ -175,7 +260,7 @@ Metadata associated with this container describes the planted shape tree that ma
 	@prefix dc: &lt;http://purl.org/dc/terms/&gt;.
 	@prefix dcterms: &lt;http://purl.org/dc/terms/&gt;.
 
-	&lt;&gt; 
+	&lt;&gt;
 	  tree:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
 
 	&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
@@ -208,7 +293,7 @@ If the shape tree includes a validatedBy, the POST must include a Link: rel="foc
 	  :title "Note1" ;
 	  :content "Don't believe the hype!" ;
 	  :updated "2020-01-01T12:34:00Z"^^xsd:dateTime ;
-	  :tagNames ("tag1" "tag2") .	
+	  :tagNames ("tag1" "tag2") .
 	</pre>
 </figure>
 
@@ -234,38 +319,38 @@ The convention on how this index of SKOS graphs is structured and used, along wi
 <figure>
 	<figcaption>Sample SKOS index document, with references to English and Russian representations of the CommonNotes shape tree</figcaption>
 	<pre highlight="turtle">
-	<#index>
+	&lt;#index&gt;
 	  a tree:ShapeTreeDecoratorIndex ;
-	  treeIndex:hasSeries <#en>, <#ru> .
+	  treeIndex:hasSeries &lt;#en&gt;, &lt;#ru&gt; .
 
-	<#en> 
+	&lt;#en>
 	  a tree:ShapeTreeDecoratorSeries ;
-	  tree:hasHierarchy <#en-v1>, <#en-v1.1> .
+	  tree:hasHierarchy &lt;#en-v1&gt;, &lt;#en-v1.1&gt; .
 
-	<#en-v1>
+	&lt;#en-v1&gt;
 	  a tree:ShapeTreeDecoratorHierarchy ;
 	  xsd:lang "en" ;
 	  tree:hasVersion "1.0" ;
-	  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-en-v1#root> ;
+	  tree:hasSkosGraph &lt;https://commonnote.example/CommonNoteGraph-en-v1#root&gt; ;
 	  tree:hasSHA256Hash: "92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47" .
 
-	<#en-v1.1>
+	&lt;#en-v1.1&gt;
 	  a tree:ShapeTreeDecoratorHierarchy ;
 	  xsd:lang "en" ;
 	  tree:hasVersion "1.1" ;
-	  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-en-v1.1#root> ;
+	  tree:hasSkosGraph &lt;https://commonnote.example/CommonNoteGraph-en-v1.1#root&gt; ;
 	  tree:hasSHA256Hash: "74a468adf584231d0aa3b3277fd21b13bdf0246832c992701666921c2676ca29" .
 
-	<#ru> 
+	&lt;#ru&gt;
 	  a tree:ShapeTreeDecoratorSeries ;
-	  treeIndex:hasHierarchy <#ru-v1> .
+	  treeIndex:hasHierarchy &lt;#ru-v1&gt; .
 
-	<#ru-v1>
+	&lt;#ru-v1&gt;
 	  a tree:ShapeTreeDecoratorHierarchy ;
 	  xsd:lang "ru" ;
 	  tree:hasVersion "1.0" ;
-	  tree:hasSkosGraph <https://commonnote.example/CommonNoteGraph-ru-v1#root> ;
-	  tree:hasSHA256Hash: "7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c" .	
+	  tree:hasSkosGraph &lt;https://commonnote.example/CommonNoteGraph-ru-v1#root&gt; ;
+	  tree:hasSHA256Hash: "7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c" .
 	</pre>
 </figure>
 
@@ -277,10 +362,10 @@ The convention on how this index of SKOS graphs is structured and used, along wi
 	@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
 	@prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
 
-	<#root> a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "Note Container"@en ] ; skos:narrower <#note> .
-	   <#note> a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower <#citation>, <#image> .
-	      <#citation> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
-	      <#image> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .	
+	&lt;#root&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "Note Container"@en ] ; skos:narrower &lt;#note&gt; .
+	   &lt;#note&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "Text content of a note"@en ] ; skos:narrower &lt;#citation&gt;, &lt;#image&gt; .
+	      &lt;#citation&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Citation to another document within a note"@en ] .
+	      &lt;#image&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Embedded image or graphic within a note"@en ] .
 	</pre>
 </figure>
 
@@ -292,12 +377,15 @@ The convention on how this index of SKOS graphs is structured and used, along wi
 	@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
 	@prefix skosxl: &lt;http://www.w3.org/2008/05/skos-xl#&gt; .
 
-	<#root> a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "контейнер для заметок"@ru ] ; skos:narrower <#note> .
-	   <#note> a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "текстовое содержание заметки"@ru ] ; skos:narrower <#citation>, <#image> .
-	      <#citation> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Цитирование другого документа в заметке"@ru ] .
-	      <#image> a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Встроенное изображение или изображение в заметке"@ru ] .
+	&lt;#root&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:root ; skosxl:prefLabel [ skosxl:literalForm "контейнер для заметок"@ru ] ; skos:narrower &lt;#note&gt; .
+	   &lt;#note&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:note ; skosxl:prefLabel [ skosxl:literalForm "текстовое содержание заметки"@ru ] ; skos:narrower &lt;#citation&gt;, &lt;#image&gt; .
+	      &lt;#citation&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Цитирование другого документа в заметке"@ru ] .
+	      &lt;#image&gt; a tree:ShapeTreeLabel ; tree:hasShapeTree f:citation ; skosxl:prefLabel [ skosxl:literalForm "Встроенное изображение или изображение в заметке"@ru ] .
 	</pre>
 </figure>
 
-Describing Shape Trees {#describing}
+Definitions {#definitions}
 =====================
+**All definitions as stated below should be considered in the context of shape trees, whether explicitly stated or not.**
+
+The <dfn>Plant</dfn> Operation represents the act of marking a new or existing container as being managed by one or more shape tree.
