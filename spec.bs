@@ -1436,12 +1436,23 @@ Every Managed Container has metadata that expresses "where" that managed contain
 Describing Shape Trees {#describing}
 =====================
 
-Issue: TODO - this needs to be fleshed out in more detail
+While the RDF structure of [=shape trees=] enable machine readability, additional context is required make it human-friendly.
 
-External graphs adhering to the SKOS data model can be optionally used to describe the shape tree in human-readable terms.
+External [=SKOS graphs=] can be optionally linked to describe the shape tree in human-readable terms.
 
-Specifying a <code class="vocab">tree:hasShapeTreeDecoratorIndex</code> predicate within shape tree definition enables clients to discover available human-readable definitions of that shape tree.
+* Let <code>STR</code> be an RDF document containing one or more shape trees <code>STs</code>.
+* The { &lt;gt; <code class="vocab">tree:hasShapeTreeDecoratorIndex</code> <code>IDX</code> } arc indicates that there is exactly one <code class="vocab">tree:ShapeTreeDecoratorIndex</code> located at <code>IDX</code>.
+* The { <code>IDX</code> <code>a</code> <code class="vocab">tree:ShapeTreeDecoratorIndex</code> } arc indicates a <code class="vocab">tree:ShapeTreeDecoratorIndex</code> that represents an index of <code class="vocab">tree:ShapeTreeDecoratorSeries</code>.
+* The { <code>IDX</code> <code class="vocab">tree:hasSeries</code> <code>SERIES</code> } arc indicates linkage to one or more <code class="vocab">tree:ShapeTreeDecoratorSeries</code>.
+* The { <code>SERIES</code> <code>a</code> <code class="vocab">tree:ShapeTreeDecoratorSeries</code> } arc indicates a <code class="vocab">tree:ShapeTreeDecoratorSeries</code> that represent a series of versioned [=SKOS graphs=] for a given language or interpretation.
+* The { <code>SERIES</code> <code class="vocab">tree:hasHierarchy</code> <code>HIER</code> } arc indicates linkage to one or more <code class="vocab">tree:ShapeTreeDecoratorHierarchy</code>.
+* The { <code>HIER</code> <code>a</code> <code class="vocab">tree:ShapeTreeDecoratorHierarchy</code> } arc indicates a <code class="vocab">tree:ShapeTreeDecoratorHierarchy</code> that represent a single versioned [=SKOS graph=].
+    * The { <code>HIER</code> <code class="vocab">tree:hasSkosGraph</code> <code>SKOS</code> } arc indicates that there is exactly one [=SKOS graph=] describing <code>STs</code>
+    * The { <code>HIER</code> <code class="vocab">tree:hasVersion</code> <code>VERSION</code> } arc indicates the version of the [=SKOS graph=] <code>SKOS</code>
+    * The { <code>HIER</code> <code class="vocab">tree:hasSHA256</code> <code>HASH</code> } arc indicates the hash of [=SKOS graph=] <code>SKOS</code>
+* Each { <code>SKOSSUB</code> <code>a</code> <code class="vocab">tree:ShapeTreeLabel</code> } in <code>SKOS</code> refers back to the [=shape tree=] <code>ST</code> via the { <code>SKOSSUB</code> <code class="vocab">tree:hasShapeTree</code> <code>ST</code> } arc.
 
+SKOS constructs such as <code>skos:narrower</code> may be used to group or organize related [=shape trees=].
 
 Definitions {#definitions}
 =====================
