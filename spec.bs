@@ -1417,7 +1417,7 @@ Every Managed Container has metadata that expresses "where" that managed contain
 1. instantiate a <b>shape tree instance</b> &mdash; an LDP Container with a Resource Graph conformant to <span class="hljs-name">&lt;#ShapeTreeInstanceStep&gt;</span> below:
 
 <figure>
-	<pre highlight="shexc">
+	<pre highlight="turtle">
 	&lt;#ShapeTreeInstance&gt; {
 	  a [tree:ShapeTreeLocator] ;
 	  tree:shapeTreeRoot IRI;
