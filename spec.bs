@@ -348,7 +348,6 @@ shape trees are managing a given container.
 			a st:ShapeTreeLocator ;
 	  	st:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
 	  	st:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
-	  	st:hasShapeTreeInstancePath "." ;
 	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
 		</pre>
 	</figure>
@@ -661,10 +660,6 @@ Note: This step can be performed by either a client or server side agent.
 				<td><code>linksti</code></td>
 			</tr>
 			<tr>
-				<td><code>ip</code></td>
-				<td>"."</td>
-			</tr>
-			<tr>
 				<td><code>rootpath</code></td>
 				<td><code>tc</code></td>
 			</tr>
@@ -708,10 +703,6 @@ Note: This step can be performed by either a client or server side agent.
       <tr>
         <td><code>rc</code></td>
         <td><code>tc</code></td>
-      </tr>
-      <tr>
-        <td><code>d</code></td>
-        <td><code>0</code></td>
       </tr>
   </table>
 
@@ -906,10 +897,6 @@ Note: This can be performed by either a client or server side agent.
       <tr>
         <td><code>rc</code></td>
         <td><code>tc</code></td>
-      </tr>
-      <tr>
-        <td><code>d</code></td>
-        <td><code>d</code></td>
       </tr>
   </table>
 
@@ -1410,8 +1397,6 @@ Note: This algorithm can be performed by either a client or server side agent.
     this shape tree hierarchy
 * Let <code>rc</code> be the root container at the top of this shape tree
     hierarchy
-* Let <code>d</code> be the depth relative between <code>rc</code> and
-    <code>pc</code>
 
 **Outputs**
 * Nothing
@@ -1448,10 +1433,6 @@ Note: This algorithm can be performed by either a client or server side agent.
     				<td><code>sst</code></td>
     			</tr>
     			<tr>
-    				<td><code>ip</code></td>
-    				<td>The calculated relative path between <code>rc</code> and <code>cr</code></td>
-    			</tr>
-    			<tr>
     				<td><code>rootpath</code></td>
     				<td><code>rc</code></td>
     			</tr>
@@ -1465,38 +1446,32 @@ Note: This algorithm can be performed by either a client or server side agent.
         1. Let <code>csstit</code> be the shape tree resulting in dereferencing
             IRI <code>cssti</code>
         1. If <code>csstit</code> has a <code class="vocab">rdfs:label</code>
-            value:
-            1. Increment <code>d</code>
-            1. Recursively call algorithm
-                [Initialize Statics](#initialize-statics) with parameters:
-                <table class="data algorithmparams" align="left">
-                  <thead>
-                    <tr>
-                      <td><b>Parameter</b></td>
-                      <td><b>Value</b></td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>pc</code></td>
-                      <td><code>cr</code></td>
-                    <tr>
-                      <td><code>sst</code></td>
-                      <td><code>csstit</code></td>
-                    </tr>
-                    <tr>
-                      <td><code>rst</code></td>
-                      <td><code>rst</code></td>
-                    </tr>
-                    <tr>
-                      <td><code>rc</code></td>
-                      <td><code>rc</code></td>
-                    </tr>
-                    <tr>
-                      <td><code>d</code></td>
-                      <td><code>d</code></td>
-                    </tr>
-                </table>
+            value then recursively call algorithm
+              [Initialize Statics](#initialize-statics) with parameters:
+              <table class="data algorithmparams" align="left">
+                <thead>
+                  <tr>
+                    <td><b>Parameter</b></td>
+                    <td><b>Value</b></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>pc</code></td>
+                    <td><code>cr</code></td>
+                  <tr>
+                    <td><code>sst</code></td>
+                    <td><code>csstit</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>rst</code></td>
+                    <td><code>rst</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>rc</code></td>
+                    <td><code>rc</code></td>
+                  </tr>
+              </table>
 
 ## Update Container Metadata ## {#update-container-metadata}
 
@@ -1513,8 +1488,6 @@ Note: This algorithm can be performed by either a client or server side agent.
 * Let <code>st</code> be a [=shape tree=] that will manage <code>tc</code>
 * Let <code>rootpath</code> be the URI of the root of this shape tree hierarchy,
     where <code>rootst</code> is planted
-* Let <code>ip</code> be the relative path between the <code>rootpath</code> and
-    the URI of <code>tc</code>
 
 **Outputs**:
 * Nothing
@@ -1564,7 +1537,6 @@ Note: This algorithm can be performed by either a client or server side agent.
 			a st:ShapeTreeLocator ;
 	  	st:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
 	  	st:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
-	  	st:hasShapeTreeInstancePath "." ;
 	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
 		</pre>
 	</figure>
@@ -1617,14 +1589,6 @@ Note: This algorithm can be performed by either a client or server side agent.
     			<td><b><i>st</i></b></td>
     			<td>Describes the shape tree planted at this container</td>
     		</tr>
-    		<tr>
-    			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
-    			<td><code class="vocab">st:ShapeTreeInstancePath</code></td>
-    			<td><b><i>ip</i></b></td>
-    			<td>
-            Describes a relative path from the current container to the root
-            container of this shape tree hierarchy
-        </td>
     		</tr>
     		<tr>
     			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
@@ -1727,38 +1691,6 @@ This operation notifies the [=ecosystem=] of a
 Note: The <code><b>ShapeTreeContext</b></code> class is implementation specific
 and may be used to include important context such as authentication details,
 base URLs, etc.
-
-Navigating Planted Shape Trees {#navigating}
-=====================
-
-Issue: Is this still needed?  It explains ShapeTreeLocator, but what do you
-do with this information?
-
-The shape tree describes data instances which are resource hierarchies in an
-LDP Container hierarchy.
-Every Managed Container has metadata that expresses "where" that managed
-container is located in reference to the Instance Root of the planted shape st:
-
-* <b>Shape tree Instantiation Root</b> &mdash; the IRI of the container that
-    represents the planted shape tree.
-* <b>Shape tree Instantiation Path</b> &mdash; a relative IRI identifying a
-    location within a shape tree instance. This is represented in RDF as a
-    string literal.
-* <b>Root shape tree</b> &mdash; the IRI of the planted shape tree's subject.
-* <b>Current shape tree</b> &mdash; a location within a shape tree identified
-    by the IRI of the subject node of that shape tree in the shape tree hierarchy.
-
-<figure>
-	<pre highlight="turtle">
-	&lt;#ShapeTreeInstance&gt; {
-	  a [st:ShapeTreeLocator] ;
-	  st:shapeTreeRoot IRI;
-	  st:shapeTreeInstancePath xsd:string;
-	  st:shapeTreeInstanceRoot IRI;
-	  st:hasShapeTree IRI;
-	}
-	</pre>
-</figure>
 
 Describing Shape Trees {#describing}
 =====================

@@ -290,15 +290,6 @@
 # Properties in domain of ShapeTreeLocator
 #########################################################
 
-:hasShapeTreeInstancePath
-  a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTreeLocator ;
-  rdfs:range xsd:string ;
-  rdfs:comment "Describes a relative path between the root of a planted ShapeTree hierarchy and the current container"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Instance Path"@en .
-
-
 :hasShapeTreeInstanceRoot
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeLocator ;
