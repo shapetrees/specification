@@ -346,8 +346,8 @@ shape trees are managing a given container.
 
 		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
 			a st:ShapeTreeLocator ;
-	  	st:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
-	  	st:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+	  	st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+	  	st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
 	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
 		</pre>
 	</figure>
@@ -394,10 +394,11 @@ managed by one or more shape trees.
         (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
 	* Let <code>linkfn</code> be an optional Link header with the relation of
         "http://shapetrees.org/#FocusNode".  This represents the target subject
-        within the request body to start validation, when validating using ShEx.
+        within the request body (used for ShEx validation, etc.)
 	* Let <code>linktst</code> be an optional Link header with the relation of
         "http://shapetrees.org/#TargetShapeTree"
-  * Let <code>slug</code> be a Slug header, required when <code>req</code> is a POST
+  * Let <code>slug</code> be a Slug header, required when <code>req</code> is a
+      POST and no <code>linktst</code> is provided
   * Let <code>name</code> be a portion of the URI that represents the name of
         the resource, will only be present with <code>req</code> is a PUT
 
@@ -494,26 +495,37 @@ Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem
     <tr>
       <td><b>Parameter</b></td>
       <td><b>Value</b></td>
+      <td><b>Notes</b></td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>targetContainer</code></td>
       <td><code>tc</code></td>
+      <td>
+        The [=target container=] to that will contain instance data of the
+        [=shape tree=]
+      </td>
     </tr>
     <tr>
       <td><code>bodyGraph</code></td>
       <td>
         [=Body Graph=] of <code>req</code>
       </td>
+      <td>RDF graph body from request</td>
     </tr>
     <tr>
       <td><code>shapeTreesToPlant</code></td>
       <td><code>linkst</code></td>
+      <td>
+        Link header with the relation of
+        "http://shapetrees.org/#TargetShapeTree"
+      </td>
     </tr>
     <tr>
       <td><code>linkHeaders</code></td>
       <td>Link headers of <code>req</code></td>
+      <td>All link headers from request</td>
     </tr>
 </table>
 
@@ -579,12 +591,16 @@ Note: This step can be performed by either a client or server side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Notes</b></td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>uri</code></td>
         <td><code>pc</code></td>
+        <td>
+          The [=parent container=] to that will contain the [=target container=]
+        </td>
       </tr>
       <tr>
         <td><code>rn</code></td>
@@ -592,14 +608,20 @@ Note: This step can be performed by either a client or server side agent.
           If <code>req</code> is a POST then <code>slug</code><br/>
           If <code>req</code> is a PUT then <code>name</code>
         </td>
+        <td>The name of the resource</td>
       </tr>
       <tr>
         <td><code>sth</code></td>
         <td><code>linktst</code></td>
+        <td>
+          Link header with the relation of
+          "http://shapetrees.org/#TargetShapeTree"
+        </td>
       </tr>
       <tr>
         <td><code>rt</code></td>
-        <td>Container</td>
+        <td><code class="vocab">st:ShapeTreeContainer</code></td>
+        <td>The resource type being created/modified</td>
       </tr>
   </table>
 
@@ -645,23 +667,35 @@ Note: This step can be performed by either a client or server side agent.
 			<tr>
 				<td><b>Parameter</b></td>
 				<td><b>Value</b></td>
+        <td><b>Notes</td>
 			</tr>
 		</thead>
 		<tbody>
       <tr>
         <td><code>tc</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
+      </tr>
 			<tr>
 				<td><code>rootst</code></td>
 				<td><code>linksti</code></td>
+        <td>The root [=shape tree=] at the top of the hierarchy</td>
 			</tr>
 			<tr>
 				<td><code>st</code></td>
 				<td><code>linksti</code></td>
+        <td>The [=shape tree=] managing the [=target container=]</td>
 			</tr>
 			<tr>
 				<td><code>rootpath</code></td>
 				<td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
 			</tr>
 	</table>
 
@@ -686,23 +720,35 @@ Note: This step can be performed by either a client or server side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Notes</td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>pc</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
+      </tr>
       <tr>
         <td><code>sst</code></td>
         <td><code>cstist</code></td>
+        <td>The matching contained [=shape tree=]</td>
       </tr>
       <tr>
         <td><code>rst</code></td>
         <td><code>cst</code></td>
+        <td>The [=shape tree=] containing a <code class="vocab">st:container</code>
       </tr>
       <tr>
         <td><code>rc</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
       </tr>
   </table>
 
@@ -720,20 +766,29 @@ Note: This step is always performed by a client-side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Notes</td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>parentContainer</code></td>
         <td><code>pc</code></td>
+        <td>
+          The [=parent container=] to that will contain the [=target container=]
+        </td>
       </tr>
       <tr>
         <td><code>shapeTree</code></td>
         <td><code>linksti</code></td>
+        <td>The [=shape tree=] managing the [=target container=]</td>
       </tr>
       <tr>
         <td><code>targetContainer</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
       </tr>
   </table>
 
@@ -747,11 +802,11 @@ tree within a managed container.
     characteristics:
 	* Let <code>linkfn</code> be an optional Link header with the relation of
         "http://shapetrees.org/#FocusNode".  This represents the target subject
-        within the request body to start validation, when validating using ShEx.
+        within the request body (used for ShEx validation, etc.)
 	* Let <code>linktst</code> be an optional Link header with the relation of
         "http://shapetrees.org/#TargetShapeTree"
-  * Let <code>slug</code> be a Slug header, required when <code>req</code>
-        is a POST
+  * Let <code>slug</code> be a Slug header, required when <code>req</code> is a
+        POST and no <code>linktst</code> is provided
   * Let <code>name</code> be a portion of the URI that represents the name of
         the resource. This will only be present when <code>req</code> is a PUT
 
@@ -834,12 +889,16 @@ Note: This can be performed by either a client or server side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Notes</b></td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>uri</code></td>
         <td><code>pc</code></td>
+        <td>
+          The [=parent container=] to that will contain the [=target container=]
+        </td>
       </tr>
       <tr>
         <td><code>rn</code></td>
@@ -847,14 +906,21 @@ Note: This can be performed by either a client or server side agent.
           If <code>req</code> is a POST then <code>slug</code><br/>
           If <code>req</code> is a PUT then <code>name</code>
         </td>
+        <td>The name of the resource</td>
       </tr>
       <tr>
         <td><code>sth</code></td>
         <td><code>linktst</code></td>
+        <td>The [=shape tree=] managing the [=target container=]</td>
       </tr>
       <tr>
         <td><code>rt</code></td>
-        <td>Container</td>
+        <td>
+          <code class="vocab">st:ShapeTreeContainer</code> or
+          <code class="vocab">st:ShapeTreeResource</code> or
+          <code class="vocab">st:ShapeTreeNonRDFResource</code>
+        </td>
+        <td>The resource type being created</td>
       </tr>
   </table>
 
@@ -880,23 +946,34 @@ Note: This can be performed by either a client or server side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Note</b></td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>pc</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
       <tr>
         <td><code>sst</code></td>
         <td><code>cstist</code></td>
+        <td>The matching [=shape tree=]
       </tr>
       <tr>
         <td><code>rst</code></td>
         <td><code>cst</code></td>
+        <td>The parent [=shape tree=] managing the parent container
       </tr>
       <tr>
         <td><code>rc</code></td>
         <td><code>tc</code></td>
+        <td>
+          The [=target container=] to that will contain instance data of the
+          [=shape tree=]
+        </td>
       </tr>
   </table>
 
@@ -911,24 +988,30 @@ Call the provided [=ecosystem=]'s [Index Shape Tree Data Instance operation](#ec
     <tr>
       <td><b>Parameter</b></td>
       <td><b>Value</b></td>
+      <td><b>Notes</b></td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>parentContainer</code></td>
       <td><code>pc</code></td>
+      <td>
+        The [=parent container=] to that will contain the [=target container=]
+      </td>
     </tr>
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>mcst</code></td>
+      <td>The [=shape tree=] that was used for validating the body</td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
-      <td><code>
+      <td>
         If <code>req</code> is a POST then Location header of resource creation
         <br/>
         If <code>req</code> is a PUT then URI of PUT request
-      </code></td>
+      </td>
+      <td>The IRI of the [=shape tree=] instance
     </tr>
 </table>
 
@@ -942,7 +1025,7 @@ The <dfn>update data instance</dfn> operation updates an instance of a
     characteristics:
 	* Let <code>linkfn</code> be an optional Link header with the relation of
         "http://shapetrees.org/#FocusNode".  This represents the target subject
-        within the request body to start validation, when validating using ShEx.
+        within the request body (used for ShEx validation, etc.)
 	* Let <code>linktst</code> be an optional Link header with the relation of
         "http://shapetrees.org/#TargetShapeTree"
   * Let <code>name</code> be a portion of the URI that represents the name
@@ -1017,24 +1100,31 @@ Note: This can be performed by either a client or server side agent.
       <tr>
         <td><b>Parameter</b></td>
         <td><b>Value</b></td>
+        <td><b>Notes</b></td>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><code>uri</code></td>
         <td><code>pc</code></td>
+        <td>
+          The [=parent container=] to that will contain the [=target container=]
+        </td>
       </tr>
       <tr>
         <td><code>rn</code></td>
         <td><code>name</code></td>
+        <td>The resource name</td>
       </tr>
       <tr>
         <td><code>sth</code></td>
         <td><code>linktst</code></td>
+        <td>The [=shape tree=] managing the [=target container=]</td>
       </tr>
       <tr>
         <td><code>rt</code></td>
         <td><code>rt</code></td>
+        <td>The resource type being modified</td>
       </tr>
   </table>
 
@@ -1055,16 +1145,19 @@ with parameters:
     <tr>
       <td><b>Parameter</b></td>
       <td><b>Value</b></td>
+      <td><b>Notes</b></td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>mcst</code></td>
+      <td>The [=shape tree=] that was used for validating the body</td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
       <td><code>name</code></td>
+      <td>The IRI of the [=shape tree=] instance</td>
     </tr>
 </table>
 
@@ -1128,16 +1221,19 @@ with parameters:
     <tr>
       <td><b>Parameter</b></td>
       <td><b>Value</b></td>
+      <td><b>Notes</b></td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>linkst</code></td>
+      <td>The [=shape tree=] managing the instance being removed</td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
       <td><code>req</code>'s URI</td>
+      <td>The IRI of the instance being removed</td>
     </tr>
 </table>
 
@@ -1200,20 +1296,27 @@ Call the provided [=ecosystem=]'s
     <tr>
       <td><b>Parameter</b></td>
       <td><b>Value</b></td>
+      <td><b>Notes</b></td>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><code>parentContainer</code></td>
       <td><code>pc</code></td>
+      <td>
+        The [=parent container=] containing the [=managed container=] being
+        deleted
+      </td>
     </tr>
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>linkst</code></td>
+      <td><code>The [=shape tree=] managing the container being deleted</code></td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
       <td><code>tc</code></td>
+      <td>The IRI of the container being deleted</td>
     </tr>
 </table>
 
@@ -1226,23 +1329,23 @@ The below algorithms detail key pieces of logic required for
 ## Validate Proposed Resource Against Parent Container ## {#validate-proposed-resource}
 
 This algorithm is responsible for determining if a proposed resource
-(which may more specifically be a Container, Resource, or Non-RDF Source) is
-valid to be created within a given container.
+(which may more specifically be a [=container=], [=resource=], or [=non-RDF source=]) is
+valid to be created within a given [=container=].
 
 Note: This algorithm can be performed by either a client or server side agent.
 
 **Inputs**
 * Let <code>pc</code> be the URI of the [=Managed Container=] that will contain
     the proposed resource
-* Let <code>rn</code> be the resource name of the proposed request:
-	* In cases of this algorithm being called as result of a POST, the Slug
-        header value must be provided
-	* In cases of this algorithm being called as result of a PUT, the
-        resource name must be provided
 * Let <code>sth</code> be the target shape tree hint, from the request's
     Link header with the relation of "http://shapetrees.org/#TargetShapeTree"
+* Let <code>rn</code> be the resource name of the proposed request:
+	* In cases of this algorithm being called as result of a POST, the Slug
+        header value should be provided when no <code>sth</code> is provided
+	* In cases of this algorithm being called as result of a PUT, the
+        resource name must be provided
 * Let <code>rt</code> be the resource type of proposed
-    resource (Container, Resource, Non-RDF Source)
+    resource ([=container=], [=resource=], [=non-RDF source=])
 
 **Outputs**
 * <code>mcst</code>
@@ -1259,12 +1362,14 @@ Note: This algorithm can be performed by either a client or server side agent.
         <tr>
           <td><b>Parameter</b></td>
           <td><b>Value</b></td>
+          <td><b>Notes</b></td>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><code>uri</code></td>
           <td><code>pc</code></td>
+          <td>The parent container to discover [=shape trees=] for
         </tr>
         <tr>
           <td><code>rn</code></td>
@@ -1272,14 +1377,17 @@ Note: This algorithm can be performed by either a client or server side agent.
             If <code>req</code> is a POST then <code>slug</code><br/>
             If <code>req</code> is a PUT then <code>name</code>
           </td>
+          <td>The resource name</td>
         </tr>
         <tr>
           <td><code>sth</code></td>
-          <td><code>linktst</code></td>
+          <td><code>sth</code></td>
+          <td>The [=shape tree=] hint provided as a Link header
         </tr>
         <tr>
           <td><code>rt</code></td>
-          <td>Container</td>
+          <td><code>rt</code></td>
+          <td>The resource type being created/modified</td>
         </tr>
     </table>
 1. If <code>rt</code> does not match <code>mcst</code>'s
@@ -1309,10 +1417,10 @@ Note: This algorithm can be performed by either a client or server side agent.
 * Let <code>uri</code> be the URI of the [=Managed Container=] that will contain
     the proposed resource
 * Let <code>rn</code> be the resource name of the proposed request:
-	* In cases of this algorithm being called as result of a POST, the Slug header
-        value must be provided
-	* In cases of this algorithm being called as result of a PUT, the resource
-        name must be provided
+    * In cases of this algorithm being called as result of a POST, the Slug
+          header value should be provided when no <code>sth</code> is provided
+    * In cases of this algorithm being called as result of a PUT, the resource
+          name must be provided
 * Let <code>sth</code> be the target shape tree hint, from the request's Link
     header with the relation of "http://shapetrees.org/#TargetShapeTree"
 * Let <code>rt</code> be the resource type of proposed resource
@@ -1418,23 +1526,28 @@ Note: This algorithm can be performed by either a client or server side agent.
     			<tr>
     				<td><b>Parameter</b></td>
     				<td><b>Value</b></td>
+            <td><b>Notes</b></td>
     			</tr>
     		</thead>
     		<tbody>
           <tr>
             <td><code>tc</code></td>
             <td><code>cr</code></td>
+            <td>Created static resource</td>
     			<tr>
     				<td><code>rootst</code></td>
     				<td><code>rst</code></td>
+            <td>The root [=shape tree=] of the hierarchy</td>
     			</tr>
     			<tr>
     				<td><code>st</code></td>
     				<td><code>sst</code></td>
+            <td>The [=shape tree=] to assign to <code>cr</code>
     			</tr>
     			<tr>
     				<td><code>rootpath</code></td>
     				<td><code>rc</code></td>
+            <td>The root container at the top of this shape tree hierarchy</td>
     			</tr>
     	</table>
 
@@ -1453,23 +1566,28 @@ Note: This algorithm can be performed by either a client or server side agent.
                   <tr>
                     <td><b>Parameter</b></td>
                     <td><b>Value</b></td>
+                    <td><b>Notes</b></td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td><code>pc</code></td>
                     <td><code>cr</code></td>
+                    <td>Created static resource, now the parent</td>
                   <tr>
                     <td><code>sst</code></td>
                     <td><code>csstit</code></td>
+                    <td>A [=shape tree=] to be recursively planted</td>
                   </tr>
                   <tr>
                     <td><code>rst</code></td>
                     <td><code>rst</code></td>
+                    <td>The root [=shape tree=] of the hierarchy</td>
                   </tr>
                   <tr>
                     <td><code>rc</code></td>
                     <td><code>rc</code></td>
+                    <td>The root container at the top of this shape tree hierarchy</td>
                   </tr>
               </table>
 
@@ -1535,8 +1653,8 @@ Note: This algorithm can be performed by either a client or server side agent.
 
 		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
 			a st:ShapeTreeLocator ;
-	  	st:hasRootShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
-	  	st:hasShapeTree &lt;http://commonnote.example/CommonNoteShapeTree#container&gt; ;
+	  	st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+	  	st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
 	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
 		</pre>
 	</figure>
@@ -1746,26 +1864,32 @@ organize related [=shape trees=].
 Definitions {#definitions}
 =====================
 The following terms are used throughout this specification:
-	* <dfn>Container</dfn> -- The generalized notion of a collection of resources;
+  * <dfn>Container</dfn> -- The generalized notion of a collection of resources;
         implementations of shape trees may use a container implementation such
-        as [[LDP]]
-	* <dfn>Managed Container</dfn> -- any [=Container=] that has a [=shape tree=]
+        as [[LDP]] (ldp:Container, ldp:BasicContainer, etc.)
+  * <dfn>Resource</dfn> -- The generalized notion of document containing linked-data;
+        implementations of shape trees may use a resource implementation such
+        as [[LDP]] (ldp.Resource, etc.)
+  * <dfn>Non-RDF Source</dfn> -- The generalized notion of document not
+        containing linked-data triples;
+        this may include plain text or binary data.
+  * <dfn>Managed Container</dfn> -- any [=Container=] that has a [=shape tree=]
         planted in it. A [=Managed Container=] may be an [=Instance Root=] or
         hierarchically nested within the resource hierarchy.
-	* <dfn>Unmanaged Container</dfn> -- any [=Container=] which is not described
+  * <dfn>Unmanaged Container</dfn> -- any [=Container=] which is not described
         by a shape tree
-	* <dfn>Supported RDF Format</dfn> -- a textual representation of an RDF graph
+  * <dfn>Supported RDF Format</dfn> -- a textual representation of an RDF graph
         in a format that can be accurately and losslessly parsed to that RDF
         graph.
-	* <dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an
+  * <dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an
         HTTP request with a parser determined by the Content-type: header of that
         HTTP request.
-	* <dfn>Static Container</dfn> -- any [=Container=] which is implied by the
+  * <dfn>Static Container</dfn> -- any [=Container=] which is implied by the
         existence of the parent resource, denoted by a
         <code class="vocab">rdfs:label</code> predicate within a [=shape tree=].
-	* <dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of
+  * <dfn>Resource Graph</dfn> -- an RDF graph obtained by parsing the body of
         a GET on a resource.
-	* <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]]
+  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]]
         [[skos-reference]] data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
         human-readable terms.
