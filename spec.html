@@ -1223,7 +1223,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 7c63c139, updated Fri Jul 17 17:12:19 2020 -0700" name="generator">
   <link href="https://shapetrees.org/spec" rel="canonical">
-  <meta content="aef7cae6aa5dd1ea39deac9d62e21bea0aabd0aa" name="document-revision">
+  <meta content="2d084ec3263cecf060f275a6ceead216c236e000" name="document-revision">
 <style>
 
   em.rfc2119 {
@@ -1744,7 +1744,7 @@ applications and agents to be interoperable.</p>
    <p>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①④">Shape tree</a> client library <em class="rfc2119">MUST</em> be initialized
 with a reference to the the target <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem④">ecosystem</a> it would operate within.</p>
    <p>For purposes of this specification, an <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑤">ecosystem</a> <em class="rfc2119">SHOULD</em> be considered a software interface, expecting
-the below operations to be implemented.</p>
+the <a href="#ecosystem-operations">below operations</a> to be implemented.</p>
    <h2 class="heading settled" data-level="4" id="operations"><span class="secno">4. </span><span class="content">Shape Tree Operations</span><a class="self-link" href="#operations"></a></h2>
    <p>Working with <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⑤">shape trees</a> entails using several higher-level operations —<wbr>each of which may represent one or more HTTP requests and/or pieces of
 processing logic.</p>
@@ -3109,8 +3109,8 @@ triples should be added:</p>
   shapeTreeInstance:URI) </code> 
    <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑦">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance②">shape tree data instance</a> being deleted.</p>
    <h3 class="heading settled" data-level="6.7" id="ecosystem-unindexshapetree"><span class="secno">6.7. </span><span class="content">Unindex Shape Tree</span><a class="self-link" href="#ecosystem-unindexshapetree"></a></h3>
-    <code> <b>unIndexShapeTree</b>(context:ShapeTreeContext, p
-  arentContainer:URI, shapest:URI, targetContainer:URI)</code> 
+    <code> <b>unIndexShapeTree</b>(context:ShapeTreeContext, parentContainer:URI,
+   shapest:URI, targetContainer:URI)</code> 
    <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑧">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥③">shape tree</a>/<a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①④">managed container</a> being deleted.</p>
    <p class="note" role="note"><span>Note:</span> The <code><b>ShapeTreeContext</b></code> class is implementation specific
 and may be used to include important context such as authentication details,
