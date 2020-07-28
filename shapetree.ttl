@@ -17,7 +17,7 @@
 # Defines a tree of related resources which combine to enable some task
 # see: https://shapetrees.github.io/specification/primer
 #############################################################################
-:ShapeTree 
+:ShapeTree
   a rdfs:Class ;
   rdfs:comment "Defines a composite data structure including a tree of resources and validation criteria"@en ;
   rdfs:isDefinedBy <> ;
@@ -26,7 +26,7 @@
 #
 # Properties in domain of ShapeTree
 #
-:expectsType 
+:expectsType
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range [ owl:oneOf ( :ShapeTreeContainer :ShapeTreeResource ) ] ;
@@ -34,7 +34,7 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
 
-:contains 
+:contains
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTree  ;
@@ -42,7 +42,7 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Contains"@en .
 
-:references 
+:references
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTreeReference ;
@@ -50,7 +50,7 @@
   rdfs:comment "Links a ShapeTree to a ShapeTreeReference"@en ;
   rdfs:label "References"@en .
 
-:matchesUriTemplate 
+:matchesUriTemplate
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range xsd:string ;
@@ -74,11 +74,11 @@
   rdfs:label "Supports"@en .
 
 #
-# Specific IRIs used by :contains predicate to define behavior 
+# Specific IRIs used by :contains predicate to define behavior
 # when a matching ShapeTree with a URI Template is not found.
 # These values can be combined, for example,
 # :contains :AllowResources :AllowContainers :AllowNonRDFSources is equivalent to :AllowAll
-# Example -- <#containerShapeTree> tree:contains <#childShapeTree>, tree:AllowResources 
+# Example -- <#containerShapeTree> st:contains <#childShapeTree>, st:AllowResources
 #
 :AllowResources
   a :ShapeTree ;
@@ -114,7 +114,7 @@
 #############################################################################
 # An IRI that represents a generalized container used in a ShapeTree
 #############################################################################
-:ShapeTreeContainer 
+:ShapeTreeContainer
   rdfs:comment "Describes a generalized container within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeContainer"@en .
@@ -124,7 +124,7 @@
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeResource 
+:ShapeTreeResource
   rdfs:comment "Describes a generalized RDF resource (non-container) within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeResource"@en .
@@ -133,7 +133,7 @@
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeNonRDFResource 
+:ShapeTreeNonRDFResource
   rdfs:comment "Describes a generalized non RDF / binary content within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "ShapeTreeResource"@en .
@@ -144,7 +144,7 @@
 # A ShapeTreeReference provides the necessary context to associate instance
 # data between related ShapeTrees via a ShapePath
 #############################################################################
-:ShapeTreeReference 
+:ShapeTreeReference
   a rdfs:Class ;
   rdfs:comment "Describes how a ShapeTree references another ShapeTree via a ShapePath"@en ;
   rdfs:isDefinedBy <> ;
@@ -177,7 +177,7 @@
 # It is primarily used for use cases where a ShapeTree must be described to
 # a user for purposes of authorization.
 #############################################################################
-:ShapeTreeDecoratorIndex 
+:ShapeTreeDecoratorIndex
   a rdfs:Class ;
   rdfs:comment "Provides an index of SKOS poly-hierarchies which can be used to describe a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
@@ -199,7 +199,7 @@
 # Primary use is grouping TreeDecoratorHierarchy instances by a common discriminator
 # such as language or intended audience
 #############################################################################
-:ShapeTreeDecoratorSeries 
+:ShapeTreeDecoratorSeries
   a rdfs:Class ;
   rdfs:comment "Groups a set of ShapeTreeDecoratorHierarchy by a given discriminator"@en ;
   rdfs:isDefinedBy <> ;
@@ -219,10 +219,10 @@
 # ShapeTreeDecoratorHierarchy class
 #############################################################################
 # A ShapeTreeDecoratorHierarchy details a versioned SKOS poly-hierarchy that describes
-# a ShapeTree in a given language or format for an intended audience 
+# a ShapeTree in a given language or format for an intended audience
 # (decreased cognitivty ability, etc.)
 #############################################################################
-:ShapeTreeDecoratorHierarchy 
+:ShapeTreeDecoratorHierarchy
   a rdfs:Class ;
   rdfs:comment "Describes a SKOS poly-hierarchy for purproses of labeling a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
@@ -259,7 +259,7 @@
 # A ShapeTreeLabel details the association between a label within a SKOS graph
 # (detailed by ShapeTreeDecoratorHierarchy) and a ShapeTree
 #############################################################################
-:ShapeTreeLabel 
+:ShapeTreeLabel
   a rdfs:Class ;
   rdfs:comment "Describes the association between a SKOS label and a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
@@ -278,10 +278,10 @@
 
 # ShapeTreeLocator class
 #############################################################################
-# A ShapeTreeLocator describes a planted ShapeTree in a container with enough 
+# A ShapeTreeLocator describes a planted ShapeTree in a container with enough
 # information to traverse from the current container to the root
 #############################################################################
-:ShapeTreeLocator 
+:ShapeTreeLocator
   a rdfs:Class ;
   rdfs:comment "Describes a planted ShapeTree in a container with enough information to traverse from the current container to the root"@en ;
   rdfs:isDefinedBy <> ;
@@ -289,15 +289,6 @@
 
 # Properties in domain of ShapeTreeLocator
 #########################################################
-
-:hasShapeTreeInstancePath
-  a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTreeLocator ;
-  rdfs:range xsd:string ;
-  rdfs:comment "Describes a relative path between the root of a planted ShapeTree hierarchy and the current container"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Instance Path"@en .
-
 
 :hasShapeTreeInstanceRoot
   a owl:ObjectProperty ;
