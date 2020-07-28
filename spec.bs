@@ -394,12 +394,14 @@ shape trees are managing a given container.
     <code class="vocab">st:hasShapeTreeLocator</code> predicates it means this
     container <em class="rfc2119">MUST</em> be considered a [=Managed Container=].
 
+  Let <code>mc</code> be this [=managed container=].
+
 	The <code class="vocab">st:hasShapeTree</code> of each
     <code class="vocab">st:ShapeTreeLocator</code> subject specifies what
-    [=shape tree=] manages this container.
+    [=shape tree=] manages <code>mc</code>.
 
   The IRI of each <code class="vocab">st:ShapeTreeLocator</code> describing a
-    [=shape tree=] managing this container <em class="rfc2119">SHOULD</em>
+    [=shape tree=] managing <code>mc</code> <em class="rfc2119">SHOULD</em>
     be returned.
 
 ## Plant Shape Tree ## {#plant-shapetree}
@@ -562,8 +564,8 @@ Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
     client-side agent.
 
-1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return a
-    404 status code.
+1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, this
+    operation <em class="rfc2119">MUST</em> return a 404 status code.
 1. [Discover](#discover) any planted [=shape tree=] IRIs managing <code>pc</code>.
 	1. Let <code>parentst</code> be the collection of dereferenced shape tree
         IRIs discovered for <code>pc</code>
@@ -587,7 +589,8 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 	* more than one shape tree has a <code class="vocab">st:validatedBy</code> value
 	* more than one shape tree has a <code class="vocab">st:contains</code> value
 
-If any of the above static validations fail, return a 400 status code.
+If any of the above static validations fail, this operation
+    <em class="rfc2119">MUST</em> return a 400 status code.
 
 #### Validate graph body #### {#plant-graphbody-validation}
 
@@ -601,11 +604,12 @@ Issue: Must detail how to differentiate between ShEx and SHACL validation
     <code class="vocab">st:validatedBy</code> value
 1. If <code>vst</code> is present and the plant operation (<code>req</code>)
     includes an RDF graph body and ShEx validation is used and a [=Focus Node=]
-    (<code>linkfn</code>) is not present, return a 422 status code
+    (<code>linkfn</code>) is not present, this operation
+    <em class="rfc2119">MUST</em> return a 422 status code
 1. Perform a validation of the RDF graph body of <code>req</code> using the
     <code>vst</code> <code class="vocab">st:validatedBy</code> shape,
-    targeting the graph's <code>linkfn</code>.  If validation fails, return a
-    422 status code
+    targeting the graph's <code>linkfn</code>.  If validation fails, this
+    operation <em class="rfc2119">MUST</em> return a 422 status code
 
 #### Validate against parent container #### {#plant-parent-validation}
 
@@ -906,8 +910,8 @@ tree within a managed container.
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
     client-side agent.
 
-1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return a
-    404 status code.
+1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return
+    this operation <em class="rfc2119">MUST</em> return a 404 status code.
 1. [Discover](#discover) any planted shape tree IRIs managing <code>pc</code>.
 	1. Let <code>parentst</code> be the collection of dereferenced shape tree IRIs
         discovered for <code>pc</code>
@@ -1126,7 +1130,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
     client-side agent.
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.
-    If not, return a 404 status code.
+    If not, this operation <em class="rfc2119">MUST</em> return a 404 status code.
 1. [Discover](#discover) any planted shape tree IRIs managing <code>pc</code>.
     1. Let <code>parentst</code> be the collection of dereferenced shape tree
         IRIs discovered for <code>pc</code>
@@ -1446,15 +1450,17 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
         </tr>
     </table>
 1. If <code>rt</code> does not match <code>mcst</code>'s
-    <code class="vocab">st:expectsType</code> value, return a 422 status code
+    <code class="vocab">st:expectsType</code> value, this operation
+    <em class="rfc2119">MUST</em> return a 422 status code
 1. If <code>mcst</code> has a <code class="vocab">st:validatedBy</code> value,
     and the plant operation (<code>req</code>) includes an RDF graph body and
     ShEx validation is used and a [=Focus Node=] (<code>linkfn</code>) is not
-    present, return a 422 status code
+    present, this operation <em class="rfc2119">MUST</em> return a
+    422 status code
 1. Perform a validation of the RDF graph body of <code>req</code> using the
     <code>mcst</code> <code class="vocab">st:validatedBy</code> shape,
-    targeting the graph's <code>linkfn</code>.  If validation fails, return a
-    422 status code
+    targeting the graph's <code>linkfn</code>.  If validation fails,
+    this operation <em class="rfc2119">MUST</em> return a 422 status code
 
 ## Find Matching Contained Shape Tree ## {#matching-contained-shapetree}
 
@@ -1494,8 +1500,8 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
 1. Let <code>ccst</code> be the candidate shape trees for matching - populated
     by each <code class="vocab">st:contains</code> of <code>cst</code>
 1. If <code>sth</code> is specified
-    1. and <code>sth</code> does NOT exist within <code>ccst</code> return a
-          400 status code
+    1. and <code>sth</code> does NOT exist within <code>ccst</code> this
+          algorithm <em class="rfc2119">MUST</em> return a 400 status code
     1. and <code>sth</code> exists within <code>ccst</code> return
           <code>sth</code>
 1. Iterating through <code>ccst</code>, let <code>ccsti</code> be the
@@ -1503,8 +1509,8 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
 1. If <code>rn</code> matches <code>ccsti</code>
     <code class="vocab">st:matchesUriTemplate</code> using [[RFC6570]] add to
     potential matches (<code>pm</code>)
-1. If <code>pm</code> contains more than 1 matching shape trees, return a
-    status code 400
+1. If <code>pm</code> contains more than 1 matching shape trees, this
+    algorithm <em class="rfc2119">MUST</em> return a status code 400
 1. If <code>pm</code> contains exactly 1 matching shape trees, return
     <code>pm</code>
 1. If <code>pm</code> contains 0 matching shape trees:
@@ -1513,9 +1519,10 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
         <code class="vocab">st:AllowResources</code>,
         <code class="vocab">st:AllowContainers</code>,
         <code class="vocab">st:AllowNonRDFSources</code>,
-        return a status code of 422
+        this algorithm <em class="rfc2119">MUST</em> return a status code of 422
     1. If <code class="vocab">st:AllowNone</code> exists within
-        <code>ccst</code>, return a status code 422
+        <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em>
+        return a status code 422
     1. If <code class="vocab">st:AllowAll</code> exists within
         <code>ccst</code>, return null - indicating that while no match was
         found, <code>pc</code> has been configured to allow resources of any
@@ -1523,6 +1530,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
     1. If <code class="vocab">st:AllowResources</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Resource,
+              this algorithm <em class="rfc2119">MUST</em>
               return a status code of 422
         1. And the resource type (<code>rt</code>) is a Resource,
               return null - indicating that while no match was found,
@@ -1531,6 +1539,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
 	  1. If <code class="vocab">st:AllowContainers</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Container,
+              this algorithm <em class="rfc2119">MUST</em>
               return a status code of 422
         1. And the resource type (<code>rt</code>) is a Container,
               return null - indicating that while no match was found,
@@ -1539,6 +1548,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
 	  1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Non-RDF Source,
+              this algorithm <em class="rfc2119">MUST</em>
               return a status code of 422
         1. And the resource type (<code>rt</code>) is a Non-RDF Source,
               return null - indicating that while no match was found,
