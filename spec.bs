@@ -107,6 +107,9 @@ Abstract:
 
 Introduction {#introduction}
 =====================
+
+*This section is non-normative.*
+
 Realizing the value proposition of the Semantic Web lies in building useful and
 robust applications that can interoperate over linked data. Protocols such as
 [[LDP]] and Solid organize linked data graphs into resource hierarchies,
@@ -1942,7 +1945,7 @@ The following terms are used throughout this specification:
         implementations of [=shape trees=] may use a resource implementation such
         as [[LDP]] (ldp:Resource, etc.)
   * <dfn>Shape Tree Data Instance</dfn>A resource hierarchy that adheres to one
-         or more [=shape trees=]        
+         or more [=shape trees=]
   * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]]
         [[skos-reference]] data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
