@@ -24,6 +24,7 @@ Abstract:
     text-transform: lowercase;
     font-variant: small-caps;
     font-style: normal;
+    font-size: 18px;
     color: #900;
   }
 
@@ -251,7 +252,7 @@ processing logic.
 The key operations used to manage [=shape trees=] are:
 * [Discover Shape Tree](#discover)
 * [Plant Shape Tree](#plant-shapetree)
-* [Create Date Instance](#create-data-instance)
+* [Create Data Instance](#create-data-instance)
 * [Update Data Instance](#update-data-instance)
 * [Delete Data Instance](#delete-data-instance)
 * [Unplant Shape Tree](#unplant-shapetree)
@@ -346,16 +347,16 @@ shape trees are managing a given container.
   client-side agent.
 
 	<figure id="fig-discover-get-metadata">
-		<figcaption>Discover Container Shape Tree Metadata - Get Shape Tree metadata
-     - Request</figcaption>
+		<figcaption>Discover Container Shape Tree Metadata -
+    Get Shape Tree metadata - Request</figcaption>
 		<pre highlight="http">
 		GET /data/CommonNotes/meta/UUID
 		</pre>
 	</figure>
 
 	<figure id="fig-discover-head-response-managed">
-		<figcaption>Discover Container Shape Tree Metadata - GET Shape Tree metadata
-     - Managed Container Response</figcaption>
+		<figcaption>Discover Container Shape Tree Metadata -
+    GET Shape Tree metadata - Managed Container Response</figcaption>
 		<pre highlight="turtle">
 		prefix st: &lt;http://www.w3.org/ns/shapetree#&gt;.
     prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
@@ -373,15 +374,15 @@ shape trees are managing a given container.
 	</figure>
 
 	<figure id="fig-discover-head-response-unmanaged">
-		<figcaption>Discover Container Shape Tree Metadata - GET Shape Tree metadata
-     - Unmanaged Container Response</figcaption>
+		<figcaption>Discover Container Shape Tree Metadata -
+    GET Shape Tree metadata - Unmanaged Container Response</figcaption>
 		<pre highlight="http">
 		HTTP/1.1 404 NOT FOUND
 		</pre>
 	</figure>
 
-	A 404 is status code indicates that no [=shape trees=] manage this
-    [=container=], as such it <em class="rfc2119">MUST</em> be considered
+	A 404 status code indicates that no [=shape trees=] manage this
+    [=container=], and so it <em class="rfc2119">MUST</em> be considered
     an [=Unmanaged Container=].
 
 #### Collect any navigable shape trees #### {#discovery-details-collect}
@@ -417,7 +418,8 @@ managed by one or more shape trees.
         [=shape trees=] to be planted by the plant operation.
 	  * A Link header with the relation &quot;type&quot; and a value of a compatible
         [=container=] (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
-	  * Let <code>linkfn</code> be an optional Link header with the relation of
+	  * Let <code>linkfn</code> be an <em class="rfc2119">optional</em> Link
+        header with the relation of
         &quot;http://shapetrees.org/#FocusNode&quot;.  This represents the
         target subject within the request body (used for ShEx validation, etc.)
 	  * Let <code>linktst</code> be an <em class="rfc2119">OPTIONAL</em>
@@ -529,7 +531,7 @@ Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem
       <td><code>targetContainer</code></td>
       <td><code>tc</code></td>
       <td>
-        The [=target container=] to that will contain instance data of the
+        The [=target container=] that will contain instance data of the
         [=shape tree=]
       </td>
     </tr>
@@ -538,7 +540,7 @@ Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem
       <td>
         [=Body Graph=] of <code>req</code>
       </td>
-      <td>RDF graph body from request</td>
+      <td>RDF body graph from request</td>
     </tr>
     <tr>
       <td><code>shapeTreesToPlant</code></td>
@@ -629,7 +631,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
         <td><code>uri</code></td>
         <td><code>pc</code></td>
         <td>
-          The [=parent container=] to that will contain the [=target container=]
+          The [=parent container=] that will contain the [=target container=]
         </td>
       </tr>
       <tr>
@@ -744,11 +746,11 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either
 1. Let <code>cstist</code> be the shape tree resulting in dereferencing IRI
     <code>csti</code>
 1. If <code>cstist</code> has a <code class="vocab">rdfs:label</code> value,
-    call algorithm [Initialize Statics](#initialize-statics) with parameters:
+    let <code>label</code> be the value of rdfs:label for <code>cstist</code>,
+    and call algorithm
+    [Initialize Statics](#initialize-statics) with parameters:
 
-  Let <code>label</code> be the value of rdfs:label for <code>cstist</code>
-
-  <table class="data algorithmparams">
+  <table class="data algorithmparams" align="left">
     <thead>
       <tr>
         <td><b>Parameter</b></td>
@@ -795,7 +797,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 1. Call the provided [=ecosystem=]'s
     [Index Shape Tree operation](#ecosystem-indexshapetree) with parameters:
 
-  <table class="data algorithmparams">
+  <table class="data algorithmparams" align="left">
     <thead>
       <tr>
         <td><b>Parameter</b></td>
@@ -808,7 +810,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
         <td><code>parentContainer</code></td>
         <td><code>pc</code></td>
         <td>
-          The [=parent container=] to that will contain the [=target container=]
+          The [=parent container=] that will contain the [=target container=]
         </td>
       </tr>
       <tr>
@@ -820,7 +822,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
         <td><code>targetContainer</code></td>
         <td><code>tc</code></td>
         <td>
-          The [=target container=] to that will contain instance data of the
+          The [=target container=] that will contain instance data of the
           [=shape tree=]
         </td>
       </tr>
@@ -976,9 +978,9 @@ client or server side agent.
 1. Let <code>cstist</code> be the [=shape tree=] resulting in dereferencing IRI
     <code>csti</code>
 1. If <code>cstist</code> has a <code class="vocab">rdfs:label</code> value,
+    let <code>label</code> be the value of
+    <code class="vocab">rdfs:label</code> for <code>cstist</code>, and
     call algorithm [Initialize Statics](#initialize-statics) with parameters:
-    * Let <code>label</code> be the value of
-          <code class="vocab">rdfs:label</code> for <code>cstist</code>
 
   <table class="data algorithmparams" align="left">
     <thead>
@@ -993,7 +995,7 @@ client or server side agent.
         <td><code>pc</code></td>
         <td><code>tc</code></td>
         <td>
-          The [=target container=] to that will contain instance data of the
+          The [=target container=] that will contain instance data of the
           [=shape tree=]
         </td>
       <tr>
@@ -1010,7 +1012,7 @@ client or server side agent.
         <td><code>rc</code></td>
         <td><code>tc</code></td>
         <td>
-          The [=target container=] to that will contain instance data of the
+          The [=target container=] that will contain instance data of the
           [=shape tree=]
         </td>
       </tr>
@@ -1021,7 +1023,9 @@ client or server side agent.
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
     client-side agent.
 
-Call the provided [=ecosystem=]'s [Index Shape Tree Data Instance operation](#ecosystem-indexshapetreedatainstance) with parameters:
+Call the provided [=ecosystem=]'s
+[Index Shape Tree Data Instance operation](#ecosystem-indexshapetreedatainstance)
+with parameters:
 
 <table class="data algorithmparams" align="left">
   <thead>
@@ -1036,7 +1040,7 @@ Call the provided [=ecosystem=]'s [Index Shape Tree Data Instance operation](#ec
       <td><code>parentContainer</code></td>
       <td><code>pc</code></td>
       <td>
-        The [=parent container=] to that will contain the [=target container=]
+        The [=parent container=] that will contain the [=target container=]
       </td>
     </tr>
     <tr>
@@ -1151,7 +1155,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
         <td><code>uri</code></td>
         <td><code>pc</code></td>
         <td>
-          The [=parent container=] to that will contain the [=target container=]
+          The [=parent container=] that will contain the [=target container=]
         </td>
       </tr>
       <tr>
@@ -1360,7 +1364,7 @@ Call the provided [=ecosystem=]'s
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>linkst</code></td>
-      <td><code>The [=shape tree=] managing the container being deleted</code></td>
+      <td>The [=shape tree=] managing the container being deleted</td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
@@ -1459,7 +1463,7 @@ of shape trees mentioned in <code class="vocab">st:contains</code> is
 applicable for a given proposed resource.
 
 Issue: This describes a new construct (the use of a link header to direct which
-contained shape tree should be matched) not yet in implemented
+contained shape tree should be matched) not yet in any published implementation
 
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
     a client or server side agent.
@@ -1496,8 +1500,8 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
           <code>sth</code>
 1. Iterating through <code>ccst</code>, let <code>ccsti</code> be the
     [=shape tree=] currently evaluated
-1. If <code>rn</code> matches <code>ccsti</code> <
-    code class="vocab">st:matchesUriTemplate</code> using [[RFC6570]] add to
+1. If <code>rn</code> matches <code>ccsti</code>
+    <code class="vocab">st:matchesUriTemplate</code> using [[RFC6570]] add to
     potential matches (<code>pm</code>)
 1. If <code>pm</code> contains more than 1 matching shape trees, return a
     status code 400
@@ -1515,7 +1519,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
     1. If <code class="vocab">st:AllowAll</code> exists within
         <code>ccst</code>, return null - indicating that while no match was
         found, <code>pc</code> has been configured to allow resources of any
-        type to be create without matching the shape tree
+        type to be created without matching the shape tree
     1. If <code class="vocab">st:AllowResources</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Resource,
@@ -1523,7 +1527,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
         1. And the resource type (<code>rt</code>) is a Resource,
               return null - indicating that while no match was found,
               <code>pc</code> has been configured to allow Resources to be
-              create without matching the shape tree
+              created without matching the shape tree
 	  1. If <code class="vocab">st:AllowContainers</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Container,
@@ -1531,7 +1535,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
         1. And the resource type (<code>rt</code>) is a Container,
               return null - indicating that while no match was found,
               <code>pc</code> has been configured to allow Containers to be
-              create without matching the shape tree
+              created without matching the shape tree
 	  1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
         <code>ccst</code>:
         1. And the resource type (<code>rt</code>) is not a Non-RDF Source,
@@ -1539,7 +1543,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
         1. And the resource type (<code>rt</code>) is a Non-RDF Source,
               return null - indicating that while no match was found,
               <code>pc</code> has been configured to allow non-RDF Sources to
-              be create without matching the shape tree
+              be created without matching the shape tree
 
 ## Initialize Static Content ## {#initialize-statics}
 
