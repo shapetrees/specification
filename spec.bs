@@ -198,7 +198,7 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 <figure id="shapetree-shex">
   <figcaption>ShEx validation of a Shape Tree</figcaption>
 	<pre highlight="turtle">
-  prefix st: &lt;http://www.w3.org/ns/shapetree#&gt;.
+  prefix st: &lt;http://www.w3.org/ns/st#&gt;.
   prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
   prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
 
@@ -357,7 +357,7 @@ shape trees are managing a given container.
 		<figcaption>Discover Container Shape Tree Metadata - GET Shape Tree metadata
      - Managed Container Response</figcaption>
 		<pre highlight="turtle">
-		prefix st: &lt;http://www.w3.org/ns/shapetree#&gt;.
+		prefix st: &lt;http://www.w3.org/ns/st#&gt;.
     prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
     prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
 
@@ -1701,7 +1701,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 		<figcaption>Dereference Target Container Shape Tree Metadata URI -
     Managed Response</figcaption>
 		<pre highlight="turtle">
-		@prefix st: &lt;http://www.w3.org/ns/shapetree#&gt;.
+		@prefix st: &lt;http://www.w3.org/ns/st#&gt;.
 
 		&lt;#shapetree&gt;
 	  	st:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
