@@ -240,7 +240,7 @@ with a reference to the the target [=ecosystem=] it would operate within.
 
 For purposes of this specification, an [=ecosystem=]
 <em class="rfc2119">SHOULD</em> be considered a software interface, expecting
-the below operations to be implemented.
+the [below operations](#ecosystem-operations) to be implemented.
 
 Shape Tree Operations {#operations}
 =====================
@@ -1869,8 +1869,8 @@ being deleted.
 
 ## Unindex Shape Tree ## {#ecosystem-unindexshapetree}
 <code>
-  <b>unIndexShapeTree</b>(context:ShapeTreeContext, p
-  arentContainer:URI, shapest:URI, targetContainer:URI)</code>
+  <b>unIndexShapeTree</b>(context:ShapeTreeContext, parentContainer:URI,
+   shapest:URI, targetContainer:URI)</code>
 
 This operation notifies the [=ecosystem=] of a
 [=shape tree=]/[=managed container=] being deleted.
