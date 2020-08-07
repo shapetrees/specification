@@ -171,7 +171,7 @@ For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
     <code class="vocab">st:ShapeTreeResource</code>,
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
-* An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } arc
+* An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } [=arc=]
     indicates that there is exactly one corresponding resource <code>R</code>
     and it has the name <code>L</code>.
 * An { <code>S</code> <code class="vocab">st:matchesUriTemplate</code>
@@ -2048,7 +2048,7 @@ describe the shape tree in human-readable terms.
     <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code>
     refers back to the [=shape tree=] <code>ST</code> via the
     { <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code>
-    <code>ST</code> } arc.
+    <code>ST</code> } [=arc=].
 
 SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
   be used to group or organize related [=shape trees=].
