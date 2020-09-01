@@ -106,6 +106,10 @@ Abstract:
 	}
 </style>
 
+<div boilerplate="copyright">
+MIT License Copyright 2020 W3C Solid Community Group
+</div>
+
 Introduction {#introduction}
 =====================
 

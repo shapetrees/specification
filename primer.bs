@@ -34,6 +34,10 @@ Abstract:
 	}
 </style>
 
+<div boilerplate="copyright">
+MIT License Copyright 2020 W3C Solid Community Group
+</div>
+
 Introduction {#introduction}
 =====================
 Realizing the value proposition of the Semantic Web lies in building useful and robust applications that can interoperate over linked data.
