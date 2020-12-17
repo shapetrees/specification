@@ -31,15 +31,10 @@ jobs:
           
       - name: generate html
         run: for index in *.bs; do bikeshed spec $index; done
-          
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          #publish_branch: master
-          personal_token: ${{ secrets.GITHUB_TOKEN }} 
-          
+
+      - name: List contents
+        run: ls -al
+
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -49,3 +44,12 @@ jobs:
         
       - name: Copy files
         run: aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/ --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          #publish_branch: master
+          personal_token: ${{ secrets.GITHUB_TOKEN }} 
+          
