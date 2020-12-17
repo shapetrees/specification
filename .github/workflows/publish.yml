@@ -47,5 +47,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
           aws-region: 'us-east-1'
         
-      - name: Copy files
-        run: aws s3 cp index.html s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/spec.html
+      - name: Copy HTML files
+        run: aws s3 cp *.html s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/
+      - name: Copy SVG files
+        run: aws s3 cp *.svg *.ttl s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/
+      - name: Copy CSS files
+        run: aws s3 cp *.css s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/
+      - name: Copy TTL files
+        run: aws s3 cp *.ttl s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/
