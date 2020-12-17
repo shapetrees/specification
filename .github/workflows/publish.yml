@@ -45,9 +45,9 @@ jobs:
       - name: Copy files
         run: |
           cp spec.html index.html
-          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/specification/ --no-progress --acl public-read --exclude "*" --include "spec.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
+          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/specification/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
           cp primer.html index.html
-          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/primer/ --no-progress --acl public-read --exclude "*" --include "spec.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
+          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/primer/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
           rm index.html
 
       - name: deploy
