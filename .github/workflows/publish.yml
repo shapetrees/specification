@@ -39,3 +39,13 @@ jobs:
           publish_dir: ./
           #publish_branch: master
           personal_token: ${{ secrets.GITHUB_TOKEN }} 
+          
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+        
+      - name: Copy files
+        run: aws s3 cp index.html s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/tr/spec.html
