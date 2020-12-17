@@ -43,7 +43,12 @@ jobs:
           aws-region: 'us-east-1'
         
       - name: Copy files
-        run: aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
+        run: |
+          cp spec.html index.html
+          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/specification/ --no-progress --acl public-read --exclude "*" --include "spec.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
+          cp primer.html index.html
+          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/primer/ --no-progress --acl public-read --exclude "*" --include "spec.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
+          rm index.html
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
