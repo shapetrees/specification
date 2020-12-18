@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version c5172e83, updated Fri Nov 20 15:35:20 2020 -0800" name="generator">
   <link href="https://shapetrees.org/spec" rel="canonical">
-  <meta content="50e7c55abbf79439d79250eb6d38c0a331a5dfe6" name="document-revision">
+  <meta content="509379eafea84f337782ef3abaea2c2eefd0e7e4" name="document-revision">
 <style>
 
   em.rfc2119 {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Shape Trees Specification</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-12-17">17 December 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2020-12-18">18 December 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -702,6 +702,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <li><a href="#matching-contained-shapetree"><span class="secno">5.2</span> <span class="content">Find Matching Contained Shape Tree</span></a>
       <li><a href="#initialize-statics"><span class="secno">5.3</span> <span class="content">Initialize Static Content</span></a>
       <li><a href="#update-container-metadata"><span class="secno">5.4</span> <span class="content">Update Container Metadata</span></a>
+      <li><a href="#remove-shapetree-metadata"><span class="secno">5.5</span> <span class="content">Remove Shape Tree From Container Metadata</span></a>
      </ol>
     <li>
      <a href="#ecosystem-operations"><span class="secno">6</span> <span class="content">Ecosystem Operations</span></a>
@@ -751,11 +752,11 @@ of those dependencies:</p>
      <p><a data-link-type="dfn" href="#rdf" id="ref-for-rdf">RDF</a>'s foundation in unambiguous identifiers provides an infrastructure
 that allows for interoperability, but does not specifically encourage or enforce it.</p>
     <li data-md>
-     <p>Shape languages (e.g. <a data-link-type="biblio" href="#biblio-shex">[ShEx]</a> and <a data-link-type="biblio" href="#biblio-shacl">[SHACL]</a>) provide machine-readable,
+     <p><a data-link-type="dfn" href="#shape" id="ref-for-shape">Shape</a> languages (e.g. <a data-link-type="biblio" href="#biblio-shex">[ShEx]</a> and <a data-link-type="biblio" href="#biblio-shacl">[SHACL]</a>) provide machine-readable,
 enforceable data structure definitions on single resources.</p>
    </ul>
    <p>For applications that operate on more complex and interconnected resources, <i><a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree">Shape Trees</a></i> express the layout of those resources and associate them
-with their respective shapes.</p>
+with their respective <a data-link-type="dfn" href="#shape" id="ref-for-shape①">shapes</a>.</p>
    <p><a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①">Shape trees</a> marry <a data-link-type="dfn" href="#rdf" id="ref-for-rdf①">RDF</a> vocabularies, shapes, and resources into
 "little trees" that provide machine to machine interoperability, combining them
 into concepts that humans can easily comprehend, such as medical records, notes,
@@ -765,7 +766,7 @@ apply that to a range of operations including access control, data organization,
 data validation, and data migration.</p>
    <p><a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree②">Shape trees</a> are defined as an <a data-link-type="dfn" href="#rdf" id="ref-for-rdf②">RDF</a> graph structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a server, or a client-side library that pre-processes requests
+implemented by a <a href="#server-side-agent" id="ref-for-server-side-agent">server</a>, or a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent">client-side agent</a> that pre-processes requests
 to a server.</p>
    <p>While <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree③">shape trees</a> are intended to adapt to different technology platforms
 that support the notion of <a data-link-type="dfn" href="#container" id="ref-for-container">containers</a> and <a data-link-type="dfn" href="#resource" id="ref-for-resource">resources</a>, examples in this
@@ -781,31 +782,25 @@ The upper-most Container of that tree is the <dfn class="dfn-paneled" data-dfn-t
    <p>For any <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦">shape tree</a> <code>S</code> linked in <code>ST</code>:</p>
    <ul>
     <li data-md>
-     <p>The <code class="vocab">st:expectsType</code> arc identifies the type of a
+     <p>The <code class="vocab">st:expectsType</code> <a data-link-type="dfn" href="#arc" id="ref-for-arc">arc</a> identifies the type of a
 corresponding resource <code>R</code> in <code>T</code> where validate
 values <em class="rfc2119">MUST</em> be one of <code class="vocab">st:ShapeTreeResource</code>, <code class="vocab">st:ShapeTreeContainer</code>, or <code class="vocab">st:ShapeTreeNonRDFResource</code>.</p>
     <li data-md>
-     <p>An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } arc
-indicates that there is exactly one corresponding resource <code>R</code> and it has the name <code>L</code>.</p>
+     <p>An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①">arc</a> indicates that there is exactly one corresponding resource <code>R</code> and it has the name <code>L</code>.</p>
     <li data-md>
-     <p>An { <code>S</code> <code class="vocab">st:matchesUriTemplate</code> <code>L</code> } arc indicates that there <em class="rfc2119">MAY</em> be an arbitrary number of corresponding resources <code>R</code> and each will have a name that matches the URI template <a data-link-type="biblio" href="#biblio-rfc6570">[RFC6570]</a> <code>L</code>.</p>
+     <p>An { <code>S</code> <code class="vocab">st:matchesUriTemplate</code> <code>L</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc②">arc</a> indicates that there <em class="rfc2119">MAY</em> be an arbitrary number of corresponding resources <code>R</code> and each will have a name that matches the URI template <a data-link-type="biblio" href="#biblio-rfc6570">[RFC6570]</a> <code>L</code>.</p>
     <li data-md>
-     <p>An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> }
-arc indicates that <code>R</code> <em class="rfc2119">MUST</em> have exactly one node which conforms to shape <code>Sh</code>.</p>
+     <p>An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc③">arc</a> indicates that <code>R</code> <em class="rfc2119">MUST</em> have exactly one node which conforms to <a data-link-type="dfn" href="#shape" id="ref-for-shape②">shape</a> <code>Sh</code>.</p>
     <li data-md>
-     <p>Any { <code>S</code> <code class="vocab">st:contains</code> <code>S2</code> }
-arcs indicate there is a nested <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑧">shape tree</a> and corresponding nested
+     <p>Any { <code>S</code> <code class="vocab">st:contains</code> <code>S2</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc④">arcs</a> indicate there is a nested <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑧">shape tree</a> and corresponding nested
 resource <code>R2</code>.</p>
     <li data-md>
-     <p>An { <code>S</code> <code class="vocab">st:references</code> <code>S3</code> }
-arc indicates that <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑨">shape tree</a> <code>S3</code> is referenced through the
+     <p>An { <code>S</code> <code class="vocab">st:references</code> <code>S3</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑤">arc</a> indicates that <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑨">shape tree</a> <code>S3</code> is referenced through the
 instance data for <code>S</code>.</p>
     <li data-md>
-     <p>An { <code>S</code> <code class="vocab">st:supports</code> <code>S4</code> }
-arc indicates that <code>S</code> provides a different representation of <code>S4</code> for aggregation purposes.</p>
+     <p>An { <code>S</code> <code class="vocab">st:supports</code> <code>S4</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑥">arc</a> indicates that <code>S</code> provides a different representation of <code>S4</code> for aggregation purposes.</p>
    </ul>
-   <p>A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
-    arc indicates the location of an index of SKOS hierarchies that describe <code>ST</code>.</p>
+   <p>A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑦">arc</a> indicates the location of an index of <a href="#skos-graph" id="ref-for-skos-graph">SKOS hierarchies</a> that describe <code>ST</code>.</p>
    <figure id="shapetree-shex">
     <figcaption>ShEx validation of a Shape Tree</figcaption>
 <pre class="highlight"><c- k>prefix</c-> <c- nn>st:</c-> <c- g>&lt;http://www.w3.org/ns/st#></c-><c- p>.</c->
@@ -832,13 +827,11 @@ arc indicates that <code>S</code> provides a different representation of <code>S
 </pre>
    </figure>
    <h2 class="heading settled" data-level="3" id="ecosystems"><span class="secno">3. </span><span class="content">Ecosystems</span><a class="self-link" href="#ecosystems"></a></h2>
-    <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⓪">Shape trees</a> are meant to be used in context of a broader <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem">ecosystem</a>. <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①">Ecosystems</a> have the ability to react to (and in some cases influence) <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①①">shape tree</a> operations. 
-   <p><a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem②">Ecosystems</a> define the compatibility requirements for participating
-applications and agents to be interoperable.</p>
-   <p><a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①②">Shape trees</a> are used by <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem③">ecosystems</a> to become aware of the planting of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①③">shape trees</a> and changes to instances of those trees.</p>
+    <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⓪">Shape trees</a> are meant to be used in context of a broader <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem">ecosystem</a>. <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①">Ecosystems</a> have the ability to react to (and in some cases influence) <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①①">shape tree</a> <a href="#operations">operations</a>. 
+   <p><a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①②">Shape trees</a> are used by <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem②">ecosystems</a> to become aware of the <a href="#plant-shapetree">planting</a> of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①③">shape trees</a> and changes to instances of those trees.</p>
    <p>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①④">Shape tree</a> client library <em class="rfc2119">MUST</em> be initialized
-with a reference to the the target <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem④">ecosystem</a> it would operate within.</p>
-   <p>For purposes of this specification, an <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑤">ecosystem</a> <em class="rfc2119">SHOULD</em> be considered a software interface, expecting
+with a reference to the the target <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem③">ecosystem</a> it would operate within.</p>
+   <p>For purposes of this specification, an <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem④">ecosystem</a> <em class="rfc2119">SHOULD</em> be considered a software interface, expecting
 the <a href="#ecosystem-operations">below operations</a> to be implemented.</p>
    <h2 class="heading settled" data-level="4" id="operations"><span class="secno">4. </span><span class="content">Shape Tree Operations</span><a class="self-link" href="#operations"></a></h2>
    <p>Working with <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⑤">shape trees</a> entails using several higher-level operations —<wbr>each of which may represent one or more HTTP requests and/or pieces of
@@ -897,8 +890,7 @@ shape trees are managing a given container.</p>
    </table>
    <h4 class="heading settled" data-level="4.1.4" id="discovery-details"><span class="secno">4.1.4. </span><span class="content">Operation Details</span><a class="self-link" href="#discovery-details"></a></h4>
    <h5 class="heading settled" data-level="4.1.4.1" id="discovery-details-head"><span class="secno">4.1.4.1. </span><span class="content">Perform a HEAD on the provided <code>uri</code> to discover Shape Tree metadata URI</span><a class="self-link" href="#discovery-details-head"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-  client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent①">client-side agent</a>.</p>
    <figure id="fig-discover-head-request">
     <figcaption><code>uri</code> = <code>/data/CommonNotes/</code></figcaption>
 <pre class="highlight">HEAD /data/CommonNotes/
@@ -919,8 +911,7 @@ shape trees are managing a given container.</p>
    <p>Let <code>metauri</code> be the URI of the shape tree metadata resource
     pertaining to <code>uri</code> through the Link header with relation <code>http://shapetrees.org/#ShapeTree</code>.</p>
    <h5 class="heading settled" data-level="4.1.4.2" id="discovery-details-get"><span class="secno">4.1.4.2. </span><span class="content">Perform a GET on the discovered Shape Tree metadata resource (<code>metauri</code>)</span><a class="self-link" href="#discovery-details-get"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> performed by a
-  client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent②">client-side agent</a>.</p>
    <figure id="fig-discover-get-metadata">
     <figcaption>Discover Container Shape Tree Metadata -
     Get Shape Tree metadata - Request</figcaption>
@@ -953,15 +944,14 @@ shape trees are managing a given container.</p>
    <p>A 404 status code indicates that no <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⑦">shape trees</a> manage this <a data-link-type="dfn" href="#container" id="ref-for-container③">container</a>, and so it <em class="rfc2119">MUST</em> be considered
     an <a data-link-type="dfn" href="#unmanaged-container" id="ref-for-unmanaged-container">Unmanaged Container</a>.</p>
    <h5 class="heading settled" data-level="4.1.4.3" id="discovery-details-collect"><span class="secno">4.1.4.3. </span><span class="content">Collect any navigable shape trees</span><a class="self-link" href="#discovery-details-collect"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> performed by a
-  client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent③">client-side agent</a>.</p>
    <p>If the <code>&lt;#shapetree></code> subject has one or more <code class="vocab">st:hasShapeTreeLocator</code> predicates it means this
     container <em class="rfc2119">MUST</em> be considered a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container">Managed Container</a>.</p>
    <p>Let <code>mc</code> be this <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①">managed container</a>.</p>
    <p>The <code class="vocab">st:hasShapeTree</code> of each <code class="vocab">st:ShapeTreeLocator</code> subject specifies what <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⑧">shape tree</a> manages <code>mc</code>.</p>
    <p>The IRI of each <code class="vocab">st:ShapeTreeLocator</code> describing a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree①⑨">shape tree</a> managing <code>mc</code> <em class="rfc2119">SHOULD</em> be returned.</p>
    <h3 class="heading settled" data-level="4.2" id="plant-shapetree"><span class="secno">4.2. </span><span class="content">Plant Shape Tree</span><a class="self-link" href="#plant-shapetree"></a></h3>
-   <p class="note" role="note"><span>Note:</span> A plant operation <em class="rfc2119">MAY</em> be performed by either a client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> A plant operation <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①③">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⑧">server-side agent</a>.</p>
    <p>The <b>plant</b> operation marks a container (new or existing) as being
 managed by one or more shape trees.</p>
    <h4 class="heading settled" data-level="4.2.1" id="plant-inputs"><span class="secno">4.2.1. </span><span class="content">Inputs</span><a class="self-link" href="#plant-inputs"></a></h4>
@@ -1063,8 +1053,8 @@ that the requested shape trees (<code>linkst</code>) are planted in</p>
    <h4 class="heading settled" data-level="4.2.5" id="plant-details"><span class="secno">4.2.5. </span><span class="content">Operation Details</span><a class="self-link" href="#plant-details"></a></h4>
    <h5 class="heading settled" data-level="4.2.5.1" id="plant-details-callhook-beforeplantshapetree"><span class="secno">4.2.5.1. </span><span class="content">Call Ecosystem Hook - Before Plant Shape Tree</span><a class="self-link" href="#plant-details-callhook-beforeplantshapetree"></a></h5>
    <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by
-  a client-side agent.</p>
-   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑥">ecosystem</a>'s <a href="#ecosystem-beforeplantshapetree">Before Plant Shape Tree operation</a> with parameters:</p>
+  a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent④">client-side agent</a>.</p>
+   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑤">ecosystem</a>'s <a href="#ecosystem-beforeplantshapetree">Before Plant Shape Tree operation</a> with parameters:</p>
    <table align="left" class="data algorithmparams">
     <thead>
      <tr>
@@ -1091,8 +1081,7 @@ that the requested shape trees (<code>linkst</code>) are planted in</p>
       <td>All link headers from request
    </table>
    <h5 class="heading settled" data-level="4.2.5.2" id="plant-details-preconditions"><span class="secno">4.2.5.2. </span><span class="content">Preconditions</span><a class="self-link" href="#plant-details-preconditions"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent⑤">client-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Ensure the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container">Parent Container</a> (<code>pc</code>) exists.  If not, this
@@ -1116,8 +1105,7 @@ representing both existing and <code>linkst</code> IRIs</p>
      </ol>
    </ol>
    <h5 class="heading settled" data-level="4.2.5.3" id="plant-static-validation"><span class="secno">4.2.5.3. </span><span class="content">Static Validation of Shape Trees for Conflicts</span><a class="self-link" href="#plant-static-validation"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①④">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①">server-side agent</a>..</p>
    <ol>
     <li data-md>
      <p>Iterate <code>allst</code> to validate that none of the following conditions
@@ -1133,8 +1121,7 @@ are met:</p>
    </ol>
    <p>If any of the above static validations fail, this operation <em class="rfc2119">MUST</em> return a 400 status code.</p>
    <h5 class="heading settled" data-level="4.2.5.4" id="plant-graphbody-validation"><span class="secno">4.2.5.4. </span><span class="content">Validate graph body</span><a class="self-link" href="#plant-graphbody-validation"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①⑤">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent②">server-side agent</a>..</p>
    <p class="issue" id="issue-629a3175"><a class="self-link" href="#issue-629a3175"></a> Must detail how to differentiate between ShEx and SHACL validation</p>
    <ol>
     <li data-md>
@@ -1149,8 +1136,7 @@ targeting the graph’s <code>linkfn</code>.  If validation fails, this
 operation <em class="rfc2119">MUST</em> return a 422 status code</p>
    </ol>
    <h5 class="heading settled" data-level="4.2.5.5" id="plant-parent-validation"><span class="secno">4.2.5.5. </span><span class="content">Validate against parent container</span><a class="self-link" href="#plant-parent-validation"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①⑥">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent③">server-side agent</a>..</p>
    <ol>
     <li data-md>
      <p>Determine if the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container①">Parent Container</a> (<code>pc</code>) is a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container②">Managed Container</a> by evaluating if <code>parentst</code> is not empty</p>
@@ -1184,8 +1170,7 @@ parameters:</p>
       <td>The resource type being created/modified
    </table>
    <h5 class="heading settled" data-level="4.2.5.6" id="plant-create-container"><span class="secno">4.2.5.6. </span><span class="content">Create Target Container (<code>tc</code>), if necessary</span><a class="self-link" href="#plant-create-container"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①⑦">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent④">server-side agent</a>..</p>
    <ol>
     <li data-md>
      <p>If <code>tc</code> does not exist, create it.</p>
@@ -1206,8 +1191,7 @@ Content-length: 396
      </figure>
    </ol>
    <h5 class="heading settled" data-level="4.2.5.7" id="plant-update-container-metadata"><span class="secno">4.2.5.7. </span><span class="content">Update Shape Tree Meta Data for Target Container (<code>tc</code>)</span><a class="self-link" href="#plant-update-container-metadata"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent①⑧">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent⑤">server-side agent</a>..</p>
    <ol>
     <li data-md>
      <p>Update Target Container <code>tc</code> Metadata (<code>metauri</code>)</p>
@@ -1246,7 +1230,7 @@ parameters:</p>
    </ol>
    <h5 class="heading settled" data-level="4.2.5.8" id="plant-initialize-statics"><span class="secno">4.2.5.8. </span><span class="content">Initialize Static Content</span><a class="self-link" href="#plant-initialize-statics"></a></h5>
    <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either
-    a client or server side agent.</p>
+    a <a href="#client-side-agent" id="ref-for-client-side-agent①⑨">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent⑥">server-side agent</a>..</p>
    <ol>
     <li data-md>
      <p>Let <code>cst</code> be the shape tree having a <code class="vocab">st:contains</code> value (if one exists) from the
@@ -1285,14 +1269,13 @@ and call algorithm <a href="#initialize-statics">Initialize Statics</a> with par
       <td> The <a data-link-type="dfn" href="#target-container" id="ref-for-target-container⑧">target container</a> to that will contain instance data of the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree③①">shape tree</a> 
    </table>
    <h5 class="heading settled" data-level="4.2.5.9" id="plant-details-callhook-indexshapetree"><span class="secno">4.2.5.9. </span><span class="content">Call Ecosystem Hook - Index Shape Tree</span><a class="self-link" href="#plant-details-callhook-indexshapetree"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent⑥">client-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Iterate the collection of shape trees that were planted (<code>linkst</code>),
 letting <code>linksti</code> be the current IRI in context</p>
     <li data-md>
-     <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑦">ecosystem</a>'s <a href="#ecosystem-indexshapetree">Index Shape Tree operation</a> with parameters:</p>
+     <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑥">ecosystem</a>'s <a href="#ecosystem-indexshapetree">Index Shape Tree operation</a> with parameters:</p>
    </ol>
    <table align="left" class="data algorithmparams">
     <thead>
@@ -1378,8 +1361,7 @@ the resource. This will only be present when <code>req</code> is a PUT</p>
    </table>
    <h4 class="heading settled" data-level="4.3.5" id="create-data-instance-details"><span class="secno">4.3.5. </span><span class="content">Operation Details</span><a class="self-link" href="#create-data-instance-details"></a></h4>
    <h5 class="heading settled" data-level="4.3.5.1" id="create-data-instance-details-preconditions"><span class="secno">4.3.5.1. </span><span class="content">Preconditions</span><a class="self-link" href="#create-data-instance-details-preconditions"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent⑦">client-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Ensure the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container⑤">Parent Container</a> (<code>pc</code>) exists.  If not, return
@@ -1393,8 +1375,7 @@ discovered for <code>pc</code></p>
      </ol>
    </ol>
    <h5 class="heading settled" data-level="4.3.5.2" id="create-data-instance-details-parent-validation"><span class="secno">4.3.5.2. </span><span class="content">Validate against parent container</span><a class="self-link" href="#create-data-instance-details-parent-validation"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②⓪">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent⑦">server-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Determine if the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container⑥">Parent Container</a> (<code>pc</code>) is a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container④">Managed Container</a> by evaluating if <code>parentst</code> is not empty</p>
@@ -1427,11 +1408,9 @@ with parameters:</p>
       <td>The resource type being created
    </table>
    <h5 class="heading settled" data-level="4.3.5.3" id="create-data-instance-details-create-resource"><span class="secno">4.3.5.3. </span><span class="content">Create Resource</span><a class="self-link" href="#create-data-instance-details-create-resource"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②①">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent⑧">server-side agent</a>..</p>
    <h5 class="heading settled" data-level="4.3.5.4" id="create-data-instance-details-initialize-statics"><span class="secno">4.3.5.4. </span><span class="content">Initialize Static Content</span><a class="self-link" href="#create-data-instance-details-initialize-statics"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②②">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent⑨">server-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Iterate any <code class="vocab">st:contains</code> IRIs within <code>mcst</code>, letting <code>csti</code> be the current IRI in context</p>
@@ -1467,9 +1446,8 @@ call algorithm <a href="#initialize-statics">Initialize Statics</a> with paramet
       <td> The <a data-link-type="dfn" href="#target-container" id="ref-for-target-container①⑤">target container</a> that will contain instance data of the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree③⑨">shape tree</a> 
    </table>
    <h5 class="heading settled" data-level="4.3.5.5" id="create-data-instance-details-callhook-indexshapetreedatainstance"><span class="secno">4.3.5.5. </span><span class="content">Call Ecosystem Hook - Index Shape Tree Data Instance</span><a class="self-link" href="#create-data-instance-details-callhook-indexshapetreedatainstance"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
-   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑧">ecosystem</a>'s <a href="#ecosystem-indexshapetreedatainstance">Index Shape Tree Data Instance operation</a> with parameters:</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent⑧">client-side agent</a>.</p>
+   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑦">ecosystem</a>'s <a href="#ecosystem-indexshapetreedatainstance">Index Shape Tree Data Instance operation</a> with parameters:</p>
    <table align="left" class="data algorithmparams">
     <thead>
      <tr>
@@ -1549,8 +1527,7 @@ of the resource, defined by the resource portion of <code>req</code>.</p>
    </table>
    <h4 class="heading settled" data-level="4.4.5" id="update-data-instance-details"><span class="secno">4.4.5. </span><span class="content">Operation Details</span><a class="self-link" href="#update-data-instance-details"></a></h4>
    <h5 class="heading settled" data-level="4.4.5.1" id="update-data-instance-details-preconditions"><span class="secno">4.4.5.1. </span><span class="content">Preconditions</span><a class="self-link" href="#update-data-instance-details-preconditions"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent⑨">client-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Ensure the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container①⓪">Parent Container</a> (<code>pc</code>) exists.
@@ -1564,8 +1541,7 @@ IRIs discovered for <code>pc</code></p>
      </ol>
    </ol>
    <h5 class="heading settled" data-level="4.4.5.2" id="update-data-instance-details-parent-validation"><span class="secno">4.4.5.2. </span><span class="content">Validate against parent container</span><a class="self-link" href="#update-data-instance-details-parent-validation"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②③">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⓪">server-side agent</a>.</p>
    <ol>
     <li data-md>
      <p>Determine if the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container①①">Parent Container</a> (<code>pc</code>) is a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container⑥">Managed Container</a> by evaluating if <code>parentst</code> is not empty</p>
@@ -1601,9 +1577,8 @@ parameters:</p>
    <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a client
     or server side agent.</p>
    <h5 class="heading settled" data-level="4.4.5.4" id="update-data-instance-details-callhook-updateshapetreedatainstance"><span class="secno">4.4.5.4. </span><span class="content">Call Ecosystem Hook - Update Shape Tree Data Instance</span><a class="self-link" href="#update-data-instance-details-callhook-updateshapetreedatainstance"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
-   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑨">ecosystem</a>'s <a href="#ecosystem-updateshapetreedatainstance">Update Shape Tree Data Instance operation</a> with parameters:</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent①⓪">client-side agent</a>.</p>
+   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑧">ecosystem</a>'s <a href="#ecosystem-updateshapetreedatainstance">Update Shape Tree Data Instance operation</a> with parameters:</p>
    <table align="left" class="data algorithmparams">
     <thead>
      <tr>
@@ -1661,12 +1636,10 @@ characteristics:</p>
    </table>
    <h4 class="heading settled" data-level="4.5.5" id="delete-data-instance-details"><span class="secno">4.5.5. </span><span class="content">Operation Details</span><a class="self-link" href="#delete-data-instance-details"></a></h4>
    <h5 class="heading settled" data-level="4.5.5.1" id="delete-data-instance-details-delete-resource"><span class="secno">4.5.5.1. </span><span class="content">Delete Resource</span><a class="self-link" href="#delete-data-instance-details-delete-resource"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②④">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①①">server-side agent</a>.</p>
    <h5 class="heading settled" data-level="4.5.5.2" id="delete-data-instance-details-callhook-unindexshapetreedatainstance"><span class="secno">4.5.5.2. </span><span class="content">Call Ecosystem Hook - Unindex Shape Tree Data Instance</span><a class="self-link" href="#delete-data-instance-details-callhook-unindexshapetreedatainstance"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
-   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⓪">ecosystem</a>'s <a href="#ecosystem-unindexshapetreedatainstance">Unindex Shape Tree Data Instance operation</a> with parameters:</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent①①">client-side agent</a>.</p>
+   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem⑨">ecosystem</a>'s <a href="#ecosystem-unindexshapetreedatainstance">Unindex Shape Tree Data Instance operation</a> with parameters:</p>
    <table align="left" class="data algorithmparams">
     <thead>
      <tr>
@@ -1684,7 +1657,7 @@ characteristics:</p>
       <td>The IRI of the instance being removed
    </table>
    <h3 class="heading settled" data-level="4.6" id="unplant-shapetree"><span class="secno">4.6. </span><span class="content">Unplant Shape Tree</span><a class="self-link" href="#unplant-shapetree"></a></h3>
-   <p>The <b>unplant shape tree</b> operation deletes a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container⑧">managed container</a>.</p>
+   <p>The <b>unplant shape tree</b> operation unassigns the provided <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑧">shape tree</a> from the provided <a data-link-type="dfn" href="#container" id="ref-for-container⑤">container</a>.  If there are no remaining <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑨">shape trees</a> managing the <a data-link-type="dfn" href="#container" id="ref-for-container⑥">container</a>, it would no longer be considered a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container⑧">managed container</a>.</p>
    <h4 class="heading settled" data-level="4.6.1" id="unplant-shapetree-inputs"><span class="secno">4.6.1. </span><span class="content">Inputs</span><a class="self-link" href="#unplant-shapetree-inputs"></a></h4>
    <ul>
     <li data-md>
@@ -1693,7 +1666,8 @@ characteristics:</p>
      <ul>
       <li data-md>
        <p>Let <code>linkst</code> be a Link header with the relation of
-"http://shapetrees.org/#ShapeTree"</p>
+"http://shapetrees.org/#ShapeTree" indicating the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⓪">shape tree</a> that
+should no longer manage the target <a data-link-type="dfn" href="#container" id="ref-for-container⑦">container</a></p>
      </ul>
    </ul>
    <h4 class="heading settled" data-level="4.6.2" id="unplant-shapetree-outputs"><span class="secno">4.6.2. </span><span class="content">Outputs</span><a class="self-link" href="#unplant-shapetree-outputs"></a></h4>
@@ -1701,12 +1675,12 @@ characteristics:</p>
     <li data-md>
      <p>Standard HTTP response</p>
    </ul>
-   <h4 class="heading settled" data-level="4.6.3" id="unplant-shapetree-terms"><span class="secno">4.6.3. </span><span class="content">Key Terms for Deleting Data Instances</span><a class="self-link" href="#unplant-shapetree-terms"></a></h4>
+   <h4 class="heading settled" data-level="4.6.3" id="unplant-shapetree-terms"><span class="secno">4.6.3. </span><span class="content">Key Terms for Unplanting Shape Trees</span><a class="self-link" href="#unplant-shapetree-terms"></a></h4>
    <ul>
     <li data-md>
-     <p>Let <code>pc</code> be the parent <a data-link-type="dfn" href="#container" id="ref-for-container⑤">Container</a> of the resource being deleted</p>
+     <p>Let <code>pc</code> be the parent <a data-link-type="dfn" href="#container" id="ref-for-container⑧">Container</a> of the resource being deleted</p>
     <li data-md>
-     <p>Let <code>tc</code> be the <a data-link-type="dfn" href="#container" id="ref-for-container⑥">Container</a> of the resource being deleted</p>
+     <p>Let <code>tc</code> be the <a data-link-type="dfn" href="#container" id="ref-for-container⑨">Container</a> of the resource being deleted</p>
    </ul>
    <h4 class="heading settled" data-level="4.6.4" id="unplant-summary"><span class="secno">4.6.4. </span><span class="content">Operation Summary</span><a class="self-link" href="#unplant-summary"></a></h4>
    <table align="left" class="data operationdetails">
@@ -1717,8 +1691,8 @@ characteristics:</p>
       <th colspan="2">Interaction
     <tbody>
      <tr>
-      <td><a href="#unplant-shapetree-details-delete-container">1</a>
-      <td>Delete Container
+      <td><a href="#unplant-shapetree-details-remove-shapetree">1</a>
+      <td> Update metadata container to remove <code class="vocab">ShapeTreeLocator</code> for the provided <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤①">shape tree</a> 
       <td colspan="2">
      <tr>
       <td><a href="#unplant-shapetree-details-callhook-unindexshapetree">2</a>
@@ -1726,13 +1700,30 @@ characteristics:</p>
       <td colspan="2">See <a href="#ecosystem-unindexshapetree">Unindex Shape Tree</a>
    </table>
    <h4 class="heading settled" data-level="4.6.5" id="unplant-shapetree-details"><span class="secno">4.6.5. </span><span class="content">Operation Details</span><a class="self-link" href="#unplant-shapetree-details"></a></h4>
-   <h5 class="heading settled" data-level="4.6.5.1" id="unplant-shapetree-details-delete-container"><span class="secno">4.6.5.1. </span><span class="content">Delete Container</span><a class="self-link" href="#unplant-shapetree-details-delete-container"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <h5 class="heading settled" data-level="4.6.5.1" id="unplant-shapetree-details-remove-shapetree"><span class="secno">4.6.5.1. </span><span class="content">Remove Shape Tree Metadata</span><a class="self-link" href="#unplant-shapetree-details-remove-shapetree"></a></h5>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②⑤">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①②">server-side agent</a>.</p>
+   <p>Call the <a href="#remove-shapetree-metadata">remove shape tree metadata</a> algorithm with
+parameters:</p>
+   <table align="left" class="data algorithmparams">
+    <thead>
+     <tr>
+      <td><b>Parameter</b>
+      <td><b>Value</b>
+      <td><b>Notes</b>
+    <tbody>
+     <tr>
+      <td><code>uri</code>
+      <td><code>tc</code>
+      <td> The <a data-link-type="dfn" href="#target-container" id="ref-for-target-container①⑨">target container</a> that the [shape tree] is being removed
+              from 
+     <tr>
+      <td><code>st</code>
+      <td><code>linktst</code>
+      <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤②">shape tree</a> no longer managing the <code>tc</code>
+   </table>
    <h5 class="heading settled" data-level="4.6.5.2" id="unplant-shapetree-details-callhook-unindexshapetree"><span class="secno">4.6.5.2. </span><span class="content">Call Ecosystem Hook - Unindex Shape Tree</span><a class="self-link" href="#unplant-shapetree-details-callhook-unindexshapetree"></a></h5>
-   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.</p>
-   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①①">ecosystem</a>'s <a href="#ecosystem-unindexshapetree">Unindex Shape Tree operation</a> with parameters:</p>
+   <p class="note" role="note"><span>Note:</span> This step <em class="rfc2119">SHOULD</em> be performed by a <a data-link-type="dfn" href="#client-side-agent" id="ref-for-client-side-agent①②">client-side agent</a>.</p>
+   <p>Call the provided <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⓪">ecosystem</a>'s <a href="#ecosystem-unindexshapetree">Unindex Shape Tree operation</a> with parameters:</p>
    <table align="left" class="data algorithmparams">
     <thead>
      <tr>
@@ -1744,24 +1735,23 @@ characteristics:</p>
       <td><code>parentContainer</code>
       <td><code>pc</code>
       <td> The <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container①④">parent container</a> containing the <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container⑨">managed container</a> being
-        deleted 
+        unplanted 
      <tr>
       <td><code>shapeTree</code>
       <td><code>linkst</code>
-      <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑧">shape tree</a> managing the container being deleted
+      <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤③">shape tree</a> managing the container being unplanted
      <tr>
       <td><code>shapeTreeInstance</code>
       <td><code>tc</code>
-      <td>The IRI of the container being deleted
+      <td>The IRI of the container the shape tree is being removed from
    </table>
    <h2 class="heading settled" data-level="5" id="algorithms"><span class="secno">5. </span><span class="content">Shape Tree Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
-   <p>The below algorithms detail key pieces of logic required for <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑨">shape tree</a> implementations.</p>
+   <p>The below algorithms detail key pieces of logic required for <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤④">shape tree</a> implementations.</p>
    <h3 class="heading settled" data-level="5.1" id="validate-proposed-resource"><span class="secno">5.1. </span><span class="content">Validate Proposed Resource Against Parent Container</span><a class="self-link" href="#validate-proposed-resource"></a></h3>
    <p>This algorithm is responsible for determining if a proposed resource
-(which may more specifically be a <a data-link-type="dfn" href="#container" id="ref-for-container⑦">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource①">resource</a>, or <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source">non-RDF source</a>) is
-valid to be created within a given <a data-link-type="dfn" href="#container" id="ref-for-container⑧">container</a>.</p>
-   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+(which may more specifically be a <a data-link-type="dfn" href="#container" id="ref-for-container①⓪">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource①">resource</a>, or <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source">non-RDF source</a>) is
+valid to be created within a given <a data-link-type="dfn" href="#container" id="ref-for-container①①">container</a>.</p>
+   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②⑥">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①③">server-side agent</a>.</p>
    <p><strong>Inputs</strong></p>
    <ul>
     <li data-md>
@@ -1782,7 +1772,7 @@ resource name <em class="rfc2119">MUST</em> be provided</p>
      </ul>
     <li data-md>
      <p>Let <code>rt</code> be the resource type of proposed
-resource (<a data-link-type="dfn" href="#container" id="ref-for-container⑨">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource②">resource</a>, <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source①">non-RDF source</a>)</p>
+resource (<a data-link-type="dfn" href="#container" id="ref-for-container①②">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource②">resource</a>, <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source①">non-RDF source</a>)</p>
    </ul>
    <p><strong>Outputs</strong></p>
    <ul>
@@ -1795,7 +1785,7 @@ resource (<a data-link-type="dfn" href="#container" id="ref-for-container⑨">co
      <p>Determine if the <a data-link-type="dfn" href="#parent-container" id="ref-for-parent-container①⑤">Parent Container</a> (<code>pc</code>) is a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①①">Managed Container</a> by evaluating if <code>parentst</code> is not empty</p>
     <li data-md>
      <p>If <code>pc</code> is a <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①②">Managed Container</a>, let <code>mcst</code> be the
-matching contained <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⓪">shape tree</a> which is the result of calling the <a href="#matching-contained-shapetree">matching contained shape tree</a> algorithm
+matching contained <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑤">shape tree</a> which is the result of calling the <a href="#matching-contained-shapetree">matching contained shape tree</a> algorithm
 with parameters:</p>
      <table align="left" class="data algorithmparams">
       <thead>
@@ -1807,7 +1797,7 @@ with parameters:</p>
        <tr>
         <td><code>uri</code>
         <td><code>pc</code>
-        <td>The parent container to discover <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤①">shape trees</a> for 
+        <td>The parent container to discover <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑥">shape trees</a> for 
        <tr>
         <td><code>rn</code>
         <td> If <code>req</code> is a POST then <code>slug</code><br> If <code>req</code> is a PUT then <code>name</code> 
@@ -1815,7 +1805,7 @@ with parameters:</p>
        <tr>
         <td><code>sth</code>
         <td><code>sth</code>
-        <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤②">shape tree</a> hint provided as a Link header 
+        <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑦">shape tree</a> hint provided as a Link header 
        <tr>
         <td><code>rt</code>
         <td><code>rt</code>
@@ -1835,13 +1825,13 @@ targeting the graph’s <code>linkfn</code>.  If validation fails,
 this operation <em class="rfc2119">MUST</em> return a 422 status code</p>
    </ol>
    <h3 class="heading settled" data-level="5.2" id="matching-contained-shapetree"><span class="secno">5.2. </span><span class="content">Find Matching Contained Shape Tree</span><a class="self-link" href="#matching-contained-shapetree"></a></h3>
-   <p>This algorithm is responsible for determining which <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤③">shape tree</a> within a set
+   <p>This algorithm is responsible for determining which <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑧">shape tree</a> within a set
 of shape trees mentioned in <code class="vocab">st:contains</code> is
 applicable for a given proposed resource.</p>
    <p class="issue" id="issue-2ae7a487"><a class="self-link" href="#issue-2ae7a487"></a> This describes a new construct (the use of a link header to direct which
 contained shape tree should be matched) not yet in any published implementation</p>
    <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either
-    a client or server side agent.</p>
+    a <a href="#client-side-agent" id="ref-for-client-side-agent②⑦">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①④">server-side agent</a>.</p>
    <p><strong>Inputs</strong></p>
    <ul>
     <li data-md>
@@ -1859,10 +1849,10 @@ the proposed resource</p>
   name <em class="rfc2119">MUST</em> be provided</p>
      </ul>
     <li data-md>
-     <p>Let <code>sth</code> be the <em class="rfc2119">OPTIONAL</em> target <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤④">shape tree</a> hint, from the request’s Link header with the relation
+     <p>Let <code>sth</code> be the <em class="rfc2119">OPTIONAL</em> target <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑨">shape tree</a> hint, from the request’s Link header with the relation
 of "http://shapetrees.org/#TargetShapeTree"</p>
     <li data-md>
-     <p>Let <code>rt</code> be the resource type of proposed resource <a data-link-type="dfn" href="#container" id="ref-for-container①⓪">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource③">resource</a>, or <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source②">non-RDF source</a>)</p>
+     <p>Let <code>rt</code> be the resource type of proposed resource <a data-link-type="dfn" href="#container" id="ref-for-container①③">container</a>, <a data-link-type="dfn" href="#resource" id="ref-for-resource③">resource</a>, or <a data-link-type="dfn" href="#non-rdf-source" id="ref-for-non-rdf-source②">non-RDF source</a>)</p>
    </ul>
    <p><strong>Outputs</strong></p>
    <ul>
@@ -1888,7 +1878,7 @@ by each <code class="vocab">st:contains</code> of <code>cst</code></p>
        <p>and <code>sth</code> exists within <code>ccst</code> return <code>sth</code></p>
      </ol>
     <li data-md>
-     <p>Iterating through <code>ccst</code>, let <code>ccsti</code> be the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑤">shape tree</a> currently evaluated</p>
+     <p>Iterating through <code>ccst</code>, let <code>ccsti</code> be the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⓪">shape tree</a> currently evaluated</p>
     <li data-md>
      <p>If <code>rn</code> matches <code>ccsti</code> <code class="vocab">st:matchesUriTemplate</code> using <a data-link-type="biblio" href="#biblio-rfc6570">[RFC6570]</a> add to
 potential matches (<code>pm</code>)</p>
@@ -1948,12 +1938,11 @@ type to be created without matching the shape tree</p>
    <p>This algorithm is responsible for initializing static content that is implied
 through the creation of its parent.  When called, it recursively seeks out
 resources to be statically created.</p>
-   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②⑧">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⑤">server-side agent</a>.</p>
    <p><strong>Inputs</strong></p>
    <ul>
     <li data-md>
-     <p>Let <code>pc</code> be the URI of the parent <a data-link-type="dfn" href="#container" id="ref-for-container①①">container</a> that any statics
+     <p>Let <code>pc</code> be the URI of the parent <a data-link-type="dfn" href="#container" id="ref-for-container①④">container</a> that any statics
 would be created within</p>
     <li data-md>
      <p>Let <code>sst</code> be the static shape tree to be initialized where an <code class="vocab">rdfs:label</code> is set</p>
@@ -2000,11 +1989,11 @@ naming, letting <code>cr</code> be the resulting resource that was created</p>
          <tr>
           <td><code>rootst</code>
           <td><code>rst</code>
-          <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑥">shape tree</a> of the hierarchy
+          <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥①">shape tree</a> of the hierarchy
          <tr>
           <td><code>st</code>
           <td><code>sst</code>
-          <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑦">shape tree</a> to assign to <code>cr</code> 
+          <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥②">shape tree</a> to assign to <code>cr</code> 
          <tr>
           <td><code>rootpath</code>
           <td><code>rc</code>
@@ -2035,11 +2024,11 @@ IRI <code>cssti</code></p>
            <tr>
             <td><code>sst</code>
             <td><code>csstit</code>
-            <td>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑧">shape tree</a> to be recursively planted
+            <td>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥③">shape tree</a> to be recursively planted
            <tr>
             <td><code>rst</code>
             <td><code>rst</code>
-            <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑨">shape tree</a> of the hierarchy
+            <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥④">shape tree</a> of the hierarchy
            <tr>
             <td><code>rc</code>
             <td><code>rc</code>
@@ -2052,17 +2041,16 @@ IRI <code>cssti</code></p>
    <p>This algorithm is responsible for updating the shape tree metadata for a
 container to reflect what shapetree(s) manage that container
 and the container’s location relative to the broader hierarchy of shape trees.</p>
-   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.</p>
+   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②⑨">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⑥">server-side agent</a>.</p>
    <p><strong>Inputs</strong>:</p>
    <ul>
     <li data-md>
-     <p>Let <code>tc</code> be the URI of the <a data-link-type="dfn" href="#container" id="ref-for-container①②">Container</a> to update metadata for</p>
+     <p>Let <code>tc</code> be the URI of the <a data-link-type="dfn" href="#container" id="ref-for-container①⑤">Container</a> to update metadata for</p>
     <li data-md>
-     <p>Let <code>rootst</code> be the root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⓪">shape tree</a> within a hierarchy of
+     <p>Let <code>rootst</code> be the root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑤">shape tree</a> within a hierarchy of
 shape tree containers</p>
     <li data-md>
-     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥①">shape tree</a> that will manage <code>tc</code></p>
+     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑥">shape tree</a> that will manage <code>tc</code></p>
     <li data-md>
      <p>Let <code>rootpath</code> be the URI of the root of this shape tree hierarchy,
 where <code>rootst</code> is planted</p>
@@ -2167,127 +2155,214 @@ triples should be added:</p>
     <li data-md>
      <p>Persist the above triples to <code>metauri</code>.</p>
    </ol>
+   <h3 class="heading settled" data-level="5.5" id="remove-shapetree-metadata"><span class="secno">5.5. </span><span class="content">Remove Shape Tree From Container Metadata</span><a class="self-link" href="#remove-shapetree-metadata"></a></h3>
+   <p>This algorithm is responsible for updating the shape tree metadata for a
+container to remove a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑦">shape tree</a> from managing a container.</p>
+   <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent③⓪">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⑦">server-side agent</a>.</p>
+   <p><strong>Inputs</strong>:</p>
+   <ul>
+    <li data-md>
+     <p>Let <code>tc</code> be the URI of the <a data-link-type="dfn" href="#container" id="ref-for-container①⑥">Container</a> to update metadata for</p>
+    <li data-md>
+     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑧">shape tree</a> that will no longer manage <code>tc</code></p>
+   </ul>
+   <p><strong>Outputs</strong>:</p>
+   <ul>
+    <li data-md>
+     <p>Nothing</p>
+   </ul>
+   <p><strong>Algorithm Details</strong></p>
+   <ol>
+    <li data-md>
+     <p>Perform a HEAD on Target Container <code>tc</code></p>
+     <figure id="fig-unplant-container-head-request">
+      <figcaption>Discover Target Container Shape Tree Metadata URI -
+Request</figcaption>
+<pre class="highlight">HEAD /data/CommonNotes/
+</pre>
+     </figure>
+     <figure id="fig-unplant-container-head-response">
+      <figcaption>Discover Target Container Shape Tree Metadata URI -
+Response</figcaption>
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>200</c-> <c- ne>OK</c->
+<c- e>Link</c-><c- o>:</c-> <c- l>&lt;/data/CommonNotes/meta/UUID>; rel="http://shapetrees.org/#ShapeTree"</c->
+...other <c- l>headers omitted...</c->
+</pre>
+     </figure>
+     <p>Let <code>metauri</code> be the URI of the shape tree metadata resource
+pertaining to <code>uri</code>.</p>
+    <li data-md>
+     <p>Perform a GET on the Target Container’s Shape Tree metadata (<code>metauri</code>)</p>
+     <figure id="fig-unplant-container-get-metadata">
+      <figcaption>Dereference Target Container Shape Tree Metadata URI -
+Request</figcaption>
+<pre class="highlight">GET /data/CommonNotes/meta/UUID
+</pre>
+     </figure>
+     <figure id="fig-unplant-container-get-response-managed">
+      <figcaption>Dereference Target Container Shape Tree Metadata URI -
+Managed Response</figcaption>
+<pre class="highlight"><c- k>@prefix</c-> <c- nn>st:</c-> <c- g>&lt;http://www.w3.org/ns/st#></c-><c- p>.</c->
+
+<c- g>&lt;#shapetree></c->
+  <c- nn>st:</c-><c- f>hasShapeTreeLocator</c-> <c- g>&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56></c-> <c- p>.</c->
+
+<c- g>&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56></c->
+  <c- b>a</c-> <c- nn>st:</c-><c- f>ShapeTreeLocator</c-> <c- p>;</c->
+  <c- nn>st:</c-><c- f>hasRootShapeTree</c-> <c- g>&lt;http://commonnote.example/commonnote#container-tree></c-> <c- p>;</c->
+  <c- nn>st:</c-><c- f>hasShapeTree</c-> <c- g>&lt;http://commonnote.example/commonnote#container-tree></c-> <c- p>;</c->
+  <c- nn>st:</c-><c- f>hasShapeTreeInstanceRoot</c-> <c- g>&lt;/data/CommonNotes/></c-> <c- p>.</c->
+</pre>
+     </figure>
+     <figure id="fig-unplant-container-get-response-unmanaged">
+      <figcaption>Dereference Target Container Shape Tree Metadata URI -
+Unmanaged Response</figcaption>
+<pre class="highlight"><c- kr>HTTP</c-><c- o>/</c-><c- m>1.1</c-> <c- m>404</c-> <c- ne>NOT FOUND</c->
+</pre>
+     </figure>
+     <p>If a 404 is returned that indicates that no shape trees manage this container.
+Let <code>eg</code> be the existing metadata graph resulting from dereferencing
+and parsing <code>metauri</code>.</p>
+    <li data-md>
+     <p>Remove pertinent shape tree triples</p>
+     <p>Let <code>s</code> be the subject of type <code class="vocab">ShapeTreeLocator</code> with a <code class="vocab">st:hasShapeTree</code> matching <code>st</code>.</p>
+     <p>Remove the subject <code>s</code> along with the <code class="vocab">st:hasShapeTreeLocator</code> referencing <code>s</code> from the metadata graph.</p>
+    <li data-md>
+     <p>Persist the updated graph to <code>metauri</code>.</p>
+   </ol>
    <h2 class="heading settled" data-level="6" id="ecosystem-operations"><span class="secno">6. </span><span class="content">Ecosystem Operations</span><a class="self-link" href="#ecosystem-operations"></a></h2>
    <h3 class="heading settled" data-level="6.1" id="ecosystem-getplantedshapetree"><span class="secno">6.1. </span><span class="content">Get Planted Shape Tree</span><a class="self-link" href="#ecosystem-getplantedshapetree"></a></h3>
     <code> <b>getPlantedShapeTreeFromContainer</b>(context:ShapeTreeContext,
     parentContainer:URI,
     shapeTreesToPlant:ShapeTree[],
     resourceName:String) : ShapeTreeLocator </code> 
-   <p>This operation allows the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①②">ecosystem</a> to provide a previously <a data-link-type="dfn" href="#planted-shape-tree" id="ref-for-planted-shape-tree">planted shape tree</a> location.</p>
+   <p>This operation allows the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①①">ecosystem</a> to provide a previously <a data-link-type="dfn" href="#planted-shape-tree" id="ref-for-planted-shape-tree">planted shape tree</a> location.</p>
    <h3 class="heading settled" data-level="6.2" id="ecosystem-beforeplantshapetree"><span class="secno">6.2. </span><span class="content">Before Plant Shape Tree</span><a class="self-link" href="#ecosystem-beforeplantshapetree"></a></h3>
     <code> <b>beforePlantShapeTree</b>(context:ShapeTreeContext,
   targetContainer:URI,
   bodyGraph:Graph,
   shapeTreesToPlant:ShapeTree[],
   linkHeaders:Map) : Graph</code> 
-   <p>This operations allows the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①③">ecosystem</a> to modify the the <a data-link-type="dfn" href="#body-graph" id="ref-for-body-graph①">body graph</a> of a <a href="#plant-shapetree">Plant Shape Tree</a> operation request.</p>
+   <p>This operations allows the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①②">ecosystem</a> to modify the the <a data-link-type="dfn" href="#body-graph" id="ref-for-body-graph①">body graph</a> of a <a href="#plant-shapetree">Plant Shape Tree</a> operation request.</p>
    <h3 class="heading settled" data-level="6.3" id="ecosystem-indexshapetree"><span class="secno">6.3. </span><span class="content">Index Shape Tree</span><a class="self-link" href="#ecosystem-indexshapetree"></a></h3>
     <code> <b>indexShapeTree</b>(context:ShapeTreeContext,
   parentContainer:URI,
   shapest:URI,
   targetContainer:URI) </code> 
-   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①④">ecosystem</a> of a new <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥②">shape tree</a> being planted.</p>
+   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①③">ecosystem</a> of a new <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑨">shape tree</a> being planted.</p>
    <h3 class="heading settled" data-level="6.4" id="ecosystem-indexshapetreedatainstance"><span class="secno">6.4. </span><span class="content">Index Shape Tree Data Instance</span><a class="self-link" href="#ecosystem-indexshapetreedatainstance"></a></h3>
     <code> <b>indexShapeTreeDataInstance</b>(context:ShapeTreeContext,
   parentContainer:URI,
   shapest:URI,
   shapeTreeInstance:URI) </code> 
-   <p>This operations notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑤">ecosystem</a> of a new <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance">shape tree data instance</a> being created.</p>
+   <p>This operations notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①④">ecosystem</a> of a new <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance">shape tree data instance</a> being created.</p>
    <h3 class="heading settled" data-level="6.5" id="ecosystem-updateshapetreedatainstance"><span class="secno">6.5. </span><span class="content">Update Shape Tree Data Instance</span><a class="self-link" href="#ecosystem-updateshapetreedatainstance"></a></h3>
     <code> <b>updateShapeTreeDataInstance</b>(context:ShapeTreeContext,
   shapest:URI,
   shapeTreeInstance:URI) </code> 
-   <p>This operations notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑥">ecosystem</a> of a changed <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance①">shape tree data instance</a>.</p>
+   <p>This operations notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑤">ecosystem</a> of a changed <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance①">shape tree data instance</a>.</p>
    <h3 class="heading settled" data-level="6.6" id="ecosystem-unindexshapetreedatainstance"><span class="secno">6.6. </span><span class="content">Unindex Shape Tree Data Instance</span><a class="self-link" href="#ecosystem-unindexshapetreedatainstance"></a></h3>
     <code> <b>unIndexShapeTreeDataInstance</b>(context:ShapeTreeContext,
   shapest:URI,
   shapeTreeInstance:URI) </code> 
-   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑦">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance②">shape tree data instance</a> being deleted.</p>
+   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑥">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree-data-instance" id="ref-for-shape-tree-data-instance②">shape tree data instance</a> being deleted.</p>
    <h3 class="heading settled" data-level="6.7" id="ecosystem-unindexshapetree"><span class="secno">6.7. </span><span class="content">Unindex Shape Tree</span><a class="self-link" href="#ecosystem-unindexshapetree"></a></h3>
     <code> <b>unIndexShapeTree</b>(context:ShapeTreeContext, parentContainer:URI,
    shapest:URI, targetContainer:URI)</code> 
-   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑧">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥③">shape tree</a>/<a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①④">managed container</a> being deleted.</p>
+   <p>This operation notifies the <a data-link-type="dfn" href="#ecosystem" id="ref-for-ecosystem①⑦">ecosystem</a> of a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⓪">shape tree</a>/<a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①④">managed container</a> being deleted.</p>
    <p class="note" role="note"><span>Note:</span> The <code><b>ShapeTreeContext</b></code> class is implementation specific
 and may be used to include important context such as authentication details,
 base URLs, etc.</p>
    <h2 class="heading settled" data-level="7" id="describing"><span class="secno">7. </span><span class="content">Describing Shape Trees</span><a class="self-link" href="#describing"></a></h2>
-   <p>While the RDF structure of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥④">shape trees</a> enable machine readability, additional
+   <p>While the RDF structure of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦①">shape trees</a> enable machine readability, additional
 context is needed to make it human-friendly.</p>
-   <p>External <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph">SKOS graphs</a> can be <em class="rfc2119">OPTIONALLY</em> linked to
+   <p>External <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑦">SKOS graphs</a> can be <em class="rfc2119">OPTIONALLY</em> linked to
 describe the shape tree in human-readable terms.</p>
    <ul>
     <li data-md>
-     <p>Let <code>STR</code> be an RDF document containing one or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑤">shape trees</a> <code>STs</code>.</p>
+     <p>Let <code>STR</code> be an RDF document containing one or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦②">shape trees</a> <code>STs</code>.</p>
     <li data-md>
-     <p>The { &lt;> <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>IDX</code> } arc indicates that there is exactly one <code class="vocab">st:ShapeTreeDecoratorIndex</code> located at <code>IDX</code>.</p>
+     <p>The { &lt;> <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>IDX</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑧">arc</a> indicates that there is exactly one <code class="vocab">st:ShapeTreeDecoratorIndex</code> located at <code>IDX</code>.</p>
     <li data-md>
-     <p>The { <code>IDX</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorIndex</code> } arc indicates a <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
+     <p>The { <code>IDX</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorIndex</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑨">arc</a> indicates a <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
 index of <code class="vocab">st:ShapeTreeDecoratorSeries</code>.</p>
     <li data-md>
-     <p>The { <code>IDX</code> <code class="vocab">st:hasSeries</code> <code>SERIES</code> } arc indicates linkage to one or more <code class="vocab">st:ShapeTreeDecoratorSeries</code>.</p>
+     <p>The { <code>IDX</code> <code class="vocab">st:hasSeries</code> <code>SERIES</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⓪">arc</a> indicates linkage to one or more <code class="vocab">st:ShapeTreeDecoratorSeries</code>.</p>
     <li data-md>
-     <p>The { <code>SERIES</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorSeries</code> } arc indicates a <code class="vocab">st:ShapeTreeDecoratorSeries</code> that represent a
+     <p>The { <code>SERIES</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorSeries</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①①">arc</a> indicates a <code class="vocab">st:ShapeTreeDecoratorSeries</code> that represent a
 series of versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph①">SKOS graphs</a> for a given language or interpretation.</p>
     <li data-md>
-     <p>The { <code>SERIES</code> <code class="vocab">st:hasHierarchy</code> <code>HIER</code> } arc indicates linkage to one or more <code class="vocab">st:ShapeTreeDecoratorHierarchy</code>.</p>
+     <p>The { <code>SERIES</code> <code class="vocab">st:hasHierarchy</code> <code>HIER</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①②">arc</a> indicates linkage to one or more <code class="vocab">st:ShapeTreeDecoratorHierarchy</code>.</p>
     <li data-md>
-     <p>The { <code>HIER</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> } arc indicates
+     <p>The { <code>HIER</code> <code>a</code> <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①③">arc</a> indicates
 a <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> that represent
 a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph②">SKOS graph</a>.</p>
      <ul>
       <li data-md>
-       <p>The { <code>HIER</code> <code class="vocab">st:hasSkosGraph</code> <code>SKOS</code> } arc indicates that there is exactly one <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph③">SKOS graph</a> describing <code>STs</code></p>
+       <p>The { <code>HIER</code> <code class="vocab">st:hasSkosGraph</code> <code>SKOS</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①④">arc</a> indicates that there is exactly one <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph③">SKOS graph</a> describing <code>STs</code></p>
       <li data-md>
-       <p>The { <code>HIER</code> <code class="vocab">st:hasVersion</code> <code>VERSION</code> } arc indicates the version of the <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph④">SKOS graph</a> <code>SKOS</code></p>
+       <p>The { <code>HIER</code> <code class="vocab">st:hasVersion</code> <code>VERSION</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⑤">arc</a> indicates the version of the <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph④">SKOS graph</a> <code>SKOS</code></p>
       <li data-md>
-       <p>The { <code>HIER</code> <code class="vocab">st:hasSHA256</code> <code>HASH</code> } arc indicates the hash of <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑤">SKOS graph</a> <code>SKOS</code></p>
+       <p>The { <code>HIER</code> <code class="vocab">st:hasSHA256</code> <code>HASH</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⑥">arc</a> indicates the hash of <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑤">SKOS graph</a> <code>SKOS</code></p>
      </ul>
     <li data-md>
-     <p>Each { <code>SKOSSUB</code> <code>a</code> <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code> refers back to the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑥">shape tree</a> <code>ST</code> via the
-{ <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code> <code>ST</code> } arc.</p>
+     <p>Each { <code>SKOSSUB</code> <code>a</code> <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code> refers back to the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦③">shape tree</a> <code>ST</code> via the
+{ <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code> <code>ST</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⑦">arc</a>.</p>
    </ul>
-   <p>SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em> be used to group or organize related <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑦">shape trees</a>.</p>
+   <p>SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em> be used to group or organize related <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦④">shape trees</a>.</p>
    <h2 class="heading settled" data-level="8" id="definitions"><span class="secno">8. </span><span class="content">Definitions</span><a class="self-link" href="#definitions"></a></h2>
     The following terms are used throughout this specification: 
    <ul>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="arc">Arc</dfn> -- the directed relationship between two nodes in an RDF graph</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="body-graph">Body Graph</dfn> -- the RDF graph derived from parsing the body of an
     HTTP request with a parser determined by the Content-type: header of that
     HTTP request.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="container">Container</dfn> -- The generalized notion of a collection of resources;
-    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑧">shape trees</a> <em class="rfc2119">MAY</em> use a
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="client-side-agent">Client-side Agent</dfn> -- A software component interacting with a server.
+    in the context of shape trees, a client-side agent may be responsible for
+    data validation.</p>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="container">Container</dfn> -- the generalized notion of a collection of resources;
+    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑤">shape trees</a> <em class="rfc2119">MAY</em> use a
     container implementation such as <a data-link-type="biblio" href="#biblio-ldp">[LDP]</a> (ldp:Container, ldp:BasicContainer, etc.)</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="ecosystem">Ecosystem</dfn> -- a software environment with resources organized in
-    some hierarchical grouping that rely on <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑨">shape tree</a> concepts to
+    some hierarchical grouping that rely on <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑥">shape tree</a> concepts to
     better organize and validate structures of data</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="focus-node">Focus Node</dfn> -- The IRI to an RDF subject which is used to
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="focus-node">Focus Node</dfn> -- the IRI to an RDF subject which is used to
     specify which subject within a document should be processed first.  In
-    the context of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⓪">shape trees</a> one usage is directing shape validation
+    the context of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑦">shape trees</a> one usage is directing <a data-link-type="dfn" href="#shape" id="ref-for-shape③">shape</a> validation
     to the appropriate node in the graph.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="managed-container">Managed Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①③">container</a> that has a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦①">shape tree</a> planted in it. A <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①⑤">Managed Container</a> <em class="rfc2119">MAY</em> be an <a data-link-type="dfn" href="#instance-root" id="ref-for-instance-root">Instance Root</a> or hierarchically nested within the
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="managed-container">Managed Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①⑦">container</a> that has a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑧">shape tree</a> planted in it. A <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①⑤">Managed Container</a> <em class="rfc2119">MAY</em> be an <a data-link-type="dfn" href="#instance-root" id="ref-for-instance-root">Instance Root</a> or hierarchically nested within the
     resource hierarchy.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="non-rdf-source">Non-RDF Source</dfn> -- The generalized notion of document not
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="non-rdf-source">Non-RDF Source</dfn> -- the generalized notion of document not
     containing linked-data triples; this may include
     plain text or binary data.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="rdf">RDF</dfn> -- Resource Description Framework <a data-link-type="biblio" href="#biblio-rdf11-primer">[rdf11-primer]</a></p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource">Resource</dfn> -- The generalized notion of document containing linked-data;
-    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦②">shape trees</a> may use a resource implementation such
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource">Resource</dfn> -- the generalized notion of document containing linked-data;
+    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑨">shape trees</a> may use a resource implementation such
     as <a data-link-type="biblio" href="#biblio-ldp">[LDP]</a> (ldp:Resource, etc.)</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="shape-tree-data-instance">Shape Tree Data Instance</dfn>A resource hierarchy that adheres to one
-     or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦③">shape trees</a></p>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="server-side-agent">Server-side Agent</dfn> -- A server-side software component.  Server-side
+    agents that support shape trees are responsible for data validation.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="skos-graph">SKOS Graph</dfn> -- an RDF graph conforming to [<a data-link-type="biblio" href="#biblio-skos-reference">[skos-reference]</a>] <a data-link-type="biblio" href="#biblio-skos-reference">[skos-reference]</a> data model.  For purposes of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦④">shape trees</a> a <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑥">SKOS Graph</a> is used to describe a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑦⑤">shape tree</a> in
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="shape">Shape</dfn> -- a schema definition allowing validation of an RDF
+    subject.  Example specifications supporting the notion of shapes include <a data-link-type="biblio" href="#biblio-shex">[ShEx]</a> and <a data-link-type="biblio" href="#biblio-shacl">[SHACL]</a>.</p>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="shape-tree-data-instance">Shape Tree Data Instance</dfn> -- a resource hierarchy that adheres to one
+    or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑧⓪">shape trees</a></p>
+    <li data-md>
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="skos-graph">SKOS Graph</dfn> -- an RDF graph conforming to <a data-link-type="biblio" href="#biblio-skos-reference">[skos-reference]</a> data model.  For purposes of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑧①">shape trees</a> a <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑥">SKOS Graph</a> is used to describe a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑧②">shape tree</a> in
     human-readable terms.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="unmanaged-container">Unmanaged Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①④">Container</a> which is not described
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="unmanaged-container">Unmanaged Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①⑧">Container</a> which is not described
     by a shape tree</p>
    </ul>
   </main>
@@ -2336,7 +2411,9 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
+   <li><a href="#arc">Arc</a><span>, in §8</span>
    <li><a href="#body-graph">Body Graph</a><span>, in §8</span>
+   <li><a href="#client-side-agent">Client-side Agent</a><span>, in §8</span>
    <li><a href="#container">Container</a><span>, in §8</span>
    <li><a href="#ecosystem">Ecosystem</a><span>, in §8</span>
    <li><a href="#focus-node">Focus Node</a><span>, in §8</span>
@@ -2347,6 +2424,8 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
    <li><a href="#planted-shape-tree">planted shape tree</a><span>, in §2</span>
    <li><a href="#rdf">RDF</a><span>, in §8</span>
    <li><a href="#resource">Resource</a><span>, in §8</span>
+   <li><a href="#server-side-agent">Server-side Agent</a><span>, in §8</span>
+   <li><a href="#shape">Shape</a><span>, in §8</span>
    <li><a href="#shape-tree">shape tree</a><span>, in §2</span>
    <li><a href="#shape-tree-data-instance">Shape Tree Data Instance</a><span>, in §8</span>
    <li><a href="#skos-graph">SKOS Graph</a><span>, in §8</span>
@@ -2404,16 +2483,21 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-shape-tree④④">4.4.5.4. Call Ecosystem Hook - Update Shape Tree Data Instance</a> <a href="#ref-for-shape-tree④⑤">(2)</a>
     <li><a href="#ref-for-shape-tree④⑥">4.5. Delete Data Instance</a>
     <li><a href="#ref-for-shape-tree④⑦">4.5.5.2. Call Ecosystem Hook - Unindex Shape Tree Data Instance</a>
-    <li><a href="#ref-for-shape-tree④⑧">4.6.5.2. Call Ecosystem Hook - Unindex Shape Tree</a>
-    <li><a href="#ref-for-shape-tree④⑨">5. Shape Tree Algorithms</a>
-    <li><a href="#ref-for-shape-tree⑤⓪">5.1. Validate Proposed Resource Against Parent Container</a> <a href="#ref-for-shape-tree⑤①">(2)</a> <a href="#ref-for-shape-tree⑤②">(3)</a>
-    <li><a href="#ref-for-shape-tree⑤③">5.2. Find Matching Contained Shape Tree</a> <a href="#ref-for-shape-tree⑤④">(2)</a> <a href="#ref-for-shape-tree⑤⑤">(3)</a>
-    <li><a href="#ref-for-shape-tree⑤⑥">5.3. Initialize Static Content</a> <a href="#ref-for-shape-tree⑤⑦">(2)</a> <a href="#ref-for-shape-tree⑤⑧">(3)</a> <a href="#ref-for-shape-tree⑤⑨">(4)</a>
-    <li><a href="#ref-for-shape-tree⑥⓪">5.4. Update Container Metadata</a> <a href="#ref-for-shape-tree⑥①">(2)</a>
-    <li><a href="#ref-for-shape-tree⑥②">6.3. Index Shape Tree</a>
-    <li><a href="#ref-for-shape-tree⑥③">6.7. Unindex Shape Tree</a>
-    <li><a href="#ref-for-shape-tree⑥④">7. Describing Shape Trees</a> <a href="#ref-for-shape-tree⑥⑤">(2)</a> <a href="#ref-for-shape-tree⑥⑥">(3)</a> <a href="#ref-for-shape-tree⑥⑦">(4)</a>
-    <li><a href="#ref-for-shape-tree⑥⑧">8. Definitions</a> <a href="#ref-for-shape-tree⑥⑨">(2)</a> <a href="#ref-for-shape-tree⑦⓪">(3)</a> <a href="#ref-for-shape-tree⑦①">(4)</a> <a href="#ref-for-shape-tree⑦②">(5)</a> <a href="#ref-for-shape-tree⑦③">(6)</a> <a href="#ref-for-shape-tree⑦④">(7)</a> <a href="#ref-for-shape-tree⑦⑤">(8)</a>
+    <li><a href="#ref-for-shape-tree④⑧">4.6. Unplant Shape Tree</a> <a href="#ref-for-shape-tree④⑨">(2)</a>
+    <li><a href="#ref-for-shape-tree⑤⓪">4.6.1. Inputs</a>
+    <li><a href="#ref-for-shape-tree⑤①">4.6.4. Operation Summary</a>
+    <li><a href="#ref-for-shape-tree⑤②">4.6.5.1. Remove Shape Tree Metadata</a>
+    <li><a href="#ref-for-shape-tree⑤③">4.6.5.2. Call Ecosystem Hook - Unindex Shape Tree</a>
+    <li><a href="#ref-for-shape-tree⑤④">5. Shape Tree Algorithms</a>
+    <li><a href="#ref-for-shape-tree⑤⑤">5.1. Validate Proposed Resource Against Parent Container</a> <a href="#ref-for-shape-tree⑤⑥">(2)</a> <a href="#ref-for-shape-tree⑤⑦">(3)</a>
+    <li><a href="#ref-for-shape-tree⑤⑧">5.2. Find Matching Contained Shape Tree</a> <a href="#ref-for-shape-tree⑤⑨">(2)</a> <a href="#ref-for-shape-tree⑥⓪">(3)</a>
+    <li><a href="#ref-for-shape-tree⑥①">5.3. Initialize Static Content</a> <a href="#ref-for-shape-tree⑥②">(2)</a> <a href="#ref-for-shape-tree⑥③">(3)</a> <a href="#ref-for-shape-tree⑥④">(4)</a>
+    <li><a href="#ref-for-shape-tree⑥⑤">5.4. Update Container Metadata</a> <a href="#ref-for-shape-tree⑥⑥">(2)</a>
+    <li><a href="#ref-for-shape-tree⑥⑦">5.5. Remove Shape Tree From Container Metadata</a> <a href="#ref-for-shape-tree⑥⑧">(2)</a>
+    <li><a href="#ref-for-shape-tree⑥⑨">6.3. Index Shape Tree</a>
+    <li><a href="#ref-for-shape-tree⑦⓪">6.7. Unindex Shape Tree</a>
+    <li><a href="#ref-for-shape-tree⑦①">7. Describing Shape Trees</a> <a href="#ref-for-shape-tree⑦②">(2)</a> <a href="#ref-for-shape-tree⑦③">(3)</a> <a href="#ref-for-shape-tree⑦④">(4)</a>
+    <li><a href="#ref-for-shape-tree⑦⑤">8. Definitions</a> <a href="#ref-for-shape-tree⑦⑥">(2)</a> <a href="#ref-for-shape-tree⑦⑦">(3)</a> <a href="#ref-for-shape-tree⑦⑧">(4)</a> <a href="#ref-for-shape-tree⑦⑨">(5)</a> <a href="#ref-for-shape-tree⑧⓪">(6)</a> <a href="#ref-for-shape-tree⑧①">(7)</a> <a href="#ref-for-shape-tree⑧②">(8)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="planted-shape-tree">
@@ -2442,6 +2526,7 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-target-container①④">4.3.5.4. Initialize Static Content</a> <a href="#ref-for-target-container①⑤">(2)</a>
     <li><a href="#ref-for-target-container①⑥">4.3.5.5. Call Ecosystem Hook - Index Shape Tree Data Instance</a>
     <li><a href="#ref-for-target-container①⑦">4.4.5.2. Validate against parent container</a> <a href="#ref-for-target-container①⑧">(2)</a>
+    <li><a href="#ref-for-target-container①⑨">4.6.5.1. Remove Shape Tree Metadata</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="parent-container">
@@ -2462,11 +2547,54 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-parent-container①⑤">5.1. Validate Proposed Resource Against Parent Container</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="arc">
+   <b><a href="#arc">#arc</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-arc">2. Structure</a> <a href="#ref-for-arc①">(2)</a> <a href="#ref-for-arc②">(3)</a> <a href="#ref-for-arc③">(4)</a> <a href="#ref-for-arc④">(5)</a> <a href="#ref-for-arc⑤">(6)</a> <a href="#ref-for-arc⑥">(7)</a> <a href="#ref-for-arc⑦">(8)</a>
+    <li><a href="#ref-for-arc⑧">7. Describing Shape Trees</a> <a href="#ref-for-arc⑨">(2)</a> <a href="#ref-for-arc①⓪">(3)</a> <a href="#ref-for-arc①①">(4)</a> <a href="#ref-for-arc①②">(5)</a> <a href="#ref-for-arc①③">(6)</a> <a href="#ref-for-arc①④">(7)</a> <a href="#ref-for-arc①⑤">(8)</a> <a href="#ref-for-arc①⑥">(9)</a> <a href="#ref-for-arc①⑦">(10)</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="body-graph">
    <b><a href="#body-graph">#body-graph</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-body-graph">4.2.5.1. Call Ecosystem Hook - Before Plant Shape Tree</a>
     <li><a href="#ref-for-body-graph①">6.2. Before Plant Shape Tree</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="client-side-agent">
+   <b><a href="#client-side-agent">#client-side-agent</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-client-side-agent">1. Introduction</a>
+    <li><a href="#ref-for-client-side-agent①">4.1.4.1. Perform a HEAD on the provided uri to discover Shape Tree metadata URI</a>
+    <li><a href="#ref-for-client-side-agent②">4.1.4.2. Perform a GET on the discovered Shape Tree metadata resource (metauri)</a>
+    <li><a href="#ref-for-client-side-agent③">4.1.4.3. Collect any navigable shape trees</a>
+    <li><a href="#ref-for-client-side-agent">4.2. Plant Shape Tree</a>
+    <li><a href="#ref-for-client-side-agent④">4.2.5.1. Call Ecosystem Hook - Before Plant Shape Tree</a>
+    <li><a href="#ref-for-client-side-agent⑤">4.2.5.2. Preconditions</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.3. Static Validation of Shape Trees for Conflicts</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.4. Validate graph body</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.5. Validate against parent container</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.6. Create Target Container (tc), if necessary</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.7. Update Shape Tree Meta Data for Target Container (tc)</a>
+    <li><a href="#ref-for-client-side-agent">4.2.5.8. Initialize Static Content</a>
+    <li><a href="#ref-for-client-side-agent⑥">4.2.5.9. Call Ecosystem Hook - Index Shape Tree</a>
+    <li><a href="#ref-for-client-side-agent⑦">4.3.5.1. Preconditions</a>
+    <li><a href="#ref-for-client-side-agent">4.3.5.2. Validate against parent container</a>
+    <li><a href="#ref-for-client-side-agent">4.3.5.3. Create Resource</a>
+    <li><a href="#ref-for-client-side-agent">4.3.5.4. Initialize Static Content</a>
+    <li><a href="#ref-for-client-side-agent⑧">4.3.5.5. Call Ecosystem Hook - Index Shape Tree Data Instance</a>
+    <li><a href="#ref-for-client-side-agent⑨">4.4.5.1. Preconditions</a>
+    <li><a href="#ref-for-client-side-agent">4.4.5.2. Validate against parent container</a>
+    <li><a href="#ref-for-client-side-agent①⓪">4.4.5.4. Call Ecosystem Hook - Update Shape Tree Data Instance</a>
+    <li><a href="#ref-for-client-side-agent">4.5.5.1. Delete Resource</a>
+    <li><a href="#ref-for-client-side-agent①①">4.5.5.2. Call Ecosystem Hook - Unindex Shape Tree Data Instance</a>
+    <li><a href="#ref-for-client-side-agent">4.6.5.1. Remove Shape Tree Metadata</a>
+    <li><a href="#ref-for-client-side-agent①②">4.6.5.2. Call Ecosystem Hook - Unindex Shape Tree</a>
+    <li><a href="#ref-for-client-side-agent">5.1. Validate Proposed Resource Against Parent Container</a>
+    <li><a href="#ref-for-client-side-agent">5.2. Find Matching Contained Shape Tree</a>
+    <li><a href="#ref-for-client-side-agent">5.3. Initialize Static Content</a>
+    <li><a href="#ref-for-client-side-agent">5.4. Update Container Metadata</a>
+    <li><a href="#ref-for-client-side-agent">5.5. Remove Shape Tree From Container Metadata</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="container">
@@ -2477,31 +2605,34 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-container②">4.1.4.1. Perform a HEAD on the provided uri to discover Shape Tree metadata URI</a>
     <li><a href="#ref-for-container③">4.1.4.2. Perform a GET on the discovered Shape Tree metadata resource (metauri)</a>
     <li><a href="#ref-for-container④">4.2.1. Inputs</a>
-    <li><a href="#ref-for-container⑤">4.6.3. Key Terms for Deleting Data Instances</a> <a href="#ref-for-container⑥">(2)</a>
-    <li><a href="#ref-for-container⑦">5.1. Validate Proposed Resource Against Parent Container</a> <a href="#ref-for-container⑧">(2)</a> <a href="#ref-for-container⑨">(3)</a>
-    <li><a href="#ref-for-container①⓪">5.2. Find Matching Contained Shape Tree</a>
-    <li><a href="#ref-for-container①①">5.3. Initialize Static Content</a>
-    <li><a href="#ref-for-container①②">5.4. Update Container Metadata</a>
-    <li><a href="#ref-for-container①③">8. Definitions</a> <a href="#ref-for-container①④">(2)</a>
+    <li><a href="#ref-for-container⑤">4.6. Unplant Shape Tree</a> <a href="#ref-for-container⑥">(2)</a>
+    <li><a href="#ref-for-container⑦">4.6.1. Inputs</a>
+    <li><a href="#ref-for-container⑧">4.6.3. Key Terms for Unplanting Shape Trees</a> <a href="#ref-for-container⑨">(2)</a>
+    <li><a href="#ref-for-container①⓪">5.1. Validate Proposed Resource Against Parent Container</a> <a href="#ref-for-container①①">(2)</a> <a href="#ref-for-container①②">(3)</a>
+    <li><a href="#ref-for-container①③">5.2. Find Matching Contained Shape Tree</a>
+    <li><a href="#ref-for-container①④">5.3. Initialize Static Content</a>
+    <li><a href="#ref-for-container①⑤">5.4. Update Container Metadata</a>
+    <li><a href="#ref-for-container①⑥">5.5. Remove Shape Tree From Container Metadata</a>
+    <li><a href="#ref-for-container①⑦">8. Definitions</a> <a href="#ref-for-container①⑧">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="ecosystem">
    <b><a href="#ecosystem">#ecosystem</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ecosystem">3. Ecosystems</a> <a href="#ref-for-ecosystem①">(2)</a> <a href="#ref-for-ecosystem②">(3)</a> <a href="#ref-for-ecosystem③">(4)</a> <a href="#ref-for-ecosystem④">(5)</a> <a href="#ref-for-ecosystem⑤">(6)</a>
-    <li><a href="#ref-for-ecosystem⑥">4.2.5.1. Call Ecosystem Hook - Before Plant Shape Tree</a>
-    <li><a href="#ref-for-ecosystem⑦">4.2.5.9. Call Ecosystem Hook - Index Shape Tree</a>
-    <li><a href="#ref-for-ecosystem⑧">4.3.5.5. Call Ecosystem Hook - Index Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem⑨">4.4.5.4. Call Ecosystem Hook - Update Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem①⓪">4.5.5.2. Call Ecosystem Hook - Unindex Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem①①">4.6.5.2. Call Ecosystem Hook - Unindex Shape Tree</a>
-    <li><a href="#ref-for-ecosystem①②">6.1. Get Planted Shape Tree</a>
-    <li><a href="#ref-for-ecosystem①③">6.2. Before Plant Shape Tree</a>
-    <li><a href="#ref-for-ecosystem①④">6.3. Index Shape Tree</a>
-    <li><a href="#ref-for-ecosystem①⑤">6.4. Index Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem①⑥">6.5. Update Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem①⑦">6.6. Unindex Shape Tree Data Instance</a>
-    <li><a href="#ref-for-ecosystem①⑧">6.7. Unindex Shape Tree</a>
+    <li><a href="#ref-for-ecosystem">3. Ecosystems</a> <a href="#ref-for-ecosystem①">(2)</a> <a href="#ref-for-ecosystem②">(3)</a> <a href="#ref-for-ecosystem③">(4)</a> <a href="#ref-for-ecosystem④">(5)</a>
+    <li><a href="#ref-for-ecosystem⑤">4.2.5.1. Call Ecosystem Hook - Before Plant Shape Tree</a>
+    <li><a href="#ref-for-ecosystem⑥">4.2.5.9. Call Ecosystem Hook - Index Shape Tree</a>
+    <li><a href="#ref-for-ecosystem⑦">4.3.5.5. Call Ecosystem Hook - Index Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem⑧">4.4.5.4. Call Ecosystem Hook - Update Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem⑨">4.5.5.2. Call Ecosystem Hook - Unindex Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem①⓪">4.6.5.2. Call Ecosystem Hook - Unindex Shape Tree</a>
+    <li><a href="#ref-for-ecosystem①①">6.1. Get Planted Shape Tree</a>
+    <li><a href="#ref-for-ecosystem①②">6.2. Before Plant Shape Tree</a>
+    <li><a href="#ref-for-ecosystem①③">6.3. Index Shape Tree</a>
+    <li><a href="#ref-for-ecosystem①④">6.4. Index Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem①⑤">6.5. Update Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem①⑥">6.6. Unindex Shape Tree Data Instance</a>
+    <li><a href="#ref-for-ecosystem①⑦">6.7. Unindex Shape Tree</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="focus-node">
@@ -2548,6 +2679,38 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-resource③">5.2. Find Matching Contained Shape Tree</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="server-side-agent">
+   <b><a href="#server-side-agent">#server-side-agent</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-server-side-agent">1. Introduction</a>
+    <li><a href="#ref-for-server-side-agent">4.2. Plant Shape Tree</a>
+    <li><a href="#ref-for-server-side-agent①">4.2.5.3. Static Validation of Shape Trees for Conflicts</a>
+    <li><a href="#ref-for-server-side-agent②">4.2.5.4. Validate graph body</a>
+    <li><a href="#ref-for-server-side-agent③">4.2.5.5. Validate against parent container</a>
+    <li><a href="#ref-for-server-side-agent④">4.2.5.6. Create Target Container (tc), if necessary</a>
+    <li><a href="#ref-for-server-side-agent⑤">4.2.5.7. Update Shape Tree Meta Data for Target Container (tc)</a>
+    <li><a href="#ref-for-server-side-agent⑥">4.2.5.8. Initialize Static Content</a>
+    <li><a href="#ref-for-server-side-agent⑦">4.3.5.2. Validate against parent container</a>
+    <li><a href="#ref-for-server-side-agent⑧">4.3.5.3. Create Resource</a>
+    <li><a href="#ref-for-server-side-agent⑨">4.3.5.4. Initialize Static Content</a>
+    <li><a href="#ref-for-server-side-agent①⓪">4.4.5.2. Validate against parent container</a>
+    <li><a href="#ref-for-server-side-agent①①">4.5.5.1. Delete Resource</a>
+    <li><a href="#ref-for-server-side-agent①②">4.6.5.1. Remove Shape Tree Metadata</a>
+    <li><a href="#ref-for-server-side-agent①③">5.1. Validate Proposed Resource Against Parent Container</a>
+    <li><a href="#ref-for-server-side-agent①④">5.2. Find Matching Contained Shape Tree</a>
+    <li><a href="#ref-for-server-side-agent①⑤">5.3. Initialize Static Content</a>
+    <li><a href="#ref-for-server-side-agent①⑥">5.4. Update Container Metadata</a>
+    <li><a href="#ref-for-server-side-agent①⑦">5.5. Remove Shape Tree From Container Metadata</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="shape">
+   <b><a href="#shape">#shape</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-shape">1. Introduction</a> <a href="#ref-for-shape①">(2)</a>
+    <li><a href="#ref-for-shape②">2. Structure</a>
+    <li><a href="#ref-for-shape③">8. Definitions</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="shape-tree-data-instance">
    <b><a href="#shape-tree-data-instance">#shape-tree-data-instance</a></b><b>Referenced in:</b>
    <ul>
@@ -2559,6 +2722,7 @@ contained shape tree should be matched) not yet in any published implementation<
   <aside class="dfn-panel" data-for="skos-graph">
    <b><a href="#skos-graph">#skos-graph</a></b><b>Referenced in:</b>
    <ul>
+    <li><a href="#ref-for-skos-graph">2. Structure</a>
     <li><a href="#ref-for-skos-graph">7. Describing Shape Trees</a> <a href="#ref-for-skos-graph①">(2)</a> <a href="#ref-for-skos-graph②">(3)</a> <a href="#ref-for-skos-graph③">(4)</a> <a href="#ref-for-skos-graph④">(5)</a> <a href="#ref-for-skos-graph⑤">(6)</a>
     <li><a href="#ref-for-skos-graph⑥">8. Definitions</a>
    </ul>
