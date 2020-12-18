@@ -136,12 +136,12 @@ relationships and data structures.  Existing technologies fulfill portions
 of those dependencies:
 * [=RDF=]&apos;s foundation in unambiguous identifiers provides an infrastructure
     that allows for interoperability, but does not specifically encourage or enforce it.
-* Shape languages (e.g. [[ShEx]] and [[SHACL]]) provide machine-readable,
+* [=Shape=] languages (e.g. [[ShEx]] and [[SHACL]]) provide machine-readable,
     enforceable data structure definitions on single resources.
 
 For applications that operate on more complex and interconnected resources,
 <i>[=Shape Trees=]</i> express the layout of those resources and associate them
-with their respective shapes.
+with their respective [=shapes=].
 
 [=Shape trees=] marry [=RDF=] vocabularies, shapes, and resources into
 "little trees" that provide machine to machine interoperability, combining them
@@ -154,7 +154,7 @@ data validation, and data migration.
 
 [=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a server, or a client-side library that pre-processes requests
+implemented by a [server](#server-side-agent), or a [=client-side agent=] that pre-processes requests
 to a server.
 
 While [=shape trees=] are intended to adapt to different technology platforms
@@ -179,35 +179,35 @@ Let <code>T</code> be a corresponding instance tree.
 
 For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
 
-* The <code class="vocab">st:expectsType</code> arc identifies the type of a
+* The <code class="vocab">st:expectsType</code> [=arc=] identifies the type of a
     corresponding resource <code>R</code> in <code>T</code> where validate
     values <em class="rfc2119">MUST</em> be one of
     <code class="vocab">st:ShapeTreeResource</code>,
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
-* An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } arc
+* An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } [=arc=]
     indicates that there is exactly one corresponding resource <code>R</code>
     and it has the name <code>L</code>.
 * An { <code>S</code> <code class="vocab">st:matchesUriTemplate</code>
-    <code>L</code> } arc indicates that there <em class="rfc2119">MAY</em>
+    <code>L</code> } [=arc=] indicates that there <em class="rfc2119">MAY</em>
     be an arbitrary number of corresponding resources <code>R</code>
     and each will have a name that matches the URI template
     [[RFC6570]] <code>L</code>.
 * An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> }
-    arc indicates that <code>R</code> <em class="rfc2119">MUST</em>
-    have exactly one node which conforms to shape <code>Sh</code>.
+    [=arc=] indicates that <code>R</code> <em class="rfc2119">MUST</em>
+    have exactly one node which conforms to [=shape=] <code>Sh</code>.
 * Any { <code>S</code> <code class="vocab">st:contains</code> <code>S2</code> }
-    arcs indicate there is a nested [=shape tree=] and corresponding nested
+    [=arcs=] indicate there is a nested [=shape tree=] and corresponding nested
     resource <code>R2</code>.
 * An { <code>S</code> <code class="vocab">st:references</code> <code>S3</code> }
-    arc indicates that [=shape tree=] <code>S3</code> is referenced through the
+    [=arc=] indicates that [=shape tree=] <code>S3</code> is referenced through the
     instance data for <code>S</code>.
 * An { <code>S</code> <code class="vocab">st:supports</code> <code>S4</code> }
-    arc indicates that <code>S</code> provides a different representation of
+    [=arc=] indicates that <code>S</code> provides a different representation of
     <code>S4</code> for aggregation purposes.
 
 A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
-    arc indicates the location of an index of SKOS hierarchies that describe
+    [=arc=] indicates the location of an index of [SKOS hierarchies](#skos-graph) that describe
     <code>ST</code>.
 
 <figure id="shapetree-shex">
@@ -241,13 +241,10 @@ Ecosystems {#ecosystems}
 =====================
 [=Shape trees=] are meant to be used in context of a broader [=ecosystem=].
 [=Ecosystems=] have the ability to react to (and in some cases influence)
-[=shape tree=] operations.
+[=shape tree=] [operations](#operations).
 
-[=Ecosystems=] define the compatibility requirements for participating
-applications and agents to be interoperable.
-
-[=Shape trees=] are used by [=ecosystems=] to become aware of the planting of
-[=shape trees=] and changes to instances of those trees.
+[=Shape trees=] are used by [=ecosystems=] to become aware of the
+[planting](#plant-shapetree) of [=shape trees=] and changes to instances of those trees.
 
 A [=Shape tree=] client library <em class="rfc2119">MUST</em> be initialized
 with a reference to the the target [=ecosystem=] it would operate within.
@@ -326,7 +323,7 @@ shape trees are managing a given container.
 #### Perform a HEAD on the provided <code>uri</code> to discover Shape Tree metadata URI #### {#discovery-details-head}
 
   Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-  client-side agent.
+  [=client-side agent=].
 
 	<figure id="fig-discover-head-request">
 		<figcaption><code>uri</code> = <code>/data/CommonNotes/</code></figcaption>
@@ -358,7 +355,7 @@ shape trees are managing a given container.
 #### Perform a GET on the discovered Shape Tree metadata resource (<code>metauri</code>) #### {#discovery-details-get}
 
   Note: This step <em class="rfc2119">SHOULD</em> performed by a
-  client-side agent.
+  [=client-side agent=].
 
 	<figure id="fig-discover-get-metadata">
 		<figcaption>Discover Container Shape Tree Metadata -
@@ -402,7 +399,7 @@ shape trees are managing a given container.
 #### Collect any navigable shape trees #### {#discovery-details-collect}
 
   Note: This step <em class="rfc2119">SHOULD</em> performed by a
-  client-side agent.
+  [=client-side agent=].
 
 	If the ```<#shapetree>``` subject has one or more
     <code class="vocab">st:hasShapeTreeLocator</code> predicates it means this
@@ -421,7 +418,7 @@ shape trees are managing a given container.
 ## Plant Shape Tree ## {#plant-shapetree}
 
 Note: A plant operation <em class="rfc2119">MAY</em>
-  be performed by either a client or server side agent.
+  be performed by either a [client](#client-side-agent) or [=server-side agent=].
 
 The <b>plant</b> operation marks a container (new or existing) as being
 managed by one or more shape trees.
@@ -530,7 +527,7 @@ managed by one or more shape trees.
 #### Call Ecosystem Hook - Before Plant Shape Tree #### {#plant-details-callhook-beforeplantshapetree}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by
-  a client-side agent.
+  a [=client-side agent=].
 
 Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem-beforeplantshapetree) with parameters:
 
@@ -576,7 +573,7 @@ Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem
 #### Preconditions #### {#plant-details-preconditions}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, this
     operation <em class="rfc2119">MUST</em> return a 404 status code.
@@ -594,7 +591,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 #### Static Validation of Shape Trees for Conflicts #### {#plant-static-validation}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 1. Iterate <code>allst</code> to validate that none of the following conditions
     are met:
@@ -609,7 +606,7 @@ If any of the above static validations fail, this operation
 #### Validate graph body #### {#plant-graphbody-validation}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 Issue: Must detail how to differentiate between ShEx and SHACL validation
 
@@ -628,7 +625,7 @@ Issue: Must detail how to differentiate between ShEx and SHACL validation
 #### Validate against parent container #### {#plant-parent-validation}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 1. Determine if the [=Parent Container=] (<code>pc</code>) is a
     [=Managed Container=] by evaluating if <code>parentst</code> is not empty
@@ -678,7 +675,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 #### Create Target Container (<code>tc</code>), if necessary #### {#plant-create-container}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 1. If <code>tc</code> does not exist, create it.
 
@@ -705,7 +702,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 #### Update Shape Tree Meta Data for Target Container (<code>tc</code>) #### {#plant-update-container-metadata}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 1. Update Target Container <code>tc</code> Metadata (<code>metauri</code>)
 
@@ -754,7 +751,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 #### Initialize Static Content #### {#plant-initialize-statics}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either
-    a client or server side agent.
+    a [client](#client-side-agent) or [=server-side agent=]..
 
 1. Let <code>cst</code> be the shape tree having a
     <code class="vocab">st:contains</code> value (if one exists) from the
@@ -808,7 +805,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either
 #### Call Ecosystem Hook - Index Shape Tree #### {#plant-details-callhook-indexshapetree}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 1. Iterate the collection of shape trees that were planted (<code>linkst</code>),
     letting <code>linksti</code> be the current IRI in context
@@ -922,7 +919,7 @@ tree within a managed container.
 #### Preconditions #### {#create-data-instance-details-preconditions}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return
     this operation <em class="rfc2119">MUST</em> return a 404 status code.
@@ -933,7 +930,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 #### Validate against parent container #### {#create-data-instance-details-parent-validation}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 1. Determine if the [=Parent Container=] (<code>pc</code>) is a
     [=Managed Container=] by evaluating if <code>parentst</code> is not empty
@@ -984,12 +981,12 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 #### Create Resource #### {#create-data-instance-details-create-resource}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=]..
 
 #### Initialize Static Content #### {#create-data-instance-details-initialize-statics}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-client or server side agent.
+[client](#client-side-agent) or [=server-side agent=].
 
 1. Iterate any <code class="vocab">st:contains</code> IRIs within
     <code>mcst</code>, letting <code>csti</code> be the current IRI in context
@@ -1039,7 +1036,7 @@ client or server side agent.
 #### Call Ecosystem Hook - Index Shape Tree Data Instance #### {#create-data-instance-details-callhook-indexshapetreedatainstance}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 Call the provided [=ecosystem=]'s
 [Index Shape Tree Data Instance operation](#ecosystem-indexshapetreedatainstance)
@@ -1141,7 +1138,7 @@ The <b>update data instance</b> operation updates an instance of a
 #### Preconditions #### {#update-data-instance-details-preconditions}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.
     If not, this operation <em class="rfc2119">MUST</em> return a 404 status code.
@@ -1152,7 +1149,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 #### Validate against parent container #### {#update-data-instance-details-parent-validation}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 1. Determine if the [=Parent Container=] (<code>pc</code>) is a
     [=Managed Container=] by evaluating if <code>parentst</code> is not empty
@@ -1201,7 +1198,7 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a client
 #### Call Ecosystem Hook - Update Shape Tree Data Instance #### {#update-data-instance-details-callhook-updateshapetreedatainstance}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 Call the provided [=ecosystem=]'s
 [Update Shape Tree Data Instance operation](#ecosystem-updateshapetreedatainstance)
@@ -1274,12 +1271,12 @@ The <b>delete data instance</b> operation deletes an instance of a
 #### Delete Resource #### {#delete-data-instance-details-delete-resource}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 #### Call Ecosystem Hook - Unindex Shape Tree Data Instance #### {#delete-data-instance-details-callhook-unindexshapetreedatainstance}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 Call the provided [=ecosystem=]'s
 [Unindex Shape Tree Data Instance operation](#ecosystem-unindexshapetreedatainstance)
@@ -1308,18 +1305,22 @@ with parameters:
 
 ## Unplant Shape Tree ## {#unplant-shapetree}
 
-The <b>unplant shape tree</b> operation deletes a [=managed container=].
+The <b>unplant shape tree</b> operation unassigns the provided [=shape tree=]
+from the provided [=container=].  If there are no remaining [=shape trees=]
+managing the [=container=], it would no longer be considered a
+[=managed container=].
 
 ### Inputs ### {#unplant-shapetree-inputs}
 * Let <code>req</code> be a DELETE HTTP request with the following
     characteristics:
     * Let <code>linkst</code> be a Link header with the relation of
-        "http://shapetrees.org/#ShapeTree"
+        "http://shapetrees.org/#ShapeTree" indicating the [=shape tree=] that
+        should no longer manage the target [=container=]
 
 ### Outputs ### {#unplant-shapetree-outputs}
 * Standard HTTP response
 
-### Key Terms for Deleting Data Instances ### {#unplant-shapetree-terms}
+### Key Terms for Unplanting Shape Trees ### {#unplant-shapetree-terms}
 * Let <code>pc</code> be the parent [=Container=] of the resource being deleted
 * Let <code>tc</code> be the [=Container=] of the resource being deleted
 
@@ -1335,8 +1336,12 @@ The <b>unplant shape tree</b> operation deletes a [=managed container=].
 	</thead>
 	<tbody>
     <tr>
-			<td>[1](#unplant-shapetree-details-delete-container)</td>
-			<td>Delete Container</td>
+			<td>[1](#unplant-shapetree-details-remove-shapetree)</td>
+			<td>
+          Update metadata container to remove
+          <code class="vocab">ShapeTreeLocator</code> for the provided
+          [=shape tree=]
+      </td>
       <td colspan="2"></td>
 		</tr>
     <tr>
@@ -1349,15 +1354,42 @@ The <b>unplant shape tree</b> operation deletes a [=managed container=].
 
 ### Operation Details ### {#unplant-shapetree-details}
 
-#### Delete Container #### {#unplant-shapetree-details-delete-container}
+#### Remove Shape Tree Metadata #### {#unplant-shapetree-details-remove-shapetree}
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
+
+Call the [remove shape tree metadata](#remove-shapetree-metadata) algorithm with
+parameters:
+
+      <table class="data algorithmparams" align="left">
+        <thead>
+          <tr>
+            <td><b>Parameter</b></td>
+            <td><b>Value</b></td>
+            <td><b>Notes</b></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>uri</code></td>
+            <td><code>tc</code></td>
+            <td>
+              The [=target container=] that the [shape tree] is being removed
+              from
+            </td>
+          </tr>
+          <tr>
+            <td><code>st</code></td>
+            <td><code>linktst</code></td>
+            <td>The [=shape tree=] no longer managing the <code>tc</code></td>
+          </tr>
+      </table>
 
 #### Call Ecosystem Hook - Unindex Shape Tree #### {#unplant-shapetree-details-callhook-unindexshapetree}
 
 Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    client-side agent.
+    [=client-side agent=].
 
 Call the provided [=ecosystem=]'s
 [Unindex Shape Tree operation](#ecosystem-unindexshapetree) with parameters:
@@ -1376,18 +1408,18 @@ Call the provided [=ecosystem=]'s
       <td><code>pc</code></td>
       <td>
         The [=parent container=] containing the [=managed container=] being
-        deleted
+        unplanted
       </td>
     </tr>
     <tr>
       <td><code>shapeTree</code></td>
       <td><code>linkst</code></td>
-      <td>The [=shape tree=] managing the container being deleted</td>
+      <td>The [=shape tree=] managing the container being unplanted</td>
     </tr>
     <tr>
       <td><code>shapeTreeInstance</code></td>
       <td><code>tc</code></td>
-      <td>The IRI of the container being deleted</td>
+      <td>The IRI of the container the shape tree is being removed from</td>
     </tr>
 </table>
 
@@ -1404,7 +1436,7 @@ This algorithm is responsible for determining if a proposed resource
 valid to be created within a given [=container=].
 
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 **Inputs**
 * Let <code>pc</code> be the URI of the [=Managed Container=] that will contain
@@ -1486,7 +1518,7 @@ Issue: This describes a new construct (the use of a link header to direct which
 contained shape tree should be matched) not yet in any published implementation
 
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
-    a client or server side agent.
+    a [client](#client-side-agent) or [=server-side agent=].
 
 **Inputs**
 * Let <code>uri</code> be the URI of the [=Managed Container=] that will contain
@@ -1576,7 +1608,7 @@ through the creation of its parent.  When called, it recursively seeks out
 resources to be statically created.
 
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 **Inputs**
 * Let <code>pc</code> be the URI of the parent [=container=] that any statics
@@ -1680,7 +1712,7 @@ container to reflect what shapetree(s) manage that container
 and the container's location relative to the broader hierarchy of shape trees.
 
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    client or server side agent.
+    [client](#client-side-agent) or [=server-side agent=].
 
 **Inputs**:
 * Let <code>tc</code> be the URI of the [=Container=] to update metadata for
@@ -1814,6 +1846,94 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 
 1. Persist the above triples to <code>metauri</code>.
 
+## Remove Shape Tree From Container Metadata ## {#remove-shapetree-metadata}
+
+This algorithm is responsible for updating the shape tree metadata for a
+container to remove a [=shape tree=] from managing a container.
+
+Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
+    [client](#client-side-agent) or [=server-side agent=].
+
+**Inputs**:
+* Let <code>tc</code> be the URI of the [=Container=] to update metadata for
+* Let <code>st</code> be a [=shape tree=] that will no longer manage <code>tc</code>
+
+**Outputs**:
+* Nothing
+
+**Algorithm Details**
+1. Perform a HEAD on Target Container <code>tc</code>
+	<figure id="fig-unplant-container-head-request">
+		<figcaption>Discover Target Container Shape Tree Metadata URI -
+    Request</figcaption>
+		<pre highlight="http">
+		HEAD /data/CommonNotes/
+		</pre>
+	</figure>
+
+	<figure id="fig-unplant-container-head-response">
+		<figcaption>Discover Target Container Shape Tree Metadata URI -
+    Response</figcaption>
+		<pre highlight="http">
+		HTTP/1.1 200 OK
+		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
+		...other headers omitted...
+		</pre>
+	</figure>
+
+	Let <code>metauri</code> be the URI of the shape tree metadata resource
+    pertaining to <code>uri</code>.
+
+1. Perform a GET on the Target Container's Shape Tree metadata (<code>metauri</code>)
+	<figure id="fig-unplant-container-get-metadata">
+		<figcaption>Dereference Target Container Shape Tree Metadata URI -
+    Request</figcaption>
+		<pre highlight="http">
+		GET /data/CommonNotes/meta/UUID
+		</pre>
+	</figure>
+
+	<figure id="fig-unplant-container-get-response-managed">
+		<figcaption>Dereference Target Container Shape Tree Metadata URI -
+    Managed Response</figcaption>
+		<pre highlight="turtle">
+		@prefix st: &lt;http://www.w3.org/ns/st#&gt;.
+
+		&lt;#shapetree&gt;
+	  	st:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
+
+		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
+			a st:ShapeTreeLocator ;
+	  	st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+	  	st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
+		</pre>
+	</figure>
+
+	<figure id="fig-unplant-container-get-response-unmanaged">
+		<figcaption>Dereference Target Container Shape Tree Metadata URI -
+    Unmanaged Response</figcaption>
+		<pre highlight="http">
+		HTTP/1.1 404 NOT FOUND
+		</pre>
+	</figure>
+
+    If a 404 is returned that indicates that no shape trees manage this container.
+    Let <code>eg</code> be the existing metadata graph resulting from dereferencing
+    and parsing <code>metauri</code>.
+
+1. Remove pertinent shape tree triples
+
+    Let <code>s</code> be the subject of type
+    <code class="vocab">ShapeTreeLocator</code> with a
+    <code class="vocab">st:hasShapeTree</code> matching <code>st</code>.
+
+    Remove the subject <code>s</code> along with the
+    <code class="vocab">st:hasShapeTreeLocator</code> referencing <code>s</code>
+    from the metadata graph.
+
+1. Persist the updated graph to <code>metauri</code>.
+
 Ecosystem Operations {#ecosystem-operations}
 =====================
 
@@ -1905,41 +2025,41 @@ describe the shape tree in human-readable terms.
 * Let <code>STR</code> be an RDF document containing one or more
     [=shape trees=] <code>STs</code>.
 * The { &lt;&gt; <code class="vocab">st:hasShapeTreeDecoratorIndex</code>
-    <code>IDX</code> } arc indicates that there is exactly one
+    <code>IDX</code> } [=arc=] indicates that there is exactly one
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> located at
     <code>IDX</code>.
 * The { <code>IDX</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorIndex</code> } arc indicates a
+    <code class="vocab">st:ShapeTreeDecoratorIndex</code> } [=arc=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
     index of <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
 * The { <code>IDX</code> <code class="vocab">st:hasSeries</code>
-    <code>SERIES</code> } arc indicates linkage to one or more
+    <code>SERIES</code> } [=arc=] indicates linkage to one or more
     <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
 * The { <code>SERIES</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code> } arc indicates a
+    <code class="vocab">st:ShapeTreeDecoratorSeries</code> } [=arc=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorSeries</code> that represent a
     series of versioned [=SKOS graphs=] for a given language or interpretation.
 * The { <code>SERIES</code> <code class="vocab">st:hasHierarchy</code>
-    <code>HIER</code> } arc indicates linkage to one or more
+    <code>HIER</code> } [=arc=] indicates linkage to one or more
     <code class="vocab">st:ShapeTreeDecoratorHierarchy</code>.
 * The { <code>HIER</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> } arc indicates
+    <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> } [=arc=] indicates
     a <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> that represent
     a single versioned [=SKOS graph=].
     * The { <code>HIER</code> <code class="vocab">st:hasSkosGraph</code>
-        <code>SKOS</code> } arc indicates that there is exactly one
+        <code>SKOS</code> } [=arc=] indicates that there is exactly one
         [=SKOS graph=] describing <code>STs</code>
     * The { <code>HIER</code> <code class="vocab">st:hasVersion</code>
-        <code>VERSION</code> } arc indicates the version of the [=SKOS graph=]
+        <code>VERSION</code> } [=arc=] indicates the version of the [=SKOS graph=]
         <code>SKOS</code>
     * The { <code>HIER</code> <code class="vocab">st:hasSHA256</code>
-        <code>HASH</code> } arc indicates the hash of [=SKOS graph=]
+        <code>HASH</code> } [=arc=] indicates the hash of [=SKOS graph=]
         <code>SKOS</code>
 * Each { <code>SKOSSUB</code> <code>a</code>
     <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code>
     refers back to the [=shape tree=] <code>ST</code> via the
     { <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code>
-    <code>ST</code> } arc.
+    <code>ST</code> } [=arc=].
 
 SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
   be used to group or organize related [=shape trees=].
@@ -1947,35 +2067,44 @@ SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
 Definitions {#definitions}
 =====================
 The following terms are used throughout this specification:
+  * <dfn>Arc</dfn> -- the directed relationship between two nodes in an RDF graph
   * <dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an
         HTTP request with a parser determined by the Content-type: header of that
         HTTP request.
-  * <dfn>Container</dfn> -- The generalized notion of a collection of resources;
+  * <dfn>Client-side Agent</dfn> -- A software component interacting with a server.
+        in the context of shape trees, a client-side agent may be responsible for
+        data validation.
+  * <dfn>Container</dfn> -- the generalized notion of a collection of resources;
         implementations of [=shape trees=] <em class="rfc2119">MAY</em> use a
         container implementation such as [[LDP]]
         (ldp:Container, ldp:BasicContainer, etc.)
   * <dfn>Ecosystem</dfn> -- a software environment with resources organized in
         some hierarchical grouping that rely on [=shape tree=] concepts to
         better organize and validate structures of data
-  * <dfn>Focus Node</dfn> -- The IRI to an RDF subject which is used to
+  * <dfn>Focus Node</dfn> -- the IRI to an RDF subject which is used to
         specify which subject within a document should be processed first.  In
-        the context of [=shape trees=] one usage is directing shape validation
+        the context of [=shape trees=] one usage is directing [=shape=] validation
         to the appropriate node in the graph.
   * <dfn>Managed Container</dfn> -- any [=container=] that has a [=shape tree=]
         planted in it. A [=Managed Container=] <em class="rfc2119">MAY</em>
         be an [=Instance Root=] or hierarchically nested within the
         resource hierarchy.
-  * <dfn>Non-RDF Source</dfn> -- The generalized notion of document not
+  * <dfn>Non-RDF Source</dfn> -- the generalized notion of document not
         containing linked-data triples; this may include
         plain text or binary data.
   * <dfn>RDF</dfn> -- Resource Description Framework [[rdf11-primer]]
-  * <dfn>Resource</dfn> -- The generalized notion of document containing linked-data;
+  * <dfn>Resource</dfn> -- the generalized notion of document containing linked-data;
         implementations of [=shape trees=] may use a resource implementation such
         as [[LDP]] (ldp:Resource, etc.)
-  * <dfn>Shape Tree Data Instance</dfn>A resource hierarchy that adheres to one
-         or more [=shape trees=]
-  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]]
-        [[skos-reference]] data model.  For purposes of [=shape trees=] a
+  * <dfn>Server-side Agent</dfn> -- A server-side software component.  Server-side
+        agents that support shape trees are responsible for data validation.
+  * <dfn>Shape</dfn> -- a schema definition allowing validation of an RDF
+        subject.  Example specifications supporting the notion of shapes include 
+        [[ShEx]] and [[SHACL]].
+  * <dfn>Shape Tree Data Instance</dfn> -- a resource hierarchy that adheres to one
+        or more [=shape trees=]
+  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[skos-reference]]
+        data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
         human-readable terms.
   * <dfn>Unmanaged Container</dfn> -- any [=Container=] which is not described
