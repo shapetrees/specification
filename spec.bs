@@ -2089,8 +2089,8 @@ The following terms are used throughout this specification:
         [[ShEx]] and [[SHACL]].
   * <dfn>Shape Tree Data Instance</dfn> -- a resource hierarchy that adheres to one
         or more [=shape trees=]
-  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[[skos-reference]]]
-        [[skos-reference]] data model.  For purposes of [=shape trees=] a
+  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[skos-reference]]
+        data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
         human-readable terms.
   * <dfn>Unmanaged Container</dfn> -- any [=Container=] which is not described
