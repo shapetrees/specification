@@ -2082,7 +2082,7 @@ The following terms are used throughout this specification:
   * <dfn>Resource</dfn> -- the generalized notion of document containing linked-data;
         implementations of [=shape trees=] may use a resource implementation such
         as [[LDP]] (ldp:Resource, etc.)
-  * <dfn>Server-side Agent</dfn> -- A server-side sofwtare component.  Server-side
+  * <dfn>Server-side Agent</dfn> -- A server-side software component.  Server-side
         agents that support shape trees are responsible for data validation.
   * <dfn>Shape</dfn> -- a schema definition allowing validation of an RDF
         subject.  Example specifications supporting the notion of shapes include 
