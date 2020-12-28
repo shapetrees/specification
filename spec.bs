@@ -165,7 +165,7 @@ Structure {#structure}
 =====================
 
 A <dfn>shape tree</dfn> is a machine-readable template describing the expected
-layout of a tree of resources in a [=container=]-based ecosystem.
+layout of a tree of resources in a [=container=]-based [=ecosystem=].
 
 The terms used to express a [=shape tree=] are described using an [=RDF=]
 [vocabulary](shapetree.ttl).
@@ -236,22 +236,6 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 	}
 	</pre>
 </figure>
-
-Ecosystems {#ecosystems}
-=====================
-[=Shape trees=] are meant to be used in context of a broader [=ecosystem=].
-[=Ecosystems=] have the ability to react to (and in some cases influence)
-[=shape tree=] [operations](#operations).
-
-[=Shape trees=] are used by [=ecosystems=] to become aware of the
-[planting](#plant-shapetree) of [=shape trees=] and changes to instances of those trees.
-
-A [=Shape tree=] client library <em class="rfc2119">MUST</em> be initialized
-with a reference to the the target [=ecosystem=] it would operate within.
-
-For purposes of this specification, an [=ecosystem=]
-<em class="rfc2119">SHOULD</em> be considered a software interface, expecting
-the [below operations](#ecosystem-operations) to be implemented.
 
 Shape Tree Operations {#operations}
 =====================
@@ -448,11 +432,11 @@ managed by one or more shape trees.
 
 ### Key Terms for Planting ### {#plant-keyterms}
   * Let <code>tc</code> be the <dfn>Target Container</dfn> - The container that
-        will contain instances of the planted shape tree.
+        will contain instances of the [=planted shape tree=].
         This container may or may not already exist.
   * Let <code>pc</code> be the <dfn>Parent Container</dfn> - The container that
         will contain the new or existing [=target container=] representing the
-        planted shape tree.  When <code>req</code> is a POST, this will be the
+        [=planted shape tree=].  When <code>req</code> is a POST, this will be the
         location URL.  For PUT, this will be the parent of the PUT container.
 
 ### Operation Summary ### {#plant-summary}
@@ -466,13 +450,8 @@ managed by one or more shape trees.
     </tr>
 	</thead>
 	<tbody>
-    <tr>
-      <td>[1](#plant-details-callhook-beforeplantshapetree)</td>
-      <td>Call Ecosystem Hook - Before Plant Shape Tree</td>
-      <td colspan="2">See [Before Plant Shape Tree](#ecosystem-beforeplantshapetree)</td>
-    </tr>
 		<tr>
-			<td>[2](#plant-details-preconditions)</td>
+			<td>[1](#plant-details-preconditions)</td>
 			<td>Preconditions:
 				* Discover Shape Tree(s) for Parent Container (<code>pc</code>)
 				* Discover Shape Tree(s) for Target Container (<code>tc</code>)
@@ -480,95 +459,44 @@ managed by one or more shape trees.
 			<td colspan="2">See [Discovery](#discover)</td>
 		</tr>
 		<tr>
-			<td>[3](#plant-static-validation)</td>
+			<td>[2](#plant-static-validation)</td>
 			<td>Static Validation of Shape Trees for Conflicts</td>
 			<td colspan="2">N/A - Logic only</td>
 		</tr>
 		<tr>
-			<td>[4](#plant-graphbody-validation)</td>
+			<td>[3](#plant-graphbody-validation)</td>
 			<td>Validate Graph Body</td>
 			<td colspan="2">N/A - Logic only</td>
 		</tr>
 		<tr>
-			<td>[5](#plant-parent-validation)</td>
+			<td>[4](#plant-parent-validation)</td>
 			<td>Validate against Parent Container (pc)</td>
 			<td colspan="2">
         See [Validate Proposed Resource](#validate-proposed-resource)
       </td>
 		</tr>
 		<tr>
-			<td>[6](#plant-create-container)</td>
+			<td>[5](#plant-create-container)</td>
 			<td>Create Target Container (<code>tc</code>), if necessary</td>
 			<td>[Request](#fig-plant-create-target-request)</td>
 			<td>[Response](#fig-plant-create-target-response)</td>
 		</tr>
 		<tr>
-			<td>[7](#plant-update-container-metadata)</td>
+			<td>[6](#plant-update-container-metadata)</td>
 			<td>Update Shape Tree Meta Data for Target Container (<code>tc</code>)</td>
 			<td colspan="2">
         See [Update Container Metadata](#update-container-metadata)
       </td>
 		</tr>
 		<tr>
-			<td>[8](#plant-initialize-statics)</td>
+			<td>[7](#plant-initialize-statics)</td>
 			<td>Initialize Static Content</td>
 			<td colspan="2">See [Initialize Static Content](#initialize-statics)</td>
-		</tr>
-    <tr>
-			<td>[9](#plant-details-callhook-indexshapetree)</td>
-			<td>Call Ecosystem Hook - Index Shape Tree</td>
-			<td colspan="2">See [Index Shape Tree](#ecosystem-indexshapetree)</td>
 		</tr>
 	</tbody>
 </table>
 
 ### Operation Details ### {#plant-details}
-
-#### Call Ecosystem Hook - Before Plant Shape Tree #### {#plant-details-callhook-beforeplantshapetree}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by
-  a [=client-side agent=].
-
-Call the provided [=ecosystem=]'s [Before Plant Shape Tree operation](#ecosystem-beforeplantshapetree) with parameters:
-
-<table class="data algorithmparams" align="left">
-  <thead>
-    <tr>
-      <td><b>Parameter</b></td>
-      <td><b>Value</b></td>
-      <td><b>Notes</b></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>targetContainer</code></td>
-      <td><code>tc</code></td>
-      <td>
-        The [=target container=] that will contain instance data of the
-        [=shape tree=]
-      </td>
-    </tr>
-    <tr>
-      <td><code>bodyGraph</code></td>
-      <td>
-        [=Body Graph=] of <code>req</code>
-      </td>
-      <td>RDF body graph from request</td>
-    </tr>
-    <tr>
-      <td><code>shapeTreesToPlant</code></td>
-      <td><code>linkst</code></td>
-      <td>
-        Link header with the relation of
-        "http://shapetrees.org/#TargetShapeTree"
-      </td>
-    </tr>
-    <tr>
-      <td><code>linkHeaders</code></td>
-      <td>Link headers of <code>req</code></td>
-      <td>All link headers from request</td>
-    </tr>
-</table>
 
 #### Preconditions #### {#plant-details-preconditions}
 
@@ -581,7 +509,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 	1. Let <code>parentst</code> be the collection of dereferenced shape tree
         IRIs discovered for <code>pc</code>
 1. If the [=Target Container=] (<code>tc</code>) already exists,
-    [discover](#discover) any previously planted shape tree IRIs.
+    [discover](#discover) any previously [=planted shape tree=] IRIs.
 	1. Collect any existing shape tree IRIs and combine with the IRIs of the
         <code>linkst</code> provided via the request Link header to represent
         the full collection of existing and proposed shape trees for <code>tc</code>.
@@ -802,47 +730,6 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either
       </tr>
   </table>
 
-#### Call Ecosystem Hook - Index Shape Tree #### {#plant-details-callhook-indexshapetree}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-1. Iterate the collection of shape trees that were planted (<code>linkst</code>),
-    letting <code>linksti</code> be the current IRI in context
-1. Call the provided [=ecosystem=]'s
-    [Index Shape Tree operation](#ecosystem-indexshapetree) with parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Notes</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>parentContainer</code></td>
-        <td><code>pc</code></td>
-        <td>
-          The [=parent container=] that will contain the [=target container=]
-        </td>
-      </tr>
-      <tr>
-        <td><code>shapeTree</code></td>
-        <td><code>linksti</code></td>
-        <td>The [=shape tree=] managing the [=target container=]</td>
-      </tr>
-      <tr>
-        <td><code>targetContainer</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] that will contain instance data of the
-          [=shape tree=]
-        </td>
-      </tr>
-  </table>
-
 ## Create Data Instance ## {#create-data-instance}
 
 The <b>create data instance</b> operation creates an instance of a shape
@@ -902,15 +789,6 @@ tree within a managed container.
 			<td>Initialize Static Content</td>
 			<td colspan="2">See [Initialize Static Content](#initialize-statics)</td>
 		</tr>
-    <tr>
-			<td>
-        [5](#create-data-instance-details-callhook-indexshapetreedatainstance)
-      </td>
-			<td>Call Ecosystem Hook - Index Shape Tree Data Instance</td>
-			<td colspan="2">
-        See [Index Shape Tree Data Instance](#ecosystem-indexshapetreedatainstance)
-      </td>
-		</tr>
 	</tbody>
 </table>
 
@@ -923,7 +801,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return
     this operation <em class="rfc2119">MUST</em> return a 404 status code.
-1. [Discover](#discover) any planted shape tree IRIs managing <code>pc</code>.
+1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>pc</code>.
 	1. Let <code>parentst</code> be the collection of dereferenced shape tree IRIs
         discovered for <code>pc</code>
 
@@ -1033,47 +911,6 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
       </tr>
   </table>
 
-#### Call Ecosystem Hook - Index Shape Tree Data Instance #### {#create-data-instance-details-callhook-indexshapetreedatainstance}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-Call the provided [=ecosystem=]'s
-[Index Shape Tree Data Instance operation](#ecosystem-indexshapetreedatainstance)
-with parameters:
-
-<table class="data algorithmparams" align="left">
-  <thead>
-    <tr>
-      <td><b>Parameter</b></td>
-      <td><b>Value</b></td>
-      <td><b>Notes</b></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>parentContainer</code></td>
-      <td><code>pc</code></td>
-      <td>
-        The [=parent container=] that will contain the [=target container=]
-      </td>
-    </tr>
-    <tr>
-      <td><code>shapeTree</code></td>
-      <td><code>mcst</code></td>
-      <td>The [=shape tree=] that was used for validating the body</td>
-    </tr>
-    <tr>
-      <td><code>shapeTreeInstance</code></td>
-      <td>
-        If <code>req</code> is a POST then Location header of resource creation
-        <br/>
-        If <code>req</code> is a PUT then URI of PUT request
-      </td>
-      <td>The IRI of the [=shape tree=] instance
-    </tr>
-</table>
-
 ## Update Data Instance ## {#update-data-instance}
 
 The <b>update data instance</b> operation updates an instance of a
@@ -1125,11 +962,6 @@ The <b>update data instance</b> operation updates an instance of a
 			<td>Update Resource</td>
 			<td colspan="2"></td>
 		</tr>
-    <tr>
-			<td>[4](#update-data-instance-details-callhook-updateshapetreedatainstance)</td>
-			<td>Call Ecosystem Hook - Update Shape Tree Data Instance</td>
-			<td colspan="2">See [Update Shape Tree Data Instance](#ecosystem-updateshapetreedatainstance)</td>
-		</tr>
 	</tbody>
 </table>
 
@@ -1142,7 +974,7 @@ Note: This step <em class="rfc2119">SHOULD</em> be performed by a
 
 1. Ensure the [=Parent Container=] (<code>pc</code>) exists.
     If not, this operation <em class="rfc2119">MUST</em> return a 404 status code.
-1. [Discover](#discover) any planted shape tree IRIs managing <code>pc</code>.
+1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>pc</code>.
     1. Let <code>parentst</code> be the collection of dereferenced shape tree
         IRIs discovered for <code>pc</code>
 
@@ -1195,36 +1027,6 @@ Note: This step <em class="rfc2119">MAY</em> be performed by either a
 Note: This step <em class="rfc2119">MAY</em> be performed by either a client
     or server side agent.
 
-#### Call Ecosystem Hook - Update Shape Tree Data Instance #### {#update-data-instance-details-callhook-updateshapetreedatainstance}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-Call the provided [=ecosystem=]'s
-[Update Shape Tree Data Instance operation](#ecosystem-updateshapetreedatainstance)
-with parameters:
-
-<table class="data algorithmparams" align="left">
-  <thead>
-    <tr>
-      <td><b>Parameter</b></td>
-      <td><b>Value</b></td>
-      <td><b>Notes</b></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>shapeTree</code></td>
-      <td><code>mcst</code></td>
-      <td>The [=shape tree=] that was used for validating the body</td>
-    </tr>
-    <tr>
-      <td><code>shapeTreeInstance</code></td>
-      <td><code>name</code></td>
-      <td>The IRI of the [=shape tree=] instance</td>
-    </tr>
-</table>
-
 ## Delete Data Instance ## {#delete-data-instance}
 
 The <b>delete data instance</b> operation deletes an instance of a
@@ -1258,11 +1060,6 @@ The <b>delete data instance</b> operation deletes an instance of a
 			<td>Delete Resource</td>
 			<td colspan="2"></td>
 		</tr>
-    <tr>
-			<td>[2](#delete-data-instance-details-callhook-unindexshapetreedatainstance)</td>
-			<td>Call Ecosystem Hook - Unindex Shape Tree Data Instance</td>
-			<td colspan="2">See [Unindex Shape Tree Data Instance](#ecosystem-unindexshapetreedatainstance)</td>
-		</tr>
 	</tbody>
 </table>
 
@@ -1272,36 +1069,6 @@ The <b>delete data instance</b> operation deletes an instance of a
 
 Note: This step <em class="rfc2119">MAY</em> be performed by either a
     [client](#client-side-agent) or [=server-side agent=].
-
-#### Call Ecosystem Hook - Unindex Shape Tree Data Instance #### {#delete-data-instance-details-callhook-unindexshapetreedatainstance}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-Call the provided [=ecosystem=]'s
-[Unindex Shape Tree Data Instance operation](#ecosystem-unindexshapetreedatainstance)
-with parameters:
-
-<table class="data algorithmparams" align="left">
-  <thead>
-    <tr>
-      <td><b>Parameter</b></td>
-      <td><b>Value</b></td>
-      <td><b>Notes</b></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>shapeTree</code></td>
-      <td><code>linkst</code></td>
-      <td>The [=shape tree=] managing the instance being removed</td>
-    </tr>
-    <tr>
-      <td><code>shapeTreeInstance</code></td>
-      <td><code>req</code>'s URI</td>
-      <td>The IRI of the instance being removed</td>
-    </tr>
-</table>
 
 ## Unplant Shape Tree ## {#unplant-shapetree}
 
@@ -1344,11 +1111,6 @@ managing the [=container=], it would no longer be considered a
       </td>
       <td colspan="2"></td>
 		</tr>
-    <tr>
-			<td>[2](#unplant-shapetree-details-callhook-unindexshapetree)</td>
-			<td>Call Ecosystem Hook - Unindex Shape Tree</td>
-			<td colspan="2">See [Unindex Shape Tree](#ecosystem-unindexshapetree)</td>
-		</tr>
 	</tbody>
 </table>
 
@@ -1385,43 +1147,6 @@ parameters:
             <td>The [=shape tree=] no longer managing the <code>tc</code></td>
           </tr>
       </table>
-
-#### Call Ecosystem Hook - Unindex Shape Tree #### {#unplant-shapetree-details-callhook-unindexshapetree}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-Call the provided [=ecosystem=]'s
-[Unindex Shape Tree operation](#ecosystem-unindexshapetree) with parameters:
-
-<table class="data algorithmparams" align="left">
-  <thead>
-    <tr>
-      <td><b>Parameter</b></td>
-      <td><b>Value</b></td>
-      <td><b>Notes</b></td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>parentContainer</code></td>
-      <td><code>pc</code></td>
-      <td>
-        The [=parent container=] containing the [=managed container=] being
-        unplanted
-      </td>
-    </tr>
-    <tr>
-      <td><code>shapeTree</code></td>
-      <td><code>linkst</code></td>
-      <td>The [=shape tree=] managing the container being unplanted</td>
-    </tr>
-    <tr>
-      <td><code>shapeTreeInstance</code></td>
-      <td><code>tc</code></td>
-      <td>The IRI of the container the shape tree is being removed from</td>
-    </tr>
-</table>
 
 Shape Tree Algorithms {#algorithms}
 =====================
@@ -1934,84 +1659,6 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 
 1. Persist the updated graph to <code>metauri</code>.
 
-Ecosystem Operations {#ecosystem-operations}
-=====================
-
-## Get Planted Shape Tree ## {#ecosystem-getplantedshapetree}
-<code>
-  <b>getPlantedShapeTreeFromContainer</b>(context:ShapeTreeContext,
-    parentContainer:URI,
-    shapeTreesToPlant:ShapeTree[],
-    resourceName:String) : ShapeTreeLocator
-</code>
-
-This operation allows the [=ecosystem=] to provide a previously
-[=planted shape tree=] location.
-
-## Before Plant Shape Tree ## {#ecosystem-beforeplantshapetree}
-<code>
-  <b>beforePlantShapeTree</b>(context:ShapeTreeContext,
-  targetContainer:URI,
-  bodyGraph:Graph,
-  shapeTreesToPlant:ShapeTree[],
-  linkHeaders:Map) : Graph</code>
-</code>
-
-This operations allows the [=ecosystem=] to modify the the [=body graph=] of a
-[Plant Shape Tree](#plant-shapetree) operation request.
-
-## Index Shape Tree ## {#ecosystem-indexshapetree}
-<code>
-  <b>indexShapeTree</b>(context:ShapeTreeContext,
-  parentContainer:URI,
-  shapest:URI,
-  targetContainer:URI)
-</code>
-
-This operation notifies the [=ecosystem=] of a new [=shape tree=] being planted.
-
-## Index Shape Tree Data Instance ## {#ecosystem-indexshapetreedatainstance}
-<code>
-  <b>indexShapeTreeDataInstance</b>(context:ShapeTreeContext,
-  parentContainer:URI,
-  shapest:URI,
-  shapeTreeInstance:URI)
-</code>
-
-This operations notifies the [=ecosystem=] of a new
-[=shape tree data instance=] being created.
-
-## Update Shape Tree Data Instance ## {#ecosystem-updateshapetreedatainstance}
-<code>
-  <b>updateShapeTreeDataInstance</b>(context:ShapeTreeContext,
-  shapest:URI,
-  shapeTreeInstance:URI)
-</code>
-
-This operations notifies the [=ecosystem=] of a changed
-[=shape tree data instance=].
-
-## Unindex Shape Tree Data Instance ## {#ecosystem-unindexshapetreedatainstance}
-<code>
-  <b>unIndexShapeTreeDataInstance</b>(context:ShapeTreeContext,
-  shapest:URI,
-  shapeTreeInstance:URI)
-</code>
-
-This operation notifies the [=ecosystem=] of a [=shape tree data instance=]
-being deleted.
-
-## Unindex Shape Tree ## {#ecosystem-unindexshapetree}
-<code>
-  <b>unIndexShapeTree</b>(context:ShapeTreeContext, parentContainer:URI,
-   shapest:URI, targetContainer:URI)</code>
-
-This operation notifies the [=ecosystem=] of a
-[=shape tree=]/[=managed container=] being deleted.
-
-Note: The <code><b>ShapeTreeContext</b></code> class is implementation specific
-and may be used to include important context such as authentication details,
-base URLs, etc.
 
 Describing Shape Trees {#describing}
 =====================
@@ -2068,9 +1715,6 @@ Definitions {#definitions}
 =====================
 The following terms are used throughout this specification:
   * <dfn>Arc</dfn> -- the directed relationship between two nodes in an RDF graph
-  * <dfn>Body Graph</dfn> -- the RDF graph derived from parsing the body of an
-        HTTP request with a parser determined by the Content-type: header of that
-        HTTP request.
   * <dfn>Client-side Agent</dfn> -- A software component interacting with a server.
         in the context of shape trees, a client-side agent may be responsible for
         data validation.
@@ -2101,8 +1745,6 @@ The following terms are used throughout this specification:
   * <dfn>Shape</dfn> -- a schema definition allowing validation of an RDF
         subject.  Example specifications supporting the notion of shapes include 
         [[ShEx]] and [[SHACL]].
-  * <dfn>Shape Tree Data Instance</dfn> -- a resource hierarchy that adheres to one
-        or more [=shape trees=]
   * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[skos-reference]]
         data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
