@@ -1514,21 +1514,12 @@ This algorithm is responsible for determining which [=shape tree=] within a set
 of shape trees mentioned in <code class="vocab">st:contains</code> is
 applicable for a given proposed resource.
 
-Issue: This describes a new construct (the use of a link header to direct which
-contained shape tree should be matched) not yet in any published implementation
-
 Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
     a [client](#client-side-agent) or [=server-side agent=].
 
 **Inputs**
 * Let <code>uri</code> be the URI of the [=Managed Container=] that will contain
     the proposed resource
-* Let <code>rn</code> be the resource name of the proposed request:
-    * In cases of this algorithm being called as result of a POST, the Slug
-          header value <em class="rfc2119">SHOULD</em> be provided when
-          no <code>sth</code> is provided
-    * In cases of this algorithm being called as result of a PUT, the resource
-          name <em class="rfc2119">MUST</em> be provided
 * Let <code>sth</code> be the <em class="rfc2119">OPTIONAL</em> target
     [=shape tree=] hint, from the request's Link header with the relation
     of "http://shapetrees.org/#TargetShapeTree"
@@ -1550,56 +1541,46 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
           algorithm <em class="rfc2119">MUST</em> return a 400 status code
     1. and <code>sth</code> exists within <code>ccst</code> return
           <code>sth</code>
-1. Iterating through <code>ccst</code>, let <code>ccsti</code> be the
-    [=shape tree=] currently evaluated
-1. If <code>rn</code> matches <code>ccsti</code>
-    <code class="vocab">st:matchesUriTemplate</code> using [[RFC6570]] add to
-    potential matches (<code>pm</code>)
-1. If <code>pm</code> contains more than 1 matching shape trees, this
-    algorithm <em class="rfc2119">MUST</em> return a status code 400
-1. If <code>pm</code> contains exactly 1 matching shape trees, return
-    <code>pm</code>
-1. If <code>pm</code> contains 0 matching shape trees:
-    1. If <code>ccst</code> does not contain any of
-        <code class="vocab">st:AllowAll</code>,
-        <code class="vocab">st:AllowResources</code>,
-        <code class="vocab">st:AllowContainers</code>,
-        <code class="vocab">st:AllowNonRDFSources</code>,
-        this algorithm <em class="rfc2119">MUST</em> return a status code of 422
-    1. If <code class="vocab">st:AllowNone</code> exists within
-        <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em>
-        return a status code 422
-    1. If <code class="vocab">st:AllowAll</code> exists within
-        <code>ccst</code>, return null - indicating that while no match was
-        found, <code>pc</code> has been configured to allow resources of any
-        type to be created without matching the shape tree
-    1. If <code class="vocab">st:AllowResources</code> exists within
-        <code>ccst</code>:
-        1. And the resource type (<code>rt</code>) is not a Resource,
-              this algorithm <em class="rfc2119">MUST</em>
-              return a status code of 422
-        1. And the resource type (<code>rt</code>) is a Resource,
-              return null - indicating that while no match was found,
-              <code>pc</code> has been configured to allow Resources to be
-              created without matching the shape tree
-	  1. If <code class="vocab">st:AllowContainers</code> exists within
-        <code>ccst</code>:
-        1. And the resource type (<code>rt</code>) is not a Container,
-              this algorithm <em class="rfc2119">MUST</em>
-              return a status code of 422
-        1. And the resource type (<code>rt</code>) is a Container,
-              return null - indicating that while no match was found,
-              <code>pc</code> has been configured to allow Containers to be
-              created without matching the shape tree
-	  1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
-        <code>ccst</code>:
-        1. And the resource type (<code>rt</code>) is not a Non-RDF Source,
-              this algorithm <em class="rfc2119">MUST</em>
-              return a status code of 422
-        1. And the resource type (<code>rt</code>) is a Non-RDF Source,
-              return null - indicating that while no match was found,
-              <code>pc</code> has been configured to allow non-RDF Sources to
-              be created without matching the shape tree
+1. If <code>ccst</code> does not contain any of
+    <code class="vocab">st:AllowAll</code>,
+    <code class="vocab">st:AllowResources</code>,
+    <code class="vocab">st:AllowContainers</code>,
+    <code class="vocab">st:AllowNonRDFSources</code>,
+    this algorithm <em class="rfc2119">MUST</em> return a status code of 422
+1. If <code class="vocab">st:AllowNone</code> exists within
+    <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em>
+    return a status code 422
+1. If <code class="vocab">st:AllowAll</code> exists within
+    <code>ccst</code>, return null - indicating that while no match was
+    found, <code>pc</code> has been configured to allow resources of any
+    type to be created without matching the shape tree
+1. If <code class="vocab">st:AllowResources</code> exists within
+    <code>ccst</code>:
+    1. And the resource type (<code>rt</code>) is not a Resource,
+          this algorithm <em class="rfc2119">MUST</em>
+          return a status code of 422
+    1. And the resource type (<code>rt</code>) is a Resource,
+          return null - indicating that while no match was found,
+          <code>pc</code> has been configured to allow Resources to be
+          created without matching the shape tree
+1. If <code class="vocab">st:AllowContainers</code> exists within
+    <code>ccst</code>:
+    1. And the resource type (<code>rt</code>) is not a Container,
+          this algorithm <em class="rfc2119">MUST</em>
+          return a status code of 422
+    1. And the resource type (<code>rt</code>) is a Container,
+          return null - indicating that while no match was found,
+          <code>pc</code> has been configured to allow Containers to be
+          created without matching the shape tree
+1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
+    <code>ccst</code>:
+    1. And the resource type (<code>rt</code>) is not a Non-RDF Source,
+          this algorithm <em class="rfc2119">MUST</em>
+          return a status code of 422
+    1. And the resource type (<code>rt</code>) is a Non-RDF Source,
+          return null - indicating that while no match was found,
+          <code>pc</code> has been configured to allow non-RDF Sources to
+          be created without matching the shape tree
 
 ## Initialize Static Content ## {#initialize-statics}
 
