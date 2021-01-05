@@ -50,14 +50,6 @@
   rdfs:comment "Links a ShapeTree to a ShapeTreeReference"@en ;
   rdfs:label "References"@en .
 
-:matchesUriTemplate
-  a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTree ;
-  rdfs:range xsd:string ;
-  rdfs:comment "Describes a URI Template (RFC 6570) that governs the naming of resources of this Shape Tree"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Matches URI Template"@en .
-
 :validatedBy
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
@@ -193,6 +185,15 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Series"@en .
 
+:defaultLanguage
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTreeDecoratorIndex ;
+  rdfs:range xsd:language ;
+  rdfs:comment "Defines default language for use with shape tree decorator when none exist matching user preferences"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Default language"@en .
+
+
 # ShapeTreeDecoratorSeries class
 #############################################################################
 # A ShapeTreeDecoratorSeries details a versioned set of ShapeTreeDecoratorHierarchy classes
@@ -208,62 +209,42 @@
 #
 # Properties in domain of ShapeTreeDecoratorSeries
 #
-:hasHierarchy
+:hasShapeTreeDecoratorResource
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeDecoratorSeries ;
-  rdfs:range :ShapeTreeDecoratorHierarchy ;
-  rdfs:comment "Links between a ShapeTreeDecoratorSeries and a ShapeTreeDecoratorHierarchy"@en ;
+  rdfs:range :ShapeTreeDecoratorResource ;
+  rdfs:comment "Links between a ShapeTreeDecoratorSeries and the decorator resource itself"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Hierarchy"@en .
+  rdfs:label "Has Decorator Resource"@en .
 
-# ShapeTreeDecoratorHierarchy class
-#############################################################################
-# A ShapeTreeDecoratorHierarchy details a versioned SKOS poly-hierarchy that describes
-# a ShapeTree in a given language or format for an intended audience
-# (decreased cognitivty ability, etc.)
-#############################################################################
-:ShapeTreeDecoratorHierarchy
-  a rdfs:Class ;
-  rdfs:comment "Describes a SKOS poly-hierarchy for purproses of labeling a ShapeTree"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecoratorHierarchy"@en .
-
-# Properties in domain of ShapeTreeDecoratorHierarchy
-#########################################################
-:hasVersion
-  a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTreeDecoratorHierarchy ;
-  rdfs:range xsd:string ;
-  rdfs:comment "Describes the version of a ShapeTreeDecoratorHierarchy"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has Version"@en .
-
-:hasSHA256Hash
-  a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTreeDecoratorHierarchy ;
-  rdfs:range xsd:string ;
-  rdfs:comment "Describes the SHA-256 of a ShapeTreeDecoratorHierarchy"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has SHA-256 Hash"@en .
-
-:hasSkosGraph
+:usesLanguage
   a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorHierarchy ;
-  rdfs:range :ShapeTreeLabel ;
-  rdfs:comment "Represents the IRI to the SKOS graph described by ShapeTreeDecoratorHierarchy instance"@en ;
+  rdfs:domain :ShapeTreeDecoratorSeries ;
+  rdfs:range xsd:language ;
+  rdfs:comment "Describes the language used by associated ShapeTreeDecoratorResource"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has SKOS Graph"@en .
+  rdfs:label "Uses language"@en .
 
-# ShapeTreeLabel class
+# ShapeTreeDecoratorResource class
 #############################################################################
-# A ShapeTreeLabel details the association between a label within a SKOS graph
-# (detailed by ShapeTreeDecoratorHierarchy) and a ShapeTree
+# A ShapeTreeDecoratorResource represents a SKOS-based resource which
+# is made up of multiple st:ShapeTreeDecorator nodes that describe shape trees
 #############################################################################
-:ShapeTreeLabel
+:ShapeTreeDecoratorResource
   a rdfs:Class ;
-  rdfs:comment "Describes the association between a SKOS label and a ShapeTree"@en ;
+  rdfs:comment "Represents a SKOS-based resource which is made up of multiple st:ShapeTreeDecorator nodes that describe shape trees"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeLabel"@en .
+  rdfs:label "ShapeTreeDecoratorResource"@en .
+
+# ShapeTreeDecorator class
+#############################################################################
+# A ShapeTreeDecorator represents a single descriptor of a shape tree
+#############################################################################
+:ShapeTreeDecorator
+  a rdfs:Class ;
+  rdfs:comment "A ShapeTreeDecorator represents a single descriptor of a shape tree"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "ShapeTreeDecorator"@en .
 
 
 # Properties in the range of ShapeTreeLocator
