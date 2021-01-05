@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version c5172e83, updated Fri Nov 20 15:35:20 2020 -0800" name="generator">
   <link href="https://shapetrees.org/spec" rel="canonical">
-  <meta content="a1e85e95ac7445e8546563cb6adfe0c6205d1921" name="document-revision">
+  <meta content="8fb0c1053eb763bee3e2c61ddd63a8c8ad85bbe6" name="document-revision">
 <style>
 
   em.rfc2119 {
@@ -1641,8 +1641,6 @@ this operation <em class="rfc2119">MUST</em> return a 422 status code</p>
    <p>This algorithm is responsible for determining which <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④④">shape tree</a> within a set
 of shape trees mentioned in <code class="vocab">st:contains</code> is
 applicable for a given proposed resource.</p>
-   <p class="issue" id="issue-2ae7a487"><a class="self-link" href="#issue-2ae7a487"></a> This describes a new construct (the use of a link header to direct which
-contained shape tree should be matched) not yet in any published implementation</p>
    <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either
     a <a href="#client-side-agent" id="ref-for-client-side-agent②①">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①④">server-side agent</a>.</p>
    <p><strong>Inputs</strong></p>
@@ -1650,17 +1648,6 @@ contained shape tree should be matched) not yet in any published implementation<
     <li data-md>
      <p>Let <code>uri</code> be the URI of the <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①②">Managed Container</a> that will contain
 the proposed resource</p>
-    <li data-md>
-     <p>Let <code>rn</code> be the resource name of the proposed request:</p>
-     <ul>
-      <li data-md>
-       <p>In cases of this algorithm being called as result of a POST, the Slug
-  header value <em class="rfc2119">SHOULD</em> be provided when
-  no <code>sth</code> is provided</p>
-      <li data-md>
-       <p>In cases of this algorithm being called as result of a PUT, the resource
-  name <em class="rfc2119">MUST</em> be provided</p>
-     </ul>
     <li data-md>
      <p>Let <code>sth</code> be the <em class="rfc2119">OPTIONAL</em> target <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑤">shape tree</a> hint, from the request’s Link header with the relation
 of "http://shapetrees.org/#TargetShapeTree"</p>
@@ -1691,60 +1678,46 @@ by each <code class="vocab">st:contains</code> of <code>cst</code></p>
        <p>and <code>sth</code> exists within <code>ccst</code> return <code>sth</code></p>
      </ol>
     <li data-md>
-     <p>Iterating through <code>ccst</code>, let <code>ccsti</code> be the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑥">shape tree</a> currently evaluated</p>
-    <li data-md>
-     <p>If <code>rn</code> matches <code>ccsti</code> <code class="vocab">st:matchesUriTemplate</code> using <a data-link-type="biblio" href="#biblio-rfc6570">[RFC6570]</a> add to
-potential matches (<code>pm</code>)</p>
-    <li data-md>
-     <p>If <code>pm</code> contains more than 1 matching shape trees, this
-algorithm <em class="rfc2119">MUST</em> return a status code 400</p>
-    <li data-md>
-     <p>If <code>pm</code> contains exactly 1 matching shape trees, return <code>pm</code></p>
-    <li data-md>
-     <p>If <code>pm</code> contains 0 matching shape trees:</p>
-     <ol>
-      <li data-md>
-       <p>If <code>ccst</code> does not contain any of <code class="vocab">st:AllowAll</code>, <code class="vocab">st:AllowResources</code>, <code class="vocab">st:AllowContainers</code>, <code class="vocab">st:AllowNonRDFSources</code>,
+     <p>If <code>ccst</code> does not contain any of <code class="vocab">st:AllowAll</code>, <code class="vocab">st:AllowResources</code>, <code class="vocab">st:AllowContainers</code>, <code class="vocab">st:AllowNonRDFSources</code>,
 this algorithm <em class="rfc2119">MUST</em> return a status code of 422</p>
-      <li data-md>
-       <p>If <code class="vocab">st:AllowNone</code> exists within <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em> return a status code 422</p>
-      <li data-md>
-       <p>If <code class="vocab">st:AllowAll</code> exists within <code>ccst</code>, return null - indicating that while no match was
+    <li data-md>
+     <p>If <code class="vocab">st:AllowNone</code> exists within <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em> return a status code 422</p>
+    <li data-md>
+     <p>If <code class="vocab">st:AllowAll</code> exists within <code>ccst</code>, return null - indicating that while no match was
 found, <code>pc</code> has been configured to allow resources of any
 type to be created without matching the shape tree</p>
+    <li data-md>
+     <p>If <code class="vocab">st:AllowResources</code> exists within <code>ccst</code>:</p>
+     <ol>
       <li data-md>
-       <p>If <code class="vocab">st:AllowResources</code> exists within <code>ccst</code>:</p>
-       <ol>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is not a Resource,
+       <p>And the resource type (<code>rt</code>) is not a Resource,
   this algorithm <em class="rfc2119">MUST</em> return a status code of 422</p>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is a Resource,
+      <li data-md>
+       <p>And the resource type (<code>rt</code>) is a Resource,
   return null - indicating that while no match was found, <code>pc</code> has been configured to allow Resources to be
   created without matching the shape tree</p>
-       </ol>
+     </ol>
+    <li data-md>
+     <p>If <code class="vocab">st:AllowContainers</code> exists within <code>ccst</code>:</p>
+     <ol>
       <li data-md>
-       <p>If <code class="vocab">st:AllowContainers</code> exists within <code>ccst</code>:</p>
-       <ol>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is not a Container,
+       <p>And the resource type (<code>rt</code>) is not a Container,
   this algorithm <em class="rfc2119">MUST</em> return a status code of 422</p>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is a Container,
+      <li data-md>
+       <p>And the resource type (<code>rt</code>) is a Container,
   return null - indicating that while no match was found, <code>pc</code> has been configured to allow Containers to be
   created without matching the shape tree</p>
-       </ol>
+     </ol>
+    <li data-md>
+     <p>If <code class="vocab">st:AllowNonRDFSources</code> exists within <code>ccst</code>:</p>
+     <ol>
       <li data-md>
-       <p>If <code class="vocab">st:AllowNonRDFSources</code> exists within <code>ccst</code>:</p>
-       <ol>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is not a Non-RDF Source,
+       <p>And the resource type (<code>rt</code>) is not a Non-RDF Source,
   this algorithm <em class="rfc2119">MUST</em> return a status code of 422</p>
-        <li data-md>
-         <p>And the resource type (<code>rt</code>) is a Non-RDF Source,
+      <li data-md>
+       <p>And the resource type (<code>rt</code>) is a Non-RDF Source,
   return null - indicating that while no match was found, <code>pc</code> has been configured to allow non-RDF Sources to
   be created without matching the shape tree</p>
-       </ol>
      </ol>
    </ol>
    <h3 class="heading settled" data-level="4.3" id="initialize-statics"><span class="secno">4.3. </span><span class="content">Initialize Static Content</span><a class="self-link" href="#initialize-statics"></a></h3>
@@ -1802,11 +1775,11 @@ naming, letting <code>cr</code> be the resulting resource that was created</p>
          <tr>
           <td><code>rootst</code>
           <td><code>rst</code>
-          <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑦">shape tree</a> of the hierarchy
+          <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑥">shape tree</a> of the hierarchy
          <tr>
           <td><code>st</code>
           <td><code>sst</code>
-          <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑧">shape tree</a> to assign to <code>cr</code> 
+          <td>The <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑦">shape tree</a> to assign to <code>cr</code> 
          <tr>
           <td><code>rootpath</code>
           <td><code>rc</code>
@@ -1837,11 +1810,11 @@ IRI <code>cssti</code></p>
            <tr>
             <td><code>sst</code>
             <td><code>csstit</code>
-            <td>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑨">shape tree</a> to be recursively planted
+            <td>A <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑧">shape tree</a> to be recursively planted
            <tr>
             <td><code>rst</code>
             <td><code>rst</code>
-            <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⓪">shape tree</a> of the hierarchy
+            <td>The root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree④⑨">shape tree</a> of the hierarchy
            <tr>
             <td><code>rc</code>
             <td><code>rc</code>
@@ -1860,10 +1833,10 @@ and the container’s location relative to the broader hierarchy of shape trees.
     <li data-md>
      <p>Let <code>tc</code> be the URI of the <a data-link-type="dfn" href="#container" id="ref-for-container①⑤">Container</a> to update metadata for</p>
     <li data-md>
-     <p>Let <code>rootst</code> be the root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤①">shape tree</a> within a hierarchy of
+     <p>Let <code>rootst</code> be the root <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⓪">shape tree</a> within a hierarchy of
 shape tree containers</p>
     <li data-md>
-     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤②">shape tree</a> that will manage <code>tc</code></p>
+     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤①">shape tree</a> that will manage <code>tc</code></p>
     <li data-md>
      <p>Let <code>rootpath</code> be the URI of the root of this shape tree hierarchy,
 where <code>rootst</code> is planted</p>
@@ -1970,14 +1943,14 @@ triples should be added:</p>
    </ol>
    <h3 class="heading settled" data-level="4.5" id="remove-shapetree-metadata"><span class="secno">4.5. </span><span class="content">Remove Shape Tree From Container Metadata</span><a class="self-link" href="#remove-shapetree-metadata"></a></h3>
    <p>This algorithm is responsible for updating the shape tree metadata for a
-container to remove a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤③">shape tree</a> from managing a container.</p>
+container to remove a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤②">shape tree</a> from managing a container.</p>
    <p class="note" role="note"><span>Note:</span> This algorithm <em class="rfc2119">MAY</em> be performed by either a <a href="#client-side-agent" id="ref-for-client-side-agent②④">client</a> or <a data-link-type="dfn" href="#server-side-agent" id="ref-for-server-side-agent①⑦">server-side agent</a>.</p>
    <p><strong>Inputs</strong>:</p>
    <ul>
     <li data-md>
      <p>Let <code>tc</code> be the URI of the <a data-link-type="dfn" href="#container" id="ref-for-container①⑥">Container</a> to update metadata for</p>
     <li data-md>
-     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤④">shape tree</a> that will no longer manage <code>tc</code></p>
+     <p>Let <code>st</code> be a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤③">shape tree</a> that will no longer manage <code>tc</code></p>
    </ul>
    <p><strong>Outputs</strong>:</p>
    <ul>
@@ -2044,13 +2017,13 @@ and parsing <code>metauri</code>.</p>
      <p>Persist the updated graph to <code>metauri</code>.</p>
    </ol>
    <h2 class="heading settled" data-level="5" id="describing"><span class="secno">5. </span><span class="content">Describing Shape Trees</span><a class="self-link" href="#describing"></a></h2>
-   <p>While the RDF structure of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑤">shape trees</a> enable machine readability, additional
+   <p>While the RDF structure of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤④">shape trees</a> enable machine readability, additional
 context is needed to make it human-friendly.</p>
    <p>External <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑦">SKOS graphs</a> can be <em class="rfc2119">OPTIONALLY</em> linked to
 describe the shape tree in human-readable terms.</p>
    <ul>
     <li data-md>
-     <p>Let <code>STR</code> be an RDF document containing one or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑥">shape trees</a> <code>STs</code>.</p>
+     <p>Let <code>STR</code> be an RDF document containing one or more <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑤">shape trees</a> <code>STs</code>.</p>
     <li data-md>
      <p>The { &lt;> <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>IDX</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc⑧">arc</a> indicates that there is exactly one <code class="vocab">st:ShapeTreeDecoratorIndex</code> located at <code>IDX</code>.</p>
     <li data-md>
@@ -2076,10 +2049,10 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
        <p>The { <code>HIER</code> <code class="vocab">st:hasSHA256</code> <code>HASH</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⑥">arc</a> indicates the hash of <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑤">SKOS graph</a> <code>SKOS</code></p>
      </ul>
     <li data-md>
-     <p>Each { <code>SKOSSUB</code> <code>a</code> <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code> refers back to the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑦">shape tree</a> <code>ST</code> via the
+     <p>Each { <code>SKOSSUB</code> <code>a</code> <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code> refers back to the <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑥">shape tree</a> <code>ST</code> via the
 { <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code> <code>ST</code> } <a data-link-type="dfn" href="#arc" id="ref-for-arc①⑦">arc</a>.</p>
    </ul>
-   <p>SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em> be used to group or organize related <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑧">shape trees</a>.</p>
+   <p>SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em> be used to group or organize related <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑦">shape trees</a>.</p>
    <h2 class="heading settled" data-level="6" id="definitions"><span class="secno">6. </span><span class="content">Definitions</span><a class="self-link" href="#definitions"></a></h2>
     The following terms are used throughout this specification: 
    <ul>
@@ -2091,19 +2064,19 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
     data validation.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="container">Container</dfn> -- the generalized notion of a collection of resources;
-    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑨">shape trees</a> <em class="rfc2119">MAY</em> use a
+    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑧">shape trees</a> <em class="rfc2119">MAY</em> use a
     container implementation such as <a data-link-type="biblio" href="#biblio-ldp">[LDP]</a> (ldp:Container, ldp:BasicContainer, etc.)</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="ecosystem">Ecosystem</dfn> -- a software environment with resources organized in
-    some hierarchical grouping that rely on <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⓪">shape tree</a> concepts to
+    some hierarchical grouping that rely on <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑤⑨">shape tree</a> concepts to
     better organize and validate structures of data</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="focus-node">Focus Node</dfn> -- the IRI to an RDF subject which is used to
     specify which subject within a document should be processed first.  In
-    the context of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥①">shape trees</a> one usage is directing <a data-link-type="dfn" href="#shape" id="ref-for-shape③">shape</a> validation
+    the context of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⓪">shape trees</a> one usage is directing <a data-link-type="dfn" href="#shape" id="ref-for-shape③">shape</a> validation
     to the appropriate node in the graph.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="managed-container">Managed Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①⑦">container</a> that has a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥②">shape tree</a> planted in it. A <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①③">Managed Container</a> <em class="rfc2119">MAY</em> be an <a data-link-type="dfn" href="#instance-root" id="ref-for-instance-root">Instance Root</a> or hierarchically nested within the
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="managed-container">Managed Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①⑦">container</a> that has a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥①">shape tree</a> planted in it. A <a data-link-type="dfn" href="#managed-container" id="ref-for-managed-container①③">Managed Container</a> <em class="rfc2119">MAY</em> be an <a data-link-type="dfn" href="#instance-root" id="ref-for-instance-root">Instance Root</a> or hierarchically nested within the
     resource hierarchy.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="non-rdf-source">Non-RDF Source</dfn> -- the generalized notion of document not
@@ -2113,7 +2086,7 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="rdf">RDF</dfn> -- Resource Description Framework <a data-link-type="biblio" href="#biblio-rdf11-primer">[rdf11-primer]</a></p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource">Resource</dfn> -- the generalized notion of document containing linked-data;
-    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥③">shape trees</a> may use a resource implementation such
+    implementations of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥②">shape trees</a> may use a resource implementation such
     as <a data-link-type="biblio" href="#biblio-ldp">[LDP]</a> (ldp:Resource, etc.)</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="server-side-agent">Server-side Agent</dfn> -- A server-side software component.  Server-side
@@ -2122,7 +2095,7 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="shape">Shape</dfn> -- a schema definition allowing validation of an RDF
     subject.  Example specifications supporting the notion of shapes include <a data-link-type="biblio" href="#biblio-shex">[ShEx]</a> and <a data-link-type="biblio" href="#biblio-shacl">[SHACL]</a>.</p>
     <li data-md>
-     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="skos-graph">SKOS Graph</dfn> -- an RDF graph conforming to <a data-link-type="biblio" href="#biblio-skos-reference">[skos-reference]</a> data model.  For purposes of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥④">shape trees</a> a <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑥">SKOS Graph</a> is used to describe a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥⑤">shape tree</a> in
+     <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="skos-graph">SKOS Graph</dfn> -- an RDF graph conforming to <a data-link-type="biblio" href="#biblio-skos-reference">[skos-reference]</a> data model.  For purposes of <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥③">shape trees</a> a <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-graph⑥">SKOS Graph</a> is used to describe a <a data-link-type="dfn" href="#shape-tree" id="ref-for-shape-tree⑥④">shape tree</a> in
     human-readable terms.</p>
     <li data-md>
      <p><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="unmanaged-container">Unmanaged Container</dfn> -- any <a data-link-type="dfn" href="#container" id="ref-for-container①⑧">Container</a> which is not described
@@ -2217,8 +2190,6 @@ a single versioned <a data-link-type="dfn" href="#skos-graph" id="ref-for-skos-g
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Must detail how to differentiate between ShEx and SHACL validation<a href="#issue-629a3175"> ↵ </a></div>
-   <div class="issue"> This describes a new construct (the use of a link header to direct which
-contained shape tree should be matched) not yet in any published implementation<a href="#issue-2ae7a487"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="shape-tree">
    <b><a href="#shape-tree">#shape-tree</a></b><b>Referenced in:</b>
@@ -2244,12 +2215,12 @@ contained shape tree should be matched) not yet in any published implementation<
     <li><a href="#ref-for-shape-tree③⑨">3.6.5.1. Remove Shape Tree Metadata</a>
     <li><a href="#ref-for-shape-tree④⓪">4. Shape Tree Algorithms</a>
     <li><a href="#ref-for-shape-tree④①">4.1. Validate Proposed Resource Against Parent Container</a> <a href="#ref-for-shape-tree④②">(2)</a> <a href="#ref-for-shape-tree④③">(3)</a>
-    <li><a href="#ref-for-shape-tree④④">4.2. Find Matching Contained Shape Tree</a> <a href="#ref-for-shape-tree④⑤">(2)</a> <a href="#ref-for-shape-tree④⑥">(3)</a>
-    <li><a href="#ref-for-shape-tree④⑦">4.3. Initialize Static Content</a> <a href="#ref-for-shape-tree④⑧">(2)</a> <a href="#ref-for-shape-tree④⑨">(3)</a> <a href="#ref-for-shape-tree⑤⓪">(4)</a>
-    <li><a href="#ref-for-shape-tree⑤①">4.4. Update Container Metadata</a> <a href="#ref-for-shape-tree⑤②">(2)</a>
-    <li><a href="#ref-for-shape-tree⑤③">4.5. Remove Shape Tree From Container Metadata</a> <a href="#ref-for-shape-tree⑤④">(2)</a>
-    <li><a href="#ref-for-shape-tree⑤⑤">5. Describing Shape Trees</a> <a href="#ref-for-shape-tree⑤⑥">(2)</a> <a href="#ref-for-shape-tree⑤⑦">(3)</a> <a href="#ref-for-shape-tree⑤⑧">(4)</a>
-    <li><a href="#ref-for-shape-tree⑤⑨">6. Definitions</a> <a href="#ref-for-shape-tree⑥⓪">(2)</a> <a href="#ref-for-shape-tree⑥①">(3)</a> <a href="#ref-for-shape-tree⑥②">(4)</a> <a href="#ref-for-shape-tree⑥③">(5)</a> <a href="#ref-for-shape-tree⑥④">(6)</a> <a href="#ref-for-shape-tree⑥⑤">(7)</a>
+    <li><a href="#ref-for-shape-tree④④">4.2. Find Matching Contained Shape Tree</a> <a href="#ref-for-shape-tree④⑤">(2)</a>
+    <li><a href="#ref-for-shape-tree④⑥">4.3. Initialize Static Content</a> <a href="#ref-for-shape-tree④⑦">(2)</a> <a href="#ref-for-shape-tree④⑧">(3)</a> <a href="#ref-for-shape-tree④⑨">(4)</a>
+    <li><a href="#ref-for-shape-tree⑤⓪">4.4. Update Container Metadata</a> <a href="#ref-for-shape-tree⑤①">(2)</a>
+    <li><a href="#ref-for-shape-tree⑤②">4.5. Remove Shape Tree From Container Metadata</a> <a href="#ref-for-shape-tree⑤③">(2)</a>
+    <li><a href="#ref-for-shape-tree⑤④">5. Describing Shape Trees</a> <a href="#ref-for-shape-tree⑤⑤">(2)</a> <a href="#ref-for-shape-tree⑤⑥">(3)</a> <a href="#ref-for-shape-tree⑤⑦">(4)</a>
+    <li><a href="#ref-for-shape-tree⑤⑧">6. Definitions</a> <a href="#ref-for-shape-tree⑤⑨">(2)</a> <a href="#ref-for-shape-tree⑥⓪">(3)</a> <a href="#ref-for-shape-tree⑥①">(4)</a> <a href="#ref-for-shape-tree⑥②">(5)</a> <a href="#ref-for-shape-tree⑥③">(6)</a> <a href="#ref-for-shape-tree⑥④">(7)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="planted-shape-tree">
