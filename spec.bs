@@ -1654,18 +1654,18 @@ describe the shape tree in human-readable terms.
 * The { <code>IDX</code> <code>a</code>
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> } [=arc=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
-    index of <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
-* The { <code>IDX</code> <code class="vocab">st:hasSeries</code>
-    <code>SERIES</code> } [=arc=] indicates linkage to one or more
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
-* The { <code>SERIES</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code> } [=arc=] indicates a
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code> that represents a
+    index of <code class="vocab">st:ShapeTreeDecoratorSet</code>.
+* The { <code>IDX</code> <code class="vocab">st:hasSet</code>
+    <code>SET</code> } [=arc=] indicates linkage to one or more
+    <code class="vocab">st:ShapeTreeDecoratorSet</code>.
+* The { <code>SET</code> <code>a</code>
+    <code class="vocab">st:ShapeTreeDecoratorSet</code> } [=arc=] indicates a
+    <code class="vocab">st:ShapeTreeDecoratorSet</code> that represents a
     [=SKOS graphs=] for a given language or interpretation.
-* The { <code>SERIES</code> <code class="vocab">st:hasShapeTreeDecoratorResource</code>
+* The { <code>SET</code> <code class="vocab">st:hasShapeTreeDecoratorResource</code>
     <code>DECRESOURCE</code> } [=arc=] indicates linkage to a single
     <code class="vocab">st:ShapeTreeDecoratorResource</code>.
-* The { <code>SERIES</code> <code class="vocab">st:usesLanguage</code>
+* The { <code>SET</code> <code class="vocab">st:usesLanguage</code>
     <code>LANG</code> } [=arc=] indicates the language used by the associated
     <code>DECRESOURCE</code>.
 
@@ -1680,11 +1680,11 @@ describe the shape tree in human-readable terms.
   &lt;#DecoratorIndex&gt; {
     a [ st:ShapeTreeDecoratorIndex ] ;
     st:defaultLanguage xsd:language ? ;
-    st:hasSeries IRI*
+    st:hasSet IRI*
   }
 
-  &lt;#DecoratorSeries&gt; {
-    a [ st:ShapeTreeDecoratorSeries ] ;
+  &lt;#DecoratorSet&gt; {
+    a [ st:ShapeTreeDecoratorSet ] ;
     st:usesLanguage xsd:language ;
     st:hasShapeTreeDecoratorResource IRI
   }

@@ -177,13 +177,13 @@
 
 # Properties in domain of ShapeTreeDecoratorIndex
 #########################################################
-:hasSeries
+:hasSet
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeDecoratorIndex ;
-  rdfs:range :ShapeTreeDecoratorSeries ;
-  rdfs:comment "Links between a ShapeTreeDecoratorIndex and a ShapeTreeDecoratorSeries"@en ;
+  rdfs:range :ShapeTreeDecoratorSet ;
+  rdfs:comment "Links between a ShapeTreeDecoratorIndex and a ShapeTreeDecoratorSet"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Series"@en .
+  rdfs:label "Has Set"@en .
 
 :defaultLanguage
   a owl:ObjectProperty ;
@@ -194,26 +194,26 @@
   rdfs:label "Default language"@en .
 
 
-# ShapeTreeDecoratorSeries class
+# ShapeTreeDecoratorSet class
 #############################################################################
-# A ShapeTreeDecoratorSeries details a versioned set of ShapeTreeDecoratorHierarchy classes
-# Primary use is grouping TreeDecoratorHierarchy instances by a common discriminator
+# A ShapeTreeDecoratorSet details a set of ShapeTreeDecoratorResource classes
+# Primary use is grouping TreeDecoratorResource instances by a common discriminator
 # such as language or intended audience
 #############################################################################
-:ShapeTreeDecoratorSeries
+:ShapeTreeDecoratorSet
   a rdfs:Class ;
-  rdfs:comment "Groups a set of ShapeTreeDecoratorHierarchy by a given discriminator"@en ;
+  rdfs:comment "Groups a set of ShapeTreeDecoratorResource by a given discriminator"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecoratorSeries"@en .
+  rdfs:label "ShapeTreeDecoratorSet"@en .
 
 #
-# Properties in domain of ShapeTreeDecoratorSeries
+# Properties in domain of ShapeTreeDecoratorSet
 #
 :hasShapeTreeDecoratorResource
   a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorSeries ;
+  rdfs:domain :ShapeTreeDecoratorSet ;
   rdfs:range :ShapeTreeDecoratorResource ;
-  rdfs:comment "Links between a ShapeTreeDecoratorSeries and the decorator resource itself"@en ;
+  rdfs:comment "Links between a ShapeTreeDecoratorSet and the decorator resource itself"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Decorator Resource"@en .
 
