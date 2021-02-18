@@ -1744,6 +1744,13 @@ The following terms are used throughout this specification:
         "Jose Emilio Labra Gayo",
         "Gregg Kellogg"
       ]
+    },
+    "shexpath": {
+      "href": "https://shexspec.github.io/spec/ShExPath",
+      "title": "Shape Expressions ShExPath Language",
+      "authors": [
+        "Eric Prud'hommeaux"
+      ]
     }
   }
   </pre>
