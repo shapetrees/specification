@@ -6,9 +6,9 @@
   <meta content="w3c/ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version c5172e83, updated Fri Nov 20 15:35:20 2020 -0800" name="generator">
+  <meta content="Bikeshed version b94c7e755, updated Fri Feb 19 16:28:59 2021 -0800" name="generator">
   <link href="https://shapetrees.org/primer" rel="canonical">
-  <meta content="8fb0c1053eb763bee3e2c61ddd63a8c8ad85bbe6" name="document-revision">
+  <meta content="cac7ae287bfddc1d7a4b6ddde0c83c9ebbe219b2" name="document-revision">
 <style>
 
 	code.container {
@@ -536,7 +536,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Shape Trees Primer</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-01-05">5 January 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-04-01">1 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -722,13 +722,13 @@ Metadata associated with this container describes the planted shape tree that ma
 <c- k>@prefix</c-> <c- nn>dcterms:</c-> <c- g>&lt;http://purl.org/dc/terms/></c-><c- p>.</c->
 
 <c- g>&lt;></c->
-  <c- nn>tree:</c-><c- f>hasShapeTreeLocator</c-> <c- g>&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56></c-> <c- p>.</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTreeLocator</c-> <c- g>&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56></c-> <c- p>.</c->
 
 <c- g>&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56></c->
-  <c- nn>tree:</c-><c- f>hasRootShapeTree</c-> <c- g>&lt;http://commonnote.example/CommonNoteShapeTree#container></c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- g>&lt;http://commonnote.example/CommonNoteShapeTree#container></c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasShapeTreeInstancePath</c-> <c- s>"."</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasShapeTreeInstanceRoot</c-> <c- g>&lt;/data/CommonNotes/></c-> <c- p>.</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasRootShapeTree</c-> <c- g>&lt;http://commonnote.example/CommonNoteShapeTree#container></c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- g>&lt;http://commonnote.example/CommonNoteShapeTree#container></c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTreeInstancePath</c-> <c- s>"."</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTreeInstanceRoot</c-> <c- g>&lt;/data/CommonNotes/></c-> <c- p>.</c->
 </pre>
    </figure>
    <h2 class="heading settled" data-level="4" id="data-instance"><span class="secno">4. </span><span class="content">Creating Data Instances</span><a class="self-link" href="#data-instance"></a></h2>
@@ -738,17 +738,17 @@ If the shape tree includes a validatedBy, the POST must include a Link: rel="foc
    <figure>
     <figcaption>POSTing to a managed container</figcaption>
 <pre class="highlight">POST /data/CommonNotes/
-Link<c- p>:</c-> <c- g>&lt;#note1></c-><c- p>;</c-> rel=<c- s>"focusNode"</c->
+<c- nn>Link</c-><c- p>:</c-> <c- g>&lt;#note1></c-><c- p>;</c-> rel=<c- s>"focusNode"</c->
 
 <c- k>PREFIX</c-> <c- nn>:</c-> <c- g>&lt;http://nevernote.example/ns#></c->
 <c- k>PREFIX</c-> <c- nn>ldp:</c-> <c- g>&lt;http://www.w3.org/ns/ldp#></c->
 <c- k>PREFIX</c-> <c- nn>xsd:</c-> <c- g>&lt;http://www.w3.org/2001/XMLSchema#></c->
 
 <c- g>&lt;#note1></c->
-  <c- nn>:</c-><c- f>title</c-> <c- s>"Note1"</c-> <c- p>;</c->
-  <c- nn>:</c-><c- f>content</c-> <c- s>"Don’t believe the hype!"</c-> <c- p>;</c->
-  <c- nn>:</c-><c- f>updated</c-> <c- s>"2020-01-01T12:34:00Z"</c-><c- o>^^</c->xsd:dateTime <c- p>;</c->
-  <c- nn>:</c-><c- f>tagNames</c-> <c- p>(</c-><c- s>"tag1"</c-> <c- s>"tag2"</c-><c- p>)</c-> <c- p>.</c->
+  <c- p>:</c-><c- f>title</c-> <c- s>"Note1"</c-> <c- p>;</c->
+  <c- p>:</c-><c- f>content</c-> <c- s>"Don’t believe the hype!"</c-> <c- p>;</c->
+  <c- p>:</c-><c- f>updated</c-> <c- s>"2020-01-01T12:34:00Z"</c-><c- p>^^</c-><c- nn>xsd</c-><c- p>:</c-><c- f>dateTime</c-> <c- p>;</c->
+  <c- p>:</c-><c- f>tagNames</c-> <c- p>(</c-><c- s>"tag1"</c-> <c- s>"tag2"</c-><c- p>)</c-> <c- p>.</c->
 </pre>
    </figure>
    <p>When an application POSTs to a Managed Container, the shape tree-aware agent handling the POST locates the appropriate shape tree that is contained,
@@ -773,37 +773,37 @@ The convention on how this index of SKOS graphs is structured and used, along wi
    <figure>
     <figcaption>Sample SKOS index document, with references to English and Russian representations of the CommonNotes shape tree</figcaption>
 <pre class="highlight"><c- g>&lt;#index></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorIndex</c-> <c- p>;</c->
-  <c- nn>treeIndex:</c-><c- f>hasSeries</c-> <c- g>&lt;#en></c-><c- p>,</c-> <c- g>&lt;#ru></c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorIndex</c-> <c- p>;</c->
+  <c- nn>treeIndex</c-><c- p>:</c-><c- f>hasSeries</c-> <c- g>&lt;#en></c-><c- p>,</c-> <c- g>&lt;#ru></c-> <c- p>.</c->
 
 <c- g>&lt;#en></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorSeries</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasHierarchy</c-> <c- g>&lt;#en-v1></c-><c- p>,</c-> <c- g>&lt;#en-v1.1></c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorSeries</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasHierarchy</c-> <c- g>&lt;#en-v1></c-><c- p>,</c-> <c- g>&lt;#en-v1.1></c-> <c- p>.</c->
 
 <c- g>&lt;#en-v1></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
-  <c- nn>xsd:</c-><c- f>lang</c-> <c- s>"en"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasVersion</c-> <c- s>"1.0"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-en-v1#root></c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSHA256Hash</c-><c- p>:</c-> <c- s>"92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47"</c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
+  <c- nn>xsd</c-><c- p>:</c-><c- f>lang</c-> <c- s>"en"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasVersion</c-> <c- s>"1.0"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-en-v1#root></c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSHA256Hash:</c-> <c- s>"92ac6762c129666107299c2386420fdb31b12df7723b3aa0d132485fda864a47"</c-> <c- p>.</c->
 
 <c- g>&lt;#en-v1.1></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
-  <c- nn>xsd:</c-><c- f>lang</c-> <c- s>"en"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasVersion</c-> <c- s>"1.1"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-en-v1.1#root></c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSHA256Hash</c-><c- p>:</c-> <c- s>"74a468adf584231d0aa3b3277fd21b13bdf0246832c992701666921c2676ca29"</c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
+  <c- nn>xsd</c-><c- p>:</c-><c- f>lang</c-> <c- s>"en"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasVersion</c-> <c- s>"1.1"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-en-v1.1#root></c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSHA256Hash:</c-> <c- s>"74a468adf584231d0aa3b3277fd21b13bdf0246832c992701666921c2676ca29"</c-> <c- p>.</c->
 
 <c- g>&lt;#ru></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorSeries</c-> <c- p>;</c->
-  <c- nn>treeIndex:</c-><c- f>hasHierarchy</c-> <c- g>&lt;#ru-v1></c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorSeries</c-> <c- p>;</c->
+  <c- nn>treeIndex</c-><c- p>:</c-><c- f>hasHierarchy</c-> <c- g>&lt;#ru-v1></c-> <c- p>.</c->
 
 <c- g>&lt;#ru-v1></c->
-  <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
-  <c- nn>xsd:</c-><c- f>lang</c-> <c- s>"ru"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasVersion</c-> <c- s>"1.0"</c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-ru-v1#root></c-> <c- p>;</c->
-  <c- nn>tree:</c-><c- f>hasSHA256Hash</c-><c- p>:</c-> <c- s>"7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c"</c-> <c- p>.</c->
+  <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeDecoratorHierarchy</c-> <c- p>;</c->
+  <c- nn>xsd</c-><c- p>:</c-><c- f>lang</c-> <c- s>"ru"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasVersion</c-> <c- s>"1.0"</c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSkosGraph</c-> <c- g>&lt;https://commonnote.example/CommonNoteGraph-ru-v1#root></c-> <c- p>;</c->
+  <c- nn>tree</c-><c- p>:</c-><c- f>hasSHA256Hash:</c-> <c- s>"7d8cf659fdbd69618658e043c2c6e8c8e9395f4b652a38c2e5922eb7a51de42c"</c-> <c- p>.</c->
 </pre>
    </figure>
    <figure>
@@ -813,10 +813,10 @@ The convention on how this index of SKOS graphs is structured and used, along wi
 <c- k>@prefix</c-> <c- nn>skos:</c-> <c- g>&lt;http://www.w3.org/2004/02/skos/core#></c-> <c- p>.</c->
 <c- k>@prefix</c-> <c- nn>skosxl:</c-> <c- g>&lt;http://www.w3.org/2008/05/skos-xl#></c-> <c- p>.</c->
 
-<c- g>&lt;#root></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>root</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Note Container"</c-><c- o>@</c->en <c- p>]</c-> <c- p>;</c-> <c- nn>skos:</c-><c- f>narrower</c-> <c- g>&lt;#note></c-> <c- p>.</c->
-   <c- g>&lt;#note></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>note</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Text content of a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>;</c-> <c- nn>skos:</c-><c- f>narrower</c-> <c- g>&lt;#citation></c-><c- p>,</c-> <c- g>&lt;#image></c-> <c- p>.</c->
-      <c- g>&lt;#citation></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Citation to another document within a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>.</c->
-      <c- g>&lt;#image></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Embedded image or graphic within a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>.</c->
+<c- g>&lt;#root></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>root</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Note Container"</c-><c- o>@</c->en <c- p>]</c-> <c- p>;</c-> <c- nn>skos</c-><c- p>:</c-><c- f>narrower</c-> <c- g>&lt;#note></c-> <c- p>.</c->
+   <c- g>&lt;#note></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>note</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Text content of a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>;</c-> <c- nn>skos</c-><c- p>:</c-><c- f>narrower</c-> <c- g>&lt;#citation></c-><c- p>,</c-> <c- g>&lt;#image></c-> <c- p>.</c->
+      <c- g>&lt;#citation></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Citation to another document within a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>.</c->
+      <c- g>&lt;#image></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Embedded image or graphic within a note"</c-><c- o>@</c->en <c- p>]</c-> <c- p>.</c->
 </pre>
    </figure>
    <figure>
@@ -826,10 +826,10 @@ The convention on how this index of SKOS graphs is structured and used, along wi
 <c- k>@prefix</c-> <c- nn>skos:</c-> <c- g>&lt;http://www.w3.org/2004/02/skos/core#></c-> <c- p>.</c->
 <c- k>@prefix</c-> <c- nn>skosxl:</c-> <c- g>&lt;http://www.w3.org/2008/05/skos-xl#></c-> <c- p>.</c->
 
-<c- g>&lt;#root></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>root</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"контейнер для заметок"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>;</c-> <c- nn>skos:</c-><c- f>narrower</c-> <c- g>&lt;#note></c-> <c- p>.</c->
-   <c- g>&lt;#note></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>note</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"текстовое содержание заметки"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>;</c-> <c- nn>skos:</c-><c- f>narrower</c-> <c- g>&lt;#citation></c-><c- p>,</c-> <c- g>&lt;#image></c-> <c- p>.</c->
-      <c- g>&lt;#citation></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Цитирование другого документа в заметке"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>.</c->
-      <c- g>&lt;#image></c-> <c- b>a</c-> <c- nn>tree:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree:</c-><c- f>hasShapeTree</c-> <c- nn>f:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl:</c-><c- f>literalForm</c-> <c- s>"Встроенное изображение или изображение в заметке"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>.</c->
+<c- g>&lt;#root></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>root</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"контейнер для заметок"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>;</c-> <c- nn>skos</c-><c- p>:</c-><c- f>narrower</c-> <c- g>&lt;#note></c-> <c- p>.</c->
+   <c- g>&lt;#note></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>note</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"текстовое содержание заметки"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>;</c-> <c- nn>skos</c-><c- p>:</c-><c- f>narrower</c-> <c- g>&lt;#citation></c-><c- p>,</c-> <c- g>&lt;#image></c-> <c- p>.</c->
+      <c- g>&lt;#citation></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Цитирование другого документа в заметке"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>.</c->
+      <c- g>&lt;#image></c-> <c- b>a</c-> <c- nn>tree</c-><c- p>:</c-><c- f>ShapeTreeLabel</c-> <c- p>;</c-> <c- nn>tree</c-><c- p>:</c-><c- f>hasShapeTree</c-> <c- nn>f</c-><c- p>:</c-><c- f>citation</c-> <c- p>;</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>prefLabel</c-> <c- p>[</c-> <c- nn>skosxl</c-><c- p>:</c-><c- f>literalForm</c-> <c- s>"Встроенное изображение или изображение в заметке"</c-><c- o>@</c->ru <c- p>]</c-> <c- p>.</c->
 </pre>
    </figure>
    <h2 class="heading settled" data-level="6" id="definitions"><span class="secno">6. </span><span class="content">Definitions</span><a class="self-link" href="#definitions"></a></h2>

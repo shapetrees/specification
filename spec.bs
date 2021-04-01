@@ -188,11 +188,6 @@ For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
 * An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } [=arc=]
     indicates that there is exactly one corresponding resource <code>R</code>
     and it has the name <code>L</code>.
-* An { <code>S</code> <code class="vocab">st:matchesUriTemplate</code>
-    <code>L</code> } [=arc=] indicates that there <em class="rfc2119">MAY</em>
-    be an arbitrary number of corresponding resources <code>R</code>
-    and each will have a name that matches the URI template
-    [[RFC6570]] <code>L</code>.
 * An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> }
     [=arc=] indicates that <code>R</code> <em class="rfc2119">MUST</em>
     have exactly one node which conforms to [=shape=] <code>Sh</code>.
@@ -223,7 +218,7 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 	    st:expectsType [st:ShapeTreeContainer] ;
 	    st:contains @&lt;#ShapeTree&gt; +
 	  ) ;
-    (rdfs:label xsd:string | st:matchesUriTemplate xsd:string) ;
+    rdfs:label xsd:string ? ;
 	  st:references @&lt;#ReferencedShapeTree&gt; * ;
 	  st:validatedBy IRI ? ;
     st:contains IRI ? ;
@@ -1659,35 +1654,50 @@ describe the shape tree in human-readable terms.
 * The { <code>IDX</code> <code>a</code>
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> } [=arc=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
-    index of <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
-* The { <code>IDX</code> <code class="vocab">st:hasSeries</code>
-    <code>SERIES</code> } [=arc=] indicates linkage to one or more
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code>.
-* The { <code>SERIES</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code> } [=arc=] indicates a
-    <code class="vocab">st:ShapeTreeDecoratorSeries</code> that represent a
-    series of versioned [=SKOS graphs=] for a given language or interpretation.
-* The { <code>SERIES</code> <code class="vocab">st:hasHierarchy</code>
-    <code>HIER</code> } [=arc=] indicates linkage to one or more
-    <code class="vocab">st:ShapeTreeDecoratorHierarchy</code>.
-* The { <code>HIER</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> } [=arc=] indicates
-    a <code class="vocab">st:ShapeTreeDecoratorHierarchy</code> that represent
-    a single versioned [=SKOS graph=].
-    * The { <code>HIER</code> <code class="vocab">st:hasSkosGraph</code>
-        <code>SKOS</code> } [=arc=] indicates that there is exactly one
-        [=SKOS graph=] describing <code>STs</code>
-    * The { <code>HIER</code> <code class="vocab">st:hasVersion</code>
-        <code>VERSION</code> } [=arc=] indicates the version of the [=SKOS graph=]
-        <code>SKOS</code>
-    * The { <code>HIER</code> <code class="vocab">st:hasSHA256</code>
-        <code>HASH</code> } [=arc=] indicates the hash of [=SKOS graph=]
-        <code>SKOS</code>
-* Each { <code>SKOSSUB</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeLabel</code> } in <code>SKOS</code>
-    refers back to the [=shape tree=] <code>ST</code> via the
-    { <code>SKOSSUB</code> <code class="vocab">st:hasShapeTree</code>
-    <code>ST</code> } [=arc=].
+    index of <code class="vocab">st:ShapeTreeDecoratorSet</code>.
+* The { <code>IDX</code> <code class="vocab">st:hasSet</code>
+    <code>SET</code> } [=arc=] indicates linkage to one or more
+    <code class="vocab">st:ShapeTreeDecoratorSet</code>.
+* The { <code>SET</code> <code>a</code>
+    <code class="vocab">st:ShapeTreeDecoratorSet</code> } [=arc=] indicates a
+    <code class="vocab">st:ShapeTreeDecoratorSet</code> that represents a
+    [=SKOS graphs=] for a given language or interpretation.
+* The { <code>SET</code> <code class="vocab">st:hasShapeTreeDecoratorResource</code>
+    <code>DECRESOURCE</code> } [=arc=] indicates linkage to a single
+    <code class="vocab">st:ShapeTreeDecoratorResource</code>.
+* The { <code>SET</code> <code class="vocab">st:usesLanguage</code>
+    <code>LANG</code> } [=arc=] indicates the language used by the associated
+    <code>DECRESOURCE</code>.
+
+<figure id="shapetree-decorator-shex">
+  <figcaption>ShEx validation of a Shape Tree Decorators</figcaption>
+  <pre highlight="turtle">
+  prefix st: &lt;http://www.w3.org/ns/st#&gt;.
+  prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+  prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
+  prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;.
+
+  &lt;#DecoratorIndex&gt; {
+    a [ st:ShapeTreeDecoratorIndex ] ;
+    st:defaultLanguage xsd:language ? ;
+    st:hasSet IRI*
+  }
+
+  &lt;#DecoratorSet&gt; {
+    a [ st:ShapeTreeDecoratorSet ] ;
+    st:usesLanguage xsd:language ;
+    st:hasShapeTreeDecoratorResource IRI
+  }
+
+  &lt;#Decorator&gt; {
+    a [ st:ShapeTreeDecorator ] ;
+    st:hasShapeTree IRI ;
+    skos:prefLabel xsd:string ;
+    skos:definition xsd:string ?
+  }
+  
+  </pre>
+</figure>    
 
 SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
   be used to group or organize related [=shape trees=].
