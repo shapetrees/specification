@@ -51,38 +51,63 @@ Abstract:
     color: #000000;
   }
 
-  table.algorithmparams {
-    width: 70%;
-    align: center;
+  table.operation {
+    border-collapse: separate;
+    border: 3px solid #808080;
+    margin-bottom: .5em;
   }
 
-  table.algorithmparams tbody td {
+  table.operation thead tr {
+    font-size: 14px;
   }
 
-  table.algorithmparams tbody tr:nth-child(even) {
-    background-color: lightgray;
+  table.operation thead th {
+    background-color: #005A9C;
+    color: #FFF;
   }
 
-
-  table.algorithmparams thead td {
+  table.operation th[colspan] {
+    text-align: left;
   }
 
-
-  table.operationdetails {
-    width: 100%;
-    margin-bottom: 25px;
+  table.operation td[colspan] {
+    text-align: left;
   }
 
-  table.operationdetails tbody tr:nth-child(even) {
-    background-color: lightgray;
+  table.operation tbody td {
+    font-size: 13px;
+    text-align: left;
   }
 
-  table.operationdetails thead td {
-    border: 1px solid #999999;
+  table.operation code {
+    background-color: #DCDCDC;
+    color: #000;
+    font-size: 13px;
+    padding-left: .2em;
+    padding-right: .2em;
+    padding-top: .05em;
+    padding-bottom: .05em;  
   }
 
-  table.operationdetails tbody td {
-    border: 1px solid #999999;
+  .opdetails code {
+    background-color: #DCDCDC; 
+    color: #000;
+    font-weight: bold;
+    font-size: 13px;
+    padding-left: .2em;
+    padding-right: .2em;
+    padding-top: .05em;
+    padding-bottom: .05em;
+  }
+
+  .opdetails code.vocab {
+    color: #339966;
+    background-color: #FFFFFF;
+  }
+
+  .opdetails ol {
+    margin-left: 0;
+    padding-left: 1em;
   }
 
 	code.container {
@@ -101,7 +126,7 @@ Abstract:
 		color: #337700;
 	}
 
-  code.vocab {
+    code.vocab {
 		color: #339966;
 	}
 </style>
@@ -252,896 +277,816 @@ These operations make use of reusable, internal algorithms defined in
 
 ## Discover Shape Tree ## {#discover}
 
-The <b>discover shape tree</b> operation entails discovering what, if any,
-shape trees are managing a given container.
-
-### Inputs ### {#discover-inputs}
-* Let <code>uri</code> be the URI of the resource to discover shape trees for
-
-### Outputs ### {#discover-outputs}
-* Collection of <code class="vocab">st:ShapeTreeLocator</code> subjects
-
-### Operation Summary ### {#discover-summary}
-
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>discover shape tree</b> operation entails discovering what, if any, 
+        shape trees are managing a given container.
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`URI`</td>
+      <td>The URI of the resource to discover shape trees for</td>
     </tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>[1](#discovery-details-head)</td>
-			<td>Perform a HEAD on <code>uri</code> to discover Shape Tree metadata URI</td>
-			<td>[Request](#fig-discover-head-request)</td>
-			<td>
-				[Response](#fig-discover-head-response)
-			</td>
-		</tr>
-		<tr>
-			<td>[2](#discovery-details-get)</td>
-			<td>Perform a GET on the discovered Shape Tree metadata resource</td>
-			<td>[Request](#fig-discover-get-metadata)</td>
-			<td>
-				[Managed Response](#fig-discover-head-response-managed)<br/>
-				[Unmanaged Response](#fig-discover-head-response-unmanaged)
-			</td>
-		</tr>
-		<tr>
-			<td>[3](#discovery-details-collect)</td>
-			<td>Collect any navigable shape trees</td>
-			<td colspan="2">N/A - Logic only</td>
-		</tr>
-	</tbody>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`LOCATORS`</td>
+      <td>Collection of <code class="vocab">st:ShapeTreeLocator</code> subjects</td>
+    </tr>
+  </tbody>
 </table>
 
-### Operation Details ### {#discovery-details}
+<div class="opdetails">
 
-#### Perform a HEAD on the provided <code>uri</code> to discover Shape Tree metadata URI #### {#discovery-details-head}
+1. Perform a HEAD on the provided <code>URI</code> to discover Shape Tree metadata URI
 
-  Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-  [=client-side agent=].
+      Note: This step <em class="rfc2119">SHOULD</em> be performed by a
+      [=client-side agent=].
 
-	<figure id="fig-discover-head-request">
-		<figcaption><code>uri</code> = <code>/data/CommonNotes/</code></figcaption>
-		<pre highlight="http">
-		HEAD /data/CommonNotes/
-		</pre>
-	</figure>
+    	<figure id="fig-discover-head-request">
+    		<figcaption><code>URI</code> = <code>/data/CommonNotes/</code></figcaption>
+    		<pre highlight="http">
+    		HEAD /data/CommonNotes/
+    		</pre>
+    	</figure>
 
-	<figure id="fig-discover-head-response">
-		<figcaption>Discover Container Shape Tree Metadata - HEAD container -
-    Response</figcaption>
-		<pre highlight="http">
-		HTTP/1.1 200 OK
-		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
-    Link: &lt;http://www.w3.org/ns/ldp#Container&gt;; rel="type"
-		...other headers omitted...
-		</pre>
-	</figure>
+    	<figure id="fig-discover-head-response">
+    		<figcaption>Discover Container Shape Tree Metadata - HEAD container -
+        Response</figcaption>
+    		<pre highlight="http">
+    		HTTP/1.1 200 OK
+    		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
+        Link: &lt;http://www.w3.org/ns/ldp#Container&gt;; rel="type"
+    		...other headers omitted...
+    		</pre>
+    	</figure>
 
-  Discovering shape trees only applies to URIs of containers. A status code of
-  400 <em class="rfc2119">MUST</em> be returned if no Link headers with a
-  relation type which maps to the implementation's notion of a [=container=]
-  (e.g. `http://www.w3.org/ns/ldp#Container` in an LDP context) exists.
+      Discovering shape trees only applies to URIs of containers. A status code of
+      400 <em class="rfc2119">MUST</em> be returned if no Link headers with a
+      relation type which maps to the implementation's notion of a [=container=]
+      (e.g. `http://www.w3.org/ns/ldp#Container` in an LDP context) exists.
 
-	Let <code>metauri</code> be the URI of the shape tree metadata resource
-    pertaining to <code>uri</code> through the Link header with relation
-    `http://shapetrees.org/#ShapeTree`.
+    	Let <code>METAURI</code> be the URI of the shape tree metadata resource
+        pertaining to <code>URI</code> through the Link header with relation
+        `http://shapetrees.org/#ShapeTree`.
 
-#### Perform a GET on the discovered Shape Tree metadata resource (<code>metauri</code>) #### {#discovery-details-get}
 
-  Note: This step <em class="rfc2119">SHOULD</em> performed by a
-  [=client-side agent=].
+1. Perform a GET on the discovered Shape Tree metadata resource (<code>METAURI</code>)
 
-	<figure id="fig-discover-get-metadata">
-		<figcaption>Discover Container Shape Tree Metadata -
-    Get Shape Tree metadata - Request</figcaption>
-		<pre highlight="http">
-		GET /data/CommonNotes/meta/UUID
-		</pre>
-	</figure>
+      Note: This step <em class="rfc2119">SHOULD</em> performed by a
+      [=client-side agent=].
 
-	<figure id="fig-discover-head-response-managed">
-		<figcaption>Discover Container Shape Tree Metadata -
-    GET Shape Tree metadata - Managed Container Response</figcaption>
-		<pre highlight="turtle">
-		prefix st: &lt;http://www.w3.org/ns/st#&gt;.
-    prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
-    prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
+    	<figure id="fig-discover-get-metadata">
+    		<figcaption>Discover Container Shape Tree Metadata -
+        Get Shape Tree metadata - Request</figcaption>
+    		<pre highlight="http">
+    		GET /data/CommonNotes/meta/UUID
+    		</pre>
+    	</figure>
 
-		&lt;#shapetree&gt;
-	  	st:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
+    	<figure id="fig-discover-head-response-managed">
+    		<figcaption>Discover Container Shape Tree Metadata -
+        GET Shape Tree metadata - Managed Container Response</figcaption>
+    		<pre highlight="turtle">
+    		prefix st: &lt;http://www.w3.org/ns/st#&gt;.
+        prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+        prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
 
-		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
-			a st:ShapeTreeLocator ;
-	  	st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
-	  	st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
-	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
-		</pre>
-	</figure>
+    		&lt;#shapetree&gt;
+    	  	st:hasShapeTreeLocator &lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt; .
 
-	<figure id="fig-discover-head-response-unmanaged">
-		<figcaption>Discover Container Shape Tree Metadata -
-    GET Shape Tree metadata - Unmanaged Container Response</figcaption>
-		<pre highlight="http">
-		HTTP/1.1 404 NOT FOUND
-		</pre>
-	</figure>
+    		&lt;#bc1b490a-537d-4749-b778-cd7d6da3ac56&gt;
+    			a st:ShapeTreeLocator ;
+    	  	st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+    	  	st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
+    	  	st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; .
+    		</pre>
+    	</figure>
 
-	A 404 status code indicates that no [=shape trees=] manage this
-    [=container=], and so it <em class="rfc2119">MUST</em> be considered
-    an [=Unmanaged Container=].
+    	<figure id="fig-discover-head-response-unmanaged">
+    		<figcaption>Discover Container Shape Tree Metadata -
+        GET Shape Tree metadata - Unmanaged Container Response</figcaption>
+    		<pre highlight="http">
+    		HTTP/1.1 404 NOT FOUND
+    		</pre>
+    	</figure>
 
-#### Collect any navigable shape trees #### {#discovery-details-collect}
+    	A 404 status code indicates that no [=shape trees=] manage this
+        [=container=], and so it <em class="rfc2119">MUST</em> be considered
+        an [=Unmanaged Container=].
 
-  Note: This step <em class="rfc2119">SHOULD</em> performed by a
-  [=client-side agent=].
+1. Collect any navigable shape trees
 
-	If the ```<#shapetree>``` subject has one or more
-    <code class="vocab">st:hasShapeTreeLocator</code> predicates it means this
-    container <em class="rfc2119">MUST</em> be considered a [=Managed Container=].
+      Note: This step <em class="rfc2119">SHOULD</em> performed by a
+      [=client-side agent=].
 
-  Let <code>mc</code> be this [=managed container=].
+    	If the ```<#shapetree>``` subject has one or more
+        <code class="vocab">st:hasShapeTreeLocator</code> predicates it means this
+        container <em class="rfc2119">MUST</em> be considered a [=Managed Container=].
 
-	The <code class="vocab">st:hasShapeTree</code> of each
-    <code class="vocab">st:ShapeTreeLocator</code> subject specifies what
-    [=shape tree=] manages <code>mc</code>.
+      Let <code>MC</code> be this [=managed container=].
 
-  The IRI of each <code class="vocab">st:ShapeTreeLocator</code> describing a
-    [=shape tree=] managing <code>mc</code> <em class="rfc2119">SHOULD</em>
-    be returned.
+    	The <code class="vocab">st:hasShapeTree</code> of each
+        <code class="vocab">st:ShapeTreeLocator</code> subject specifies what
+        [=shape tree=] manages <code>MC</code>.
+
+      The IRI of each <code class="vocab">st:ShapeTreeLocator</code> describing a
+        [=shape tree=] managing <code>MC</code> <em class="rfc2119">SHOULD</em>
+        be returned.
 
 ## Plant Shape Tree ## {#plant-shapetree}
 
-Note: A plant operation <em class="rfc2119">MAY</em>
-  be performed by either a [client](#client-side-agent) or [=server-side agent=].
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>plant</b> operation marks a container (new or existing) as being
+        managed by one or more shape trees.
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`REQ`</td>
+      <td>A POST or PUT HTTP request with the following characteristics:
+        * Let <code>LINKST</code> be one or more Link headers with the relation of
+            &quot;http://shapetrees.org/#ShapeTree&quot;.  This represents one or more
+            [=shape trees=] to be planted by the plant operation.
+        * A Link header with the relation &quot;type&quot; and a value of a compatible
+            [=container=] (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
+        * Let <code>LINKFN</code> be an <em class="rfc2119">OPTIONAL</em> Link
+            header with the relation of
+            &quot;http://shapetrees.org/#FocusNode&quot;.  This represents the
+            target subject within the request body (used for ShEx validation, etc.)
+        * Let <code>LINKTST</code> be an <em class="rfc2119">OPTIONAL</em>
+            Link header with the relation of &quot;http://shapetrees.org/#TargetShapeTree&quot;
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`RESPONSE`</td>
+      <td>A HTTP response containing a Location header with the URI of the container
+        that the requested shape trees (<code>LINKST</code>) are planted in
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-The <b>plant</b> operation marks a container (new or existing) as being
-managed by one or more shape trees.
+<div class="opdetails">
 
-### Inputs ### {#plant-inputs}
-* Let <code>req</code> be a POST or PUT HTTP request with the following
-    characteristics:
-    * Let <code>linkst</code> be one or more Link headers with the relation of
-        &quot;http://shapetrees.org/#ShapeTree&quot;.  This represents one or more
-        [=shape trees=] to be planted by the plant operation.
-	  * A Link header with the relation &quot;type&quot; and a value of a compatible
-        [=container=] (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
-	  * Let <code>linkfn</code> be an <em class="rfc2119">optional</em> Link
-        header with the relation of
-        &quot;http://shapetrees.org/#FocusNode&quot;.  This represents the
-        target subject within the request body (used for ShEx validation, etc.)
-	  * Let <code>linktst</code> be an <em class="rfc2119">OPTIONAL</em>
-        Link header with the relation of &quot;http://shapetrees.org/#TargetShapeTree&quot;
-    * Let <code>slug</code> be a Slug header, <em class="rfc2119">REQUIRED</em>
-          when <code>req</code> is a POST and no <code>linktst</code> is provided
-    * Let <code>name</code> be the portion of the URI that represents the name of
-          the resource; will only be present with <code>req</code> is a PUT
+  Note: A plant operation <em class="rfc2119">MAY</em>
+    be performed by either a [client](#client-side-agent) or [=server-side agent=].
 
-### Outputs ### {#plant-outputs}
-* An HTTP response containing a Location header with the URI of the container
-    that the requested shape trees (<code>linkst</code>) are planted in
-
-### Key Terms for Planting ### {#plant-keyterms}
-  * Let <code>tc</code> be the <dfn>Target Container</dfn> - The container that
+  * Let <code>TC</code> be the <dfn>Target Container</dfn> - The container that
         will contain instances of the [=planted shape tree=].
         This container may or may not already exist.
-  * Let <code>pc</code> be the <dfn>Parent Container</dfn> - The container that
+  * Let <code>PC</code> be the <dfn>Parent Container</dfn> - The container that
         will contain the new or existing [=target container=] representing the
-        [=planted shape tree=].  When <code>req</code> is a POST, this will be the
+        [=planted shape tree=].  When <code>REQ</code> is a POST, this will be the
         location URL.  For PUT, this will be the parent of the PUT container.
 
-### Operation Summary ### {#plant-summary}
 
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
-    </tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>[1](#plant-details-preconditions)</td>
-			<td>Preconditions:
-				* Discover Shape Tree(s) for Parent Container (<code>pc</code>)
-				* Discover Shape Tree(s) for Target Container (<code>tc</code>)
-			</td>
-			<td colspan="2">See [Discovery](#discover)</td>
-		</tr>
-		<tr>
-			<td>[2](#plant-static-validation)</td>
-			<td>Static Validation of Shape Trees for Conflicts</td>
-			<td colspan="2">N/A - Logic only</td>
-		</tr>
-		<tr>
-			<td>[3](#plant-graphbody-validation)</td>
-			<td>Validate Graph Body</td>
-			<td colspan="2">N/A - Logic only</td>
-		</tr>
-		<tr>
-			<td>[4](#plant-parent-validation)</td>
-			<td>Validate against Parent Container (pc)</td>
-			<td colspan="2">
-        See [Validate Proposed Resource](#validate-proposed-resource)
-      </td>
-		</tr>
-		<tr>
-			<td>[5](#plant-create-container)</td>
-			<td>Create Target Container (<code>tc</code>), if necessary</td>
-			<td>[Request](#fig-plant-create-target-request)</td>
-			<td>[Response](#fig-plant-create-target-response)</td>
-		</tr>
-		<tr>
-			<td>[6](#plant-update-container-metadata)</td>
-			<td>Update Shape Tree Meta Data for Target Container (<code>tc</code>)</td>
-			<td colspan="2">
-        See [Update Container Metadata](#update-container-metadata)
-      </td>
-		</tr>
-		<tr>
-			<td>[7](#plant-initialize-statics)</td>
-			<td>Initialize Static Content</td>
-			<td colspan="2">See [Initialize Static Content](#initialize-statics)</td>
-		</tr>
-	</tbody>
-</table>
+1. Preconditions
 
-### Operation Details ### {#plant-details}
+    Note: This step <em class="rfc2119">SHOULD</em> be performed by a
+        [=client-side agent=].
 
-#### Preconditions #### {#plant-details-preconditions}
+    1. Ensure the [=Parent Container=] (<code>PC</code>) exists.  If not, this
+        operation <em class="rfc2119">MUST</em> return a 404 status code.
+    1. [Discover](#discover) any planted [=shape tree=] IRIs managing <code>PC</code>.
+    	1. Let <code>PARENTST</code> be the collection of dereferenced shape tree
+            IRIs discovered for <code>PC</code>
+    1. If the [=Target Container=] (<code>TC</code>) already exists,
+        [discover](#discover) any previously [=planted shape tree=] IRIs.
+    	1. Collect any existing shape tree IRIs and combine with the IRIs of the
+            <code>LINKST</code> provided via the request Link header to represent
+            the full collection of existing and proposed shape trees for <code>TC</code>.
+    	1. Let <code>ALLST</code> be the collection of dereferenced shape tree IRIs
+            representing both existing and <code>LINKST</code> IRIs
 
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
+1. Static Validation of Shape Trees for Conflicts
 
-1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, this
-    operation <em class="rfc2119">MUST</em> return a 404 status code.
-1. [Discover](#discover) any planted [=shape tree=] IRIs managing <code>pc</code>.
-	1. Let <code>parentst</code> be the collection of dereferenced shape tree
-        IRIs discovered for <code>pc</code>
-1. If the [=Target Container=] (<code>tc</code>) already exists,
-    [discover](#discover) any previously [=planted shape tree=] IRIs.
-	1. Collect any existing shape tree IRIs and combine with the IRIs of the
-        <code>linkst</code> provided via the request Link header to represent
-        the full collection of existing and proposed shape trees for <code>tc</code>.
-	1. Let <code>allst</code> be the collection of dereferenced shape tree IRIs
-        representing both existing and <code>linkst</code> IRIs
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
 
-#### Static Validation of Shape Trees for Conflicts #### {#plant-static-validation}
+    1. Iterate <code>ALLST</code> to validate that none of the following conditions
+        are met:
+    	* any shape tree has a <code class="vocab">st:expectsResourceType</code>
+            with a value other than <code class="vocab">st:ShapeTreeContainer</code>
+    	* more than one shape tree has a <code class="vocab">st:validatedBy</code> value
+    	* more than one shape tree has a <code class="vocab">st:contains</code> value
 
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
+    If any of the above static validations fail, this operation
+        <em class="rfc2119">MUST</em> return a 400 status code.
 
-1. Iterate <code>allst</code> to validate that none of the following conditions
-    are met:
-	* any shape tree has a <code class="vocab">st:expectsResourceType</code>
-        with a value other than <code class="vocab">st:ShapeTreeContainer</code>
-	* more than one shape tree has a <code class="vocab">st:validatedBy</code> value
-	* more than one shape tree has a <code class="vocab">st:contains</code> value
+1. Validate graph body
 
-If any of the above static validations fail, this operation
-    <em class="rfc2119">MUST</em> return a 400 status code.
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
 
-#### Validate graph body #### {#plant-graphbody-validation}
+    Issue: Must detail how to differentiate between ShEx and SHACL validation
 
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
+    1. Let <code>VST</code> be the validating shape tree that is identified by the
+        only [=shape tree=] in <code>ALLST</code> having a
+        <code class="vocab">st:validatedBy</code> value
+    1. If <code>VST</code> is present and the plant operation (<code>REQ</code>)
+        includes an RDF graph body and ShEx validation is used and a [=Focus Node=]
+        (<code>LINKFN</code>) is not present, this operation
+        <em class="rfc2119">MUST</em> return a 422 status code
+    1. Perform a validation of the RDF graph body of <code>REQ</code> using the
+        <code>VST</code> <code class="vocab">st:validatedBy</code> shape,
+        targeting the graph's <code>LINKFN</code>.  If validation fails, this
+        operation <em class="rfc2119">MUST</em> return a 422 status code
 
-Issue: Must detail how to differentiate between ShEx and SHACL validation
+1. Validate against parent container
 
-1. Let <code>vst</code> be the validating shape tree that is identified by the
-    only [=shape tree=] in <code>allst</code> having a
-    <code class="vocab">st:validatedBy</code> value
-1. If <code>vst</code> is present and the plant operation (<code>req</code>)
-    includes an RDF graph body and ShEx validation is used and a [=Focus Node=]
-    (<code>linkfn</code>) is not present, this operation
-    <em class="rfc2119">MUST</em> return a 422 status code
-1. Perform a validation of the RDF graph body of <code>req</code> using the
-    <code>vst</code> <code class="vocab">st:validatedBy</code> shape,
-    targeting the graph's <code>linkfn</code>.  If validation fails, this
-    operation <em class="rfc2119">MUST</em> return a 422 status code
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=]..
 
-#### Validate against parent container #### {#plant-parent-validation}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
-
-1. Determine if the [=Parent Container=] (<code>pc</code>) is a
-    [=Managed Container=] by evaluating if <code>parentst</code> is not empty
-2. If <code>pc</code> is a [=Managed Container=] call the
-    [validate proposed resource](#validate-proposed-resource) algorithm with
-    parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Notes</b></td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>uri</code></td>
-        <td><code>pc</code></td>
-        <td>
-          The [=parent container=] that will contain the [=target container=]
-        </td>
-      </tr>
-      <tr>
-        <td><code>rn</code></td>
-        <td>
-          If <code>req</code> is a POST then <code>slug</code><br/>
-          If <code>req</code> is a PUT then <code>name</code>
-        </td>
-        <td>The name of the resource</td>
-      </tr>
-      <tr>
-        <td><code>sth</code></td>
-        <td><code>linktst</code></td>
-        <td>
-          Link header with the relation of
-          "http://shapetrees.org/#TargetShapeTree"
-        </td>
-      </tr>
-      <tr>
-        <td><code>rt</code></td>
-        <td><code class="vocab">st:ShapeTreeContainer</code></td>
-        <td>The resource type being created/modified</td>
-      </tr>
-  </table>
-
-#### Create Target Container (<code>tc</code>), if necessary #### {#plant-create-container}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
-
-1. If <code>tc</code> does not exist, create it.
-
-	<figure id="fig-plant-create-target-request">
-		<figcaption>Create Target Container - Request</figcaption>
-		<pre highlight="http">
-		POST /<b><i>&lt;pc&gt;</b></i>/
-		Slug: <b><i>&lt;tc&gt;</b></i>;
-		Link: &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;; rel="type"
-		</pre>
-	</figure>
-
-	<figure id="fig-plant-create-target-response">
-		<figcaption>Create Target Container - Response</figcaption>
-		<pre highlight="http">
-		HTTP 201 CREATED
-		Location: http://pod.example/<b><i>&lt;pc&gt;</b></i>/<b><i>&lt;tc&gt;</b></i>/
-		Content-type: text/turtle; charset=utf-8
-		Content-length: 396
-		</pre>
-	</figure>
-
-
-#### Update Shape Tree Meta Data for Target Container (<code>tc</code>) #### {#plant-update-container-metadata}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
-
-1. Update Target Container <code>tc</code> Metadata (<code>metauri</code>)
-
-	1. Iterate the collection of shape trees to be planted (<code>linkst</code>),
-        let <code>linksti</code> be the current shape tree in context.
-	1. Call algorithm [Update Container Metadata](#update-container-metadata) with
+    1. Determine if the [=Parent Container=] (<code>PC</code>) is a
+        [=Managed Container=] by evaluating if <code>PARENTST</code> is not empty
+    2. If <code>PC</code> is a [=Managed Container=] call the
+        [validate proposed resource](#validate-proposed-resource) algorithm with
         parameters:
 
-	<table class="data algorithmparams" align="left">
-		<thead>
-			<tr>
-				<td><b>Parameter</b></td>
-				<td><b>Value</b></td>
-        <td><b>Notes</td>
-			</tr>
-		</thead>
-		<tbody>
-      <tr>
-        <td><code>tc</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] to that will contain instance data of the
-          [=shape tree=]
-        </td>
-      </tr>
-			<tr>
-				<td><code>rootst</code></td>
-				<td><code>linksti</code></td>
-        <td>The root [=shape tree=] at the top of the hierarchy</td>
-			</tr>
-			<tr>
-				<td><code>st</code></td>
-				<td><code>linksti</code></td>
-        <td>The [=shape tree=] managing the [=target container=]</td>
-			</tr>
-			<tr>
-				<td><code>rootpath</code></td>
-				<td><code>tc</code></td>
-        <td>
-          The [=target container=] to that will contain instance data of the
-          [=shape tree=]
-        </td>
-			</tr>
-	</table>
-
-#### Initialize Static Content #### {#plant-initialize-statics}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either
-    a [client](#client-side-agent) or [=server-side agent=]..
-
-1. Let <code>cst</code> be the shape tree having a
-    <code class="vocab">st:contains</code> value (if one exists) from the
-    list of shape trees that were planted <code>linkst</code>
-1. Iterate any <code class="vocab">st:contains</code> IRIs within
-    <code>cst</code>, letting <code>csti</code> be the current IRI in context
-1. Let <code>cstist</code> be the shape tree resulting in dereferencing IRI
-    <code>csti</code>
-1. If <code>cstist</code> has a <code class="vocab">rdfs:label</code> value,
-    let <code>label</code> be the value of rdfs:label for <code>cstist</code>,
-    and call algorithm
-    [Initialize Statics](#initialize-statics) with parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Notes</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>pc</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] to that will contain instance data of the
-          [=shape tree=]
-        </td>
-      </tr>
-      <tr>
-        <td><code>sst</code></td>
-        <td><code>cstist</code></td>
-        <td>The matching contained [=shape tree=]</td>
-      </tr>
-      <tr>
-        <td><code>rst</code></td>
-        <td><code>cst</code></td>
-        <td>The [=shape tree=] containing a <code class="vocab">st:container</code>
-      </tr>
-      <tr>
-        <td><code>rc</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] to that will contain instance data of the
-          [=shape tree=]
-        </td>
-      </tr>
-  </table>
-
-## Create Data Instance ## {#create-data-instance}
-
-The <b>create data instance</b> operation creates an instance of a shape
-tree within a managed container.
-
-### Inputs ### {#create-data-instance-inputs}
-* Let <code>req</code> be a POST or PUT HTTP request with the following
-    characteristics:
-    * Let <code>linkfn</code> be an <em class="rfc2119">OPTIONAL</em>
-          Link header with the relation of "http://shapetrees.org/#FocusNode".
-          This represents the target subject within the request body
-          (used for ShEx validation, etc.)
-    * Let <code>linktst</code> be an <em class="rfc2119">OPTIONAL</em> Link
-        header with the relation of "http://shapetrees.org/#TargetShapeTree"
-    * Let <code>slug</code> be a Slug header, <em class="rfc2119">REQUIRED</em>
-        when <code>req</code> is a POST and no <code>linktst</code> is provided
-    * Let <code>name</code> be a portion of the URI that represents the name of
-        the resource. This will only be present when <code>req</code> is a PUT
-
-### Outputs ### {#create-data-instance-outputs}
-* Standard HTTP response
-
-### Key Terms for Creating Data Instances ### {#create-data-instance-terms}
-* Let <code>pc</code> be the [=Parent Container=]
-
-### Operation Summary ### {#create-data-instance-summary}
-
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
-    </tr>
-	</thead>
-	<tbody>
-    <tr>
-      <td>[1](#create-data-instance-details-preconditions)</td>
-      <td>Discover Shape Tree(s) for Target Container (<code>tc</code>)
-      </td>
-      <td colspan="2">See [Discovery](#discover)</td>
-    </tr>
-    <tr>
-			<td>[2](#create-data-instance-details-parent-validation)</td>
-			<td>Validate against parent container</td>
-			<td colspan="2">
-        See [Validate Proposed Resource](#validate-proposed-resource)
-      </td>
-		</tr>
-    <tr>
-			<td>[3](#create-data-instance-details-create-resource)</td>
-			<td>Create Proposed Resource</td>
-			<td colspan="2"></td>
-		</tr>
-    <tr>
-			<td>[4](#create-data-instance-details-initialize-statics)</td>
-			<td>Initialize Static Content</td>
-			<td colspan="2">See [Initialize Static Content](#initialize-statics)</td>
-		</tr>
-	</tbody>
-</table>
-
-### Operation Details ### {#create-data-instance-details}
-
-#### Preconditions #### {#create-data-instance-details-preconditions}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-1. Ensure the [=Parent Container=] (<code>pc</code>) exists.  If not, return
-    this operation <em class="rfc2119">MUST</em> return a 404 status code.
-1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>pc</code>.
-	1. Let <code>parentst</code> be the collection of dereferenced shape tree IRIs
-        discovered for <code>pc</code>
-
-#### Validate against parent container #### {#create-data-instance-details-parent-validation}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
-
-1. Determine if the [=Parent Container=] (<code>pc</code>) is a
-    [=Managed Container=] by evaluating if <code>parentst</code> is not empty
-2. If <code>pc</code> is a [=Managed Container=] call the
-    [validate proposed resource](#validate-proposed-resource) algorithm
-    with parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Notes</b></td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>uri</code></td>
-        <td><code>pc</code></td>
-        <td>
-          The [=parent container=] to that will contain the [=target container=]
-        </td>
-      </tr>
-      <tr>
-        <td><code>rn</code></td>
-        <td>
-          If <code>req</code> is a POST then <code>slug</code><br/>
-          If <code>req</code> is a PUT then <code>name</code>
-        </td>
-        <td>The name of the resource</td>
-      </tr>
-      <tr>
-        <td><code>sth</code></td>
-        <td><code>linktst</code></td>
-        <td>The [=shape tree=] managing the [=target container=]</td>
-      </tr>
-      <tr>
-        <td><code>rt</code></td>
-        <td>
-          <code class="vocab">st:ShapeTreeContainer</code> or
-          <code class="vocab">st:ShapeTreeResource</code> or
-          <code class="vocab">st:ShapeTreeNonRDFResource</code>
-        </td>
-        <td>The resource type being created</td>
-      </tr>
-  </table>
-
-#### Create Resource #### {#create-data-instance-details-create-resource}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=]..
-
-#### Initialize Static Content #### {#create-data-instance-details-initialize-statics}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-[client](#client-side-agent) or [=server-side agent=].
-
-1. Iterate any <code class="vocab">st:contains</code> IRIs within
-    <code>mcst</code>, letting <code>csti</code> be the current IRI in context
-1. Let <code>cstist</code> be the [=shape tree=] resulting in dereferencing IRI
-    <code>csti</code>
-1. If <code>cstist</code> has a <code class="vocab">rdfs:label</code> value,
-    let <code>label</code> be the value of
-    <code class="vocab">rdfs:label</code> for <code>cstist</code>, and
-    call algorithm [Initialize Statics](#initialize-statics) with parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Note</b></td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>pc</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] that will contain instance data of the
-          [=shape tree=]
-        </td>
-      <tr>
-        <td><code>sst</code></td>
-        <td><code>cstist</code></td>
-        <td>The matching [=shape tree=]
-      </tr>
-      <tr>
-        <td><code>rst</code></td>
-        <td><code>cst</code></td>
-        <td>The parent [=shape tree=] managing the parent container
-      </tr>
-      <tr>
-        <td><code>rc</code></td>
-        <td><code>tc</code></td>
-        <td>
-          The [=target container=] that will contain instance data of the
-          [=shape tree=]
-        </td>
-      </tr>
-  </table>
-
-## Update Data Instance ## {#update-data-instance}
-
-The <b>update data instance</b> operation updates an instance of a
-[=shape tree=] within a managed container.
-
-### Inputs ### {#update-data-instance-inputs}
-* Let <code>req</code> be a PUT or PATCH HTTP request with the following
-    characteristics:
-    * Let <code>linkfn</code> be an <em class="rfc2119">OPTIONAL</em>
-        Link header with the relation of "http://shapetrees.org/#FocusNode".
-        This represents the target subject within the request body
-        (used for ShEx validation, etc.)
-    * Let <code>linktst</code> be an <em class="rfc2119">OPTIONAL</em> Link
-        header with the relation of "http://shapetrees.org/#TargetShapeTree"
-    * Let <code>name</code> be a portion of the URI that represents the name
-        of the resource, defined by the resource portion of <code>req</code>.
-    * Let <code>rt</code> be the resource type
-
-### Outputs ### {#update-data-instance-outputs}
-* Standard HTTP response
-
-### Key Terms for Updating Data Instances ### {#update-data-instance-terms}
-* Let <code>pc</code> be the [=Parent Container=]
-
-### Operation Summary ### {#update-data-instance-summary}
-
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
-    </tr>
-	</thead>
-	<tbody>
-    <tr>
-      <td>[1](#update-data-instance-details-preconditions)</td>
-      <td>Discover Shape Tree(s) for Parent Container (<code>pc</code>)
-      </td>
-      <td colspan="2">See [Discovery](#discover)</td>
-    </tr>
-    <tr>
-			<td>[2](#update-data-instance-details-parent-validation)</td>
-			<td>Validate against parent container</td>
-			<td colspan="2">See [Validate Resource](#validate-proposed-resource)</td>
-		</tr>
-    <tr>
-			<td>[3](#update-data-instance-details-update-resource)</td>
-			<td>Update Resource</td>
-			<td colspan="2"></td>
-		</tr>
-	</tbody>
-</table>
-
-### Operation Details ### {#update-data-instance-details}
-
-#### Preconditions #### {#update-data-instance-details-preconditions}
-
-Note: This step <em class="rfc2119">SHOULD</em> be performed by a
-    [=client-side agent=].
-
-1. Ensure the [=Parent Container=] (<code>pc</code>) exists.
-    If not, this operation <em class="rfc2119">MUST</em> return a 404 status code.
-1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>pc</code>.
-    1. Let <code>parentst</code> be the collection of dereferenced shape tree
-        IRIs discovered for <code>pc</code>
-
-#### Validate against parent container #### {#update-data-instance-details-parent-validation}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
-
-1. Determine if the [=Parent Container=] (<code>pc</code>) is a
-    [=Managed Container=] by evaluating if <code>parentst</code> is not empty
-1. If <code>pc</code> is a [=Managed Container=] call the
-    [validate proposed resource](#validate-proposed-resource) algorithm with
-    parameters:
-
-  <table class="data algorithmparams" align="left">
-    <thead>
-      <tr>
-        <td><b>Parameter</b></td>
-        <td><b>Value</b></td>
-        <td><b>Notes</b></td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>uri</code></td>
-        <td><code>pc</code></td>
-        <td>
-          The [=parent container=] that will contain the [=target container=]
-        </td>
-      </tr>
-      <tr>
-        <td><code>rn</code></td>
-        <td><code>name</code></td>
-        <td>The resource name</td>
-      </tr>
-      <tr>
-        <td><code>sth</code></td>
-        <td><code>linktst</code></td>
-        <td>The [=shape tree=] managing the [=target container=]</td>
-      </tr>
-      <tr>
-        <td><code>rt</code></td>
-        <td><code>rt</code></td>
-        <td>The resource type being modified</td>
-      </tr>
-  </table>
-
-#### Update Resource #### {#update-data-instance-details-update-resource}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a client
-    or server side agent.
-
-## Delete Data Instance ## {#delete-data-instance}
-
-The <b>delete data instance</b> operation deletes an instance of a
-[=shape tree=] within a managed container.
-
-### Inputs ### {#delete-data-instance-inputs}
-* Let <code>req</code> be a DELETE HTTP request with the following
-    characteristics:
-    * Let <code>linkst</code> be an <em class="rfc2119">OPTIONAL</em>
-        Link header with the relation of "http://shapetrees.org/#ShapeTree"
-
-### Outputs ### {#delete-data-instance-outputs}
-* Standard HTTP response
-
-### Key Terms for Deleting Data Instances ### {#delete-data-instance-terms}
-* Let <code>pc</code> be the [=Parent Container=] of the resource being deleted
-
-### Operation Summary ### {#delete-data-instance-summary}
-
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
-    </tr>
-	</thead>
-	<tbody>
-    <tr>
-			<td>[1](#delete-data-instance-details-delete-resource)</td>
-			<td>Delete Resource</td>
-			<td colspan="2"></td>
-		</tr>
-	</tbody>
-</table>
-
-### Operation Details ### {#delete-data-instance-details}
-
-#### Delete Resource #### {#delete-data-instance-details-delete-resource}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
-
-## Unplant Shape Tree ## {#unplant-shapetree}
-
-The <b>unplant shape tree</b> operation unassigns the provided [=shape tree=]
-from the provided [=container=].  If there are no remaining [=shape trees=]
-managing the [=container=], it would no longer be considered a
-[=managed container=].
-
-### Inputs ### {#unplant-shapetree-inputs}
-* Let <code>req</code> be a DELETE HTTP request with the following
-    characteristics:
-    * Let <code>linkst</code> be a Link header with the relation of
-        "http://shapetrees.org/#ShapeTree" indicating the [=shape tree=] that
-        should no longer manage the target [=container=]
-
-### Outputs ### {#unplant-shapetree-outputs}
-* Standard HTTP response
-
-### Key Terms for Unplanting Shape Trees ### {#unplant-shapetree-terms}
-* Let <code>pc</code> be the parent [=Container=] of the resource being deleted
-* Let <code>tc</code> be the [=Container=] of the resource being deleted
-
-### Operation Summary ### {#unplant-summary}
-
-<table class="data operationdetails" align="left">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Step</th>
-			<th colspan="2">Interaction</th>
-    </tr>
-	</thead>
-	<tbody>
-    <tr>
-			<td>[1](#unplant-shapetree-details-remove-shapetree)</td>
-			<td>
-          Update metadata container to remove
-          <code class="vocab">ShapeTreeLocator</code> for the provided
-          [=shape tree=]
-      </td>
-      <td colspan="2"></td>
-		</tr>
-	</tbody>
-</table>
-
-### Operation Details ### {#unplant-shapetree-details}
-
-#### Remove Shape Tree Metadata #### {#unplant-shapetree-details-remove-shapetree}
-
-Note: This step <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
-
-Call the [remove shape tree metadata](#remove-shapetree-metadata) algorithm with
-parameters:
-
-      <table class="data algorithmparams" align="left">
+      <table class="data operation" align="center">
+        <colgroup></colgroup>
+        <colgroup></colgroup>
+        <colgroup></colgroup>
         <thead>
           <tr>
-            <td><b>Parameter</b></td>
-            <td><b>Value</b></td>
-            <td><b>Notes</b></td>
+            <th><b>Parameter</b></th>
+            <th><b>Value</b></th>
+            <th><b>Notes</b></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>uri</code></td>
-            <td><code>tc</code></td>
+            <td><code>URI</code></td>
+            <td><code>PC</code></td>
             <td>
-              The [=target container=] that the [shape tree] is being removed
-              from
+              The [=parent container=] that will contain the [=target container=]
             </td>
           </tr>
           <tr>
-            <td><code>st</code></td>
-            <td><code>linktst</code></td>
-            <td>The [=shape tree=] no longer managing the <code>tc</code></td>
+            <td><code>STH</code></td>
+            <td><code>LINKTST</code></td>
+            <td>
+              Link header with the relation of
+              "http://shapetrees.org/#TargetShapeTree"
+            </td>
+          </tr>
+          <tr>
+            <td><code>RT</code></td>
+            <td><code class="vocab">st:ShapeTreeContainer</code></td>
+            <td>The resource type being created/modified</td>
           </tr>
       </table>
+
+1. Create Target Container (<code>TC</code>), if necessary
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=]..
+
+    1. If <code>TC</code> does not exist, create it.
+
+    	<figure id="fig-plant-create-target-request">
+    		<figcaption>Create Target Container - Request</figcaption>
+    		<pre highlight="http">
+    		POST /<b><i>&lt;PC&gt;</b></i>/
+    		Slug: <b><i>&lt;TC&gt;</b></i>;
+    		Link: &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;; rel="type"
+    		</pre>
+    	</figure>
+
+    	<figure id="fig-plant-create-target-response">
+    		<figcaption>Create Target Container - Response</figcaption>
+    		<pre highlight="http">
+    		HTTP 201 CREATED
+    		Location: http://pod.example/<b><i>&lt;PC&gt;</b></i>/<b><i>&lt;TC&gt;</b></i>/
+    		Content-type: text/turtle; charset=utf-8
+    		Content-length: 396
+    		</pre>
+    	</figure>
+
+1. Update Shape Tree Meta Data for Target Container (<code>TC</code>)
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=]..
+
+    1. Update Target Container <code>TC</code> Metadata (<code>METAURI</code>)
+
+    	1. Iterate the collection of shape trees to be planted (<code>LINKST</code>),
+            let <code>LINKSTI</code> be the current shape tree in context.
+    	1. Call algorithm [Update Container Metadata](#update-container-metadata) with
+            parameters:
+
+    	<table class="data operation" align="center">
+    		<thead>
+    			<tr>
+    				<th><b>Parameter</b></th>
+    				<th><b>Value</b></th>
+            <th><b>Notes</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+          <tr>
+            <td><code>TC</code></td>
+            <td><code>TC</code></td>
+            <td>
+              The [=target container=] to that will contain instance data of the
+              [=shape tree=]
+            </td>
+          </tr>
+    			<tr>
+    				<td><code>ROOTST</code></td>
+    				<td><code>LINKSTI</code></td>
+            <td>The root [=shape tree=] at the top of the hierarchy</td>
+    			</tr>
+    			<tr>
+    				<td><code>ST</code></td>
+    				<td><code>LINKSTI</code></td>
+            <td>The [=shape tree=] managing the [=target container=]</td>
+    			</tr>
+    			<tr>
+    				<td><code>ROOTPATH</code></td>
+    				<td><code>TC</code></td>
+            <td>
+              The [=target container=] to that will contain instance data of the
+              [=shape tree=]
+            </td>
+    			</tr>
+    	</table>
+
+1. Initialize Static Content
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either
+        a [client](#client-side-agent) or [=server-side agent=]..
+
+    1. Let <code>CST</code> be the shape tree having a
+        <code class="vocab">st:contains</code> value (if one exists) from the
+        list of shape trees that were planted <code>LINKST</code>
+    1. Iterate any <code class="vocab">st:contains</code> IRIs within
+        <code>CST</code>, letting <code>CSTI</code> be the current IRI in context
+    1. Let <code>CSTIST</code> be the shape tree resulting in dereferencing IRI
+        <code>CSTI</code>
+    1. If <code>CSTIST</code> has a <code class="vocab">rdfs:label</code> value,
+        let <code>LABEL</code> be the value of rdfs:label for <code>CSTIST</code>,
+        and call algorithm
+        [Initialize Statics](#initialize-statics) with parameters:
+
+      <table class="data operation" align="center">
+        <thead>
+          <tr>
+            <th><b>Parameter</b></th>
+            <th><b>Value</b></th>
+            <th><b>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>PC</code></td>
+            <td><code>TC</code></td>
+            <td>
+              The [=target container=] to that will contain instance data of the
+              [=shape tree=]
+            </td>
+          </tr>
+          <tr>
+            <td><code>SST</code></td>
+            <td><code>CSTIST</code></td>
+            <td>The matching contained [=shape tree=]</td>
+          </tr>
+          <tr>
+            <td><code>RST</code></td>
+            <td><code>CST</code></td>
+            <td>The [=shape tree=] containing a <code class="vocab">st:container</code>
+          </tr>
+          <tr>
+            <td><code>RC</code></td>
+            <td><code>TC</code></td>
+            <td>
+              The [=target container=] to that will contain instance data of the
+              [=shape tree=]
+            </td>
+          </tr>
+      </table>
+
+## Create Data Instance ## {#create-data-instance}
+
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>create data instance</b> operation creates an instance of a shape
+        tree within a managed container.
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`REQ`</td>
+      <td>A POST or PUT HTTP request with the following characteristics:
+        * A Link header with the relation &quot;type&quot; and a value of a compatible
+            [=container=] (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
+        * Let <code>LINKFN</code> be an <em class="rfc2119">OPTIONAL</em> Link
+            header with the relation of
+            &quot;http://shapetrees.org/#FocusNode&quot;.  This represents the
+            target subject within the request body (used for ShEx validation, etc.)
+        * Let <code>LINKTST</code> be a <em class="rfc2119">REQUIRED</em>
+            Link header with the relation of &quot;http://shapetrees.org/#TargetShapeTree&quot;
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`RESPONSE`</td>
+      <td>
+        A standard HTTP response
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="opdetails">
+
+* Let <code>PC</code> be the [=Parent Container=]
+
+1. Preconditions
+
+    Note: This step <em class="rfc2119">SHOULD</em> be performed by a
+        [=client-side agent=].
+
+    1. Ensure the [=Parent Container=] (<code>PC</code>) exists.  If not, return
+        this operation <em class="rfc2119">MUST</em> return a 404 status code.
+    1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>PC</code>.
+    	1. Let <code>PARENTST</code> be the collection of dereferenced shape tree IRIs
+            discovered for <code>PC</code>
+
+1. Validate against parent container
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
+
+    1. Determine if the [=Parent Container=] (<code>PC</code>) is a
+        [=Managed Container=] by evaluating if <code>PARENTST</code> is not empty
+    2. If <code>PC</code> is a [=Managed Container=] call the
+        [validate proposed resource](#validate-proposed-resource) algorithm
+        with parameters:
+
+      <table class="data operation" align="center">
+        <thead>
+          <tr>
+            <th><b>Parameter</b></th>
+            <th><b>Value</b></th>
+            <th><b>Notes</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>URI</code></td>
+            <td><code>PC</code></td>
+            <td>
+              The [=parent container=] to that will contain the [=target container=]
+            </td>
+          </tr>
+          <tr>
+            <td><code>STH</code></td>
+            <td><code>LINKTST</code></td>
+            <td>The [=shape tree=] managing the [=target container=]</td>
+          </tr>
+          <tr>
+            <td><code>RT</code></td>
+            <td>
+              <code class="vocab">st:ShapeTreeContainer</code> or
+              <code class="vocab">st:ShapeTreeResource</code> or
+              <code class="vocab">st:ShapeTreeNonRDFResource</code>
+            </td>
+            <td>The resource type being created</td>
+          </tr>
+      </table>
+
+1. Create Resource
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=]..
+
+1. Initialize Static Content
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+    [client](#client-side-agent) or [=server-side agent=].
+
+    1. Iterate any <code class="vocab">st:contains</code> IRIs within
+        <code>MCST</code>, letting <code>CSTI</code> be the current IRI in context
+    1. Let <code>CSTIST</code> be the [=shape tree=] resulting in dereferencing IRI
+        <code>CSTI</code>
+    1. If <code>CSTIST</code> has a <code class="vocab">rdfs:label</code> value,
+        let <code>LABEL</code> be the value of
+        <code class="vocab">rdfs:label</code> for <code>CSTIST</code>, and
+        call algorithm [Initialize Statics](#initialize-statics) with parameters:
+
+      <table class="data operation" align="center">
+        <thead>
+          <tr>
+            <th><b>Parameter</b></th>
+            <th><b>Value</b></th>
+            <th><b>Note</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>PC</code></td>
+            <td><code>TC</code></td>
+            <td>
+              The [=target container=] that will contain instance data of the
+              [=shape tree=]
+            </td>
+          <tr>
+            <td><code>SST</code></td>
+            <td><code>CSTIST</code></td>
+            <td>The matching [=shape tree=]
+          </tr>
+          <tr>
+            <td><code>RST</code></td>
+            <td><code>CST</code></td>
+            <td>The parent [=shape tree=] managing the parent container
+          </tr>
+          <tr>
+            <td><code>RC</code></td>
+            <td><code>TC</code></td>
+            <td>
+              The [=target container=] that will contain instance data of the
+              [=shape tree=]
+            </td>
+          </tr>
+      </table>
+
+## Update Data Instance ## {#update-data-instance}
+
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>update data instance</b> operation updates an instance of a
+        [=shape tree=] within a managed container.      
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`REQ`</td>
+      <td>A PUT or PATCH HTTP request with the following characteristics:
+        * Let <code>LINKFN</code> be an <em class="rfc2119">OPTIONAL</em>
+            Link header with the relation of "http://shapetrees.org/#FocusNode".
+            This represents the target subject within the request body
+            (used for ShEx validation, etc.)
+        * Let <code>LINKTST</code> be an <em class="rfc2119">REQUIRED</em> Link
+            header with the relation of "http://shapetrees.org/#TargetShapeTree"
+        * Let <code>RT</code> be the resource type inferred by the request's 
+            content type header
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`RESPONSE`</td>
+      <td>
+        A standard HTTP response
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="opdetails">
+
+* Let <code>PC</code> be the [=Parent Container=]
+
+1. Preconditions
+
+    Note: This step <em class="rfc2119">SHOULD</em> be performed by a
+        [=client-side agent=].
+
+    1. Ensure the [=Parent Container=] (<code>PC</code>) exists.
+        If not, this operation <em class="rfc2119">MUST</em> return a 404 status code.
+    1. [Discover](#discover) any [=planted shape tree=] IRIs managing <code>PC</code>.
+        1. Let <code>PARENTST</code> be the collection of dereferenced shape tree
+            IRIs discovered for <code>PC</code>
+
+1. Validate against parent container
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
+
+    1. Determine if the [=Parent Container=] (<code>PC</code>) is a
+        [=Managed Container=] by evaluating if <code>PARENTST</code> is not empty
+    1. If <code>PC</code> is a [=Managed Container=] call the
+        [validate proposed resource](#validate-proposed-resource) algorithm with
+        parameters:
+
+      <table class="data operation" align="center">
+        <thead>
+          <tr>
+            <th><b>Parameter</b></th>
+            <th><b>Value</b></th>
+            <th><b>Notes</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>URI</code></td>
+            <td><code>PC</code></td>
+            <td>
+              The [=parent container=] that will contain the [=target container=]
+            </td>
+          </tr>
+          <tr>
+            <td><code>STH</code></td>
+            <td><code>LINKTST</code></td>
+            <td>The [=shape tree=] managing the [=target container=]</td>
+          </tr>
+          <tr>
+            <td><code>RT</code></td>
+            <td><code>RT</code></td>
+            <td>The resource type being modified</td>
+          </tr>
+      </table>
+
+1. Update Resource
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a client
+        or server side agent.
+
+## Delete Data Instance ## {#delete-data-instance}
+
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>delete data instance</b> operation deletes an instance of a
+        [=shape tree=] within a managed container.
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`REQ`</td>
+      <td>
+        A DELETE HTTP request
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`RESPONSE`</td>
+      <td>
+        A standard HTTP response
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="opdetails">
+
+1. Delete Resource
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
+
+## Unplant Shape Tree ## {#unplant-shapetree}
+
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        The <b>unplant shape tree</b> operation unassigns the provided [=shape tree=]
+        from the provided [=container=].  If there are no remaining [=shape trees=]
+        managing the [=container=], it would no longer be considered a
+        [=managed container=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`REQ`</td>
+      <td>
+        A DELETE HTTP request with the following characteristics:
+          * Let <code>LINKST</code> be a Link header with the relation of
+              "http://shapetrees.org/#ShapeTree" indicating the [=shape tree=] that
+              should no longer manage the target [=container=]
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`RESPONSE`</td>
+      <td>
+        A standard HTTP response
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="opdetails">
+
+* Let <code>PC</code> be the parent [=Container=] of the resource being deleted
+* Let <code>TC</code> be the [=Container=] of the resource being deleted
+
+1. Remove Shape Tree Metadata
+
+    Note: This step <em class="rfc2119">MAY</em> be performed by either a
+        [client](#client-side-agent) or [=server-side agent=].
+
+    Call the [remove shape tree metadata](#remove-shapetree-metadata) algorithm with
+    parameters:
+
+          <table class="data operation" align="center">
+            <thead>
+              <tr>
+                <th><b>Parameter</b></th>
+                <th><b>Value</b></th>
+                <th><b>Notes</b></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>URI</code></td>
+                <td><code>TC</code></td>
+                <td>
+                  The [=target container=] that the [shape tree] is being removed
+                  from
+                </td>
+              </tr>
+              <tr>
+                <td><code>ST</code></td>
+                <td><code>LINKST</code></td>
+                <td>The [=shape tree=] no longer managing the <code>tc</code></td>
+              </tr>
+          </table>
 
 Shape Tree Algorithms {#algorithms}
 =====================
@@ -1151,283 +1096,419 @@ The below algorithms detail key pieces of logic required for
 
 ## Validate Proposed Resource Against Parent Container ## {#validate-proposed-resource}
 
-This algorithm is responsible for determining if a proposed resource
-(which may more specifically be a [=container=], [=resource=], or [=non-RDF source=]) is
-valid to be created within a given [=container=].
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        This algorithm is responsible for determining if a proposed resource
+        (which may more specifically be a [=container=], [=resource=], or [=non-RDF source=]) is
+        valid to be created within a given [=container=].
 
-Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
+        Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
+            [client](#client-side-agent) or [=server-side agent=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`PC`</td>
+      <td>
+        The URI of the [=Managed Container=] that will contain the proposed resource
+      </td>
+    </tr>
+    <tr>
+      <td>`STH`</td>
+      <td>
+        The target shape tree hint, from the request's Link header with the relation of 
+        "http://shapetrees.org/#TargetShapeTree"
+      </td>
+    </tr>
+    <tr>
+      <td>`RT`</td>
+      <td>
+        The resource type of proposed resource ([=container=], [=resource=], [=non-RDF source=])
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`MCST`</td>
+      <td>
+        The URI of the matching contains shape tree
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-**Inputs**
-* Let <code>pc</code> be the URI of the [=Managed Container=] that will contain
-    the proposed resource
-* Let <code>sth</code> be the target shape tree hint, from the request's
-    Link header with the relation of "http://shapetrees.org/#TargetShapeTree"
-* Let <code>rn</code> be the resource name of the proposed request:
-    * In cases of this algorithm being called as result of a POST, the Slug
-        header value <em class="rfc2119">SHOULD</em> be provided when no
-        <code>sth</code> is provided
-    * In cases of this algorithm being called as result of a PUT, the
-        resource name <em class="rfc2119">MUST</em> be provided
-* Let <code>rt</code> be the resource type of proposed
-    resource ([=container=], [=resource=], [=non-RDF source=])
+<div class="opdetails">
 
-**Outputs**
-* <code>mcst</code>
-
-**Algorithm Details**
-1. Determine if the [=Parent Container=] (<code>pc</code>) is a
-    [=Managed Container=] by evaluating if <code>parentst</code> is not empty
-2. If <code>pc</code> is a [=Managed Container=], let <code>mcst</code> be the
+1. Determine if the [=Parent Container=] (<code>PC</code>) is a
+    [=Managed Container=] by evaluating if <code>PARENTST</code> is not empty
+1. If <code>PC</code> is a [=Managed Container=], let <code>MCST</code> be the
     matching contained [=shape tree=] which is the result of calling the
     [matching contained shape tree](#matching-contained-shapetree) algorithm
     with parameters:
-    <table class="data algorithmparams" align="left">
+    <table class="data operation" align="center">
       <thead>
         <tr>
-          <td><b>Parameter</b></td>
-          <td><b>Value</b></td>
-          <td><b>Notes</b></td>
+          <th><b>Parameter</b></th>
+          <th><b>Value</b></th>
+          <th><b>Notes</b></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><code>uri</code></td>
-          <td><code>pc</code></td>
+          <td><code>URI</code></td>
+          <td><code>PC</code></td>
           <td>The parent container to discover [=shape trees=] for
         </tr>
         <tr>
-          <td><code>rn</code></td>
-          <td>
-            If <code>req</code> is a POST then <code>slug</code><br/>
-            If <code>req</code> is a PUT then <code>name</code>
-          </td>
-          <td>The resource name</td>
-        </tr>
-        <tr>
-          <td><code>sth</code></td>
-          <td><code>sth</code></td>
+          <td><code>STH</code></td>
+          <td><code>STH</code></td>
           <td>The [=shape tree=] hint provided as a Link header
         </tr>
         <tr>
-          <td><code>rt</code></td>
-          <td><code>rt</code></td>
+          <td><code>RT</code></td>
+          <td><code>RT</code></td>
           <td>The resource type being created/modified</td>
         </tr>
     </table>
-1. If <code>rt</code> does not match <code>mcst</code>'s
+1. If <code>RT</code> does not match <code>MCST</code>'s
     <code class="vocab">st:expectsType</code> value, this operation
     <em class="rfc2119">MUST</em> return a 422 status code
-1. If <code>mcst</code> has a <code class="vocab">st:validatedBy</code> value,
-    and the plant operation (<code>req</code>) includes an RDF graph body and
-    ShEx validation is used and a [=Focus Node=] (<code>linkfn</code>) is not
+1. If <code>MCST</code> has a <code class="vocab">st:validatedBy</code> value,
+    and the plant operation (<code>REQ</code>) includes an RDF graph body and
+    ShEx validation is used and a [=Focus Node=] (<code>LINKFN</code>) is not
     present, this operation <em class="rfc2119">MUST</em> return a
     422 status code
-1. Perform a validation of the RDF graph body of <code>req</code> using the
+1. Perform a validation of the RDF graph body of <code>REQ</code> using the
     <code>mcst</code> <code class="vocab">st:validatedBy</code> shape,
-    targeting the graph's <code>linkfn</code>.  If validation fails,
+    targeting the graph's <code>LINKFN</code>.  If validation fails,
     this operation <em class="rfc2119">MUST</em> return a 422 status code
 
 ## Find Matching Contained Shape Tree ## {#matching-contained-shapetree}
 
-This algorithm is responsible for determining which [=shape tree=] within a set
-of shape trees mentioned in <code class="vocab">st:contains</code> is
-applicable for a given proposed resource.
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        This algorithm is responsible for determining which [=shape tree=] within a set
+        of shape trees mentioned in <code class="vocab">st:contains</code> is
+        applicable for a given proposed resource.
 
-Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
-    a [client](#client-side-agent) or [=server-side agent=].
+        Note: This algorithm <em class="rfc2119">MAY</em> be performed by either
+            a [client](#client-side-agent) or [=server-side agent=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`URI`</td>
+      <td>
+        The URI of the [=Managed Container=] that will contain the proposed resource
+      </td>
+    </tr>
+    <tr>
+      <td>`STH`</td>
+      <td>
+        The target shape tree hint, from the request's Link header with the relation of 
+        "http://shapetrees.org/#TargetShapeTree"
+      </td>
+    </tr>
+    <tr>
+      <td>`RT`</td>
+      <td>
+        The resource type of proposed resource ([=container=], [=resource=], [=non-RDF source=])
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`MCST`</td>
+      <td>
+        A single shape tree IRI that should be used for validation
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-**Inputs**
-* Let <code>uri</code> be the URI of the [=Managed Container=] that will contain
-    the proposed resource
-* Let <code>sth</code> be the <em class="rfc2119">OPTIONAL</em> target
-    [=shape tree=] hint, from the request's Link header with the relation
-    of "http://shapetrees.org/#TargetShapeTree"
-* Let <code>rt</code> be the resource type of proposed resource
-    [=container=], [=resource=], or [=non-RDF source=])
+<div class="opdetails">
 
-**Outputs**
-* A single shape tree IRI that should be used for validation
-
-**Algorithm Details**
-1. Let <code>mst</code> be the shape trees managing <code>uri</code> found by
+1. Let <code>MST</code> be the shape trees managing <code>URI</code> found by
     [discovering](#discover) the shape trees
-1. Let <code>cst</code> be the shape tree within <code>mst</code> with a
+1. Let <code>CST</code> be the shape tree within <code>MST</code> with a
     <code class="vocab">st:contains</code> value(s)
-1. Let <code>ccst</code> be the candidate shape trees for matching - populated
-    by each <code class="vocab">st:contains</code> of <code>cst</code>
-1. If <code>sth</code> is specified
-    1. and <code>sth</code> does NOT exist within <code>ccst</code> this
+1. Let <code>CCST</code> be the candidate shape trees for matching - populated
+    by each <code class="vocab">st:contains</code> of <code>CST</code>
+1. If <code>STH</code> is specified
+    1. and <code>STH</code> does NOT exist within <code>CCST</code> this
           algorithm <em class="rfc2119">MUST</em> return a 400 status code
-    1. and <code>sth</code> exists within <code>ccst</code> return
-          <code>sth</code>
-1. If <code>ccst</code> does not contain any of
+    1. and <code>STH</code> exists within <code>CCST</code> return
+          <code>STH</code>
+1. If <code>CCST</code> does not contain any of
     <code class="vocab">st:AllowAll</code>,
     <code class="vocab">st:AllowResources</code>,
     <code class="vocab">st:AllowContainers</code>,
     <code class="vocab">st:AllowNonRDFSources</code>,
     this algorithm <em class="rfc2119">MUST</em> return a status code of 422
 1. If <code class="vocab">st:AllowNone</code> exists within
-    <code>ccst</code>, this algorithm <em class="rfc2119">MUST</em>
+    <code>CCST</code>, this algorithm <em class="rfc2119">MUST</em>
     return a status code 422
 1. If <code class="vocab">st:AllowAll</code> exists within
-    <code>ccst</code>, return null - indicating that while no match was
-    found, <code>pc</code> has been configured to allow resources of any
+    <code>CCST</code>, return null - indicating that while no match was
+    found, <code>PC</code> has been configured to allow resources of any
     type to be created without matching the shape tree
 1. If <code class="vocab">st:AllowResources</code> exists within
-    <code>ccst</code>:
-    1. And the resource type (<code>rt</code>) is not a Resource,
+    <code>CCST</code>:
+    1. And the resource type (<code>RT</code>) is not a Resource,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
-    1. And the resource type (<code>rt</code>) is a Resource,
+    1. And the resource type (<code>RT</code>) is a Resource,
           return null - indicating that while no match was found,
-          <code>pc</code> has been configured to allow Resources to be
+          <code>PC</code> has been configured to allow Resources to be
           created without matching the shape tree
 1. If <code class="vocab">st:AllowContainers</code> exists within
-    <code>ccst</code>:
-    1. And the resource type (<code>rt</code>) is not a Container,
+    <code>CCST</code>:
+    1. And the resource type (<code>RT</code>) is not a Container,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
-    1. And the resource type (<code>rt</code>) is a Container,
+    1. And the resource type (<code>RT</code>) is a Container,
           return null - indicating that while no match was found,
-          <code>pc</code> has been configured to allow Containers to be
+          <code>PC</code> has been configured to allow Containers to be
           created without matching the shape tree
 1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
-    <code>ccst</code>:
-    1. And the resource type (<code>rt</code>) is not a Non-RDF Source,
+    <code>CCST</code>:
+    1. And the resource type (<code>RT</code>) is not a Non-RDF Source,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
-    1. And the resource type (<code>rt</code>) is a Non-RDF Source,
+    1. And the resource type (<code>RT</code>) is a Non-RDF Source,
           return null - indicating that while no match was found,
-          <code>pc</code> has been configured to allow non-RDF Sources to
+          <code>PC</code> has been configured to allow non-RDF Sources to
           be created without matching the shape tree
 
 ## Initialize Static Content ## {#initialize-statics}
 
-This algorithm is responsible for initializing static content that is implied
-through the creation of its parent.  When called, it recursively seeks out
-resources to be statically created.
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        This algorithm is responsible for initializing static content that is implied
+        through the creation of its parent.  When called, it recursively seeks out
+        resources to be statically created.
 
-Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
+        Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
+            [client](#client-side-agent) or [=server-side agent=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`PC`</td>
+      <td>
+        The parent [=container=] that any statics would be created within
+      </td>
+    </tr>
+    <tr>
+      <td>`SST`</td>
+      <td>
+        The static shape tree to be initialized where an <code class="vocab">rdfs:label</code> is set
+      </td>
+    </tr>
+    <tr>
+      <td>`RST`</td>
+      <td>
+        The root shape tree that was planted at the top of this shape tree hierarchy
+      </td>
+    </tr>
+    <tr>
+      <td>`RC`</td>
+      <td>
+        The root container at the top of this shape tree hierarchy
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NONE</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
 
-**Inputs**
-* Let <code>pc</code> be the URI of the parent [=container=] that any statics
-    would be created within
-* Let <code>sst</code> be the static shape tree to be initialized where an
-    <code class="vocab">rdfs:label</code> is set
-* Let <code>rst</code> be the root shape tree that was planted at the top of
-    this shape tree hierarchy
-* Let <code>rc</code> be the root container at the top of this shape tree
-    hierarchy
+<div class="opdetails">
 
-**Outputs**
-* Nothing
-
-**Algorithm Details**
-
-1. Let <code>label</code> be the <code class="vocab">rdfs:label</code> value of
-    the provided &quot;static&quot; shape tree (<code>sst</code>)
+1. Let <code>LABEL</code> be the <code class="vocab">rdfs:label</code> value of
+    the provided &quot;static&quot; shape tree (<code>SST</code>)
 1. Create the expected resource using a PUT in order to have control of resource
-    naming, letting <code>cr</code> be the resulting resource that was created
+    naming, letting <code>CR</code> be the resulting resource that was created
     1. Set the appropriate Link header with "type" relation based on the
-        <code class="vocab">st:expectsType</code> value of <code>sst</code>
-1. If the <code class="vocab">st:expectsType</code> value of <code>sst</code>
+        <code class="vocab">st:expectsType</code> value of <code>SST</code>
+1. If the <code class="vocab">st:expectsType</code> value of <code>SST</code>
     is <code class="vocab">st:ShapeTreeContainer</code>:
     1. Call algorithm [Update Container Metadata](#update-container-metadata)
         with parameters:
-    	<table class="data algorithmparams" align="left">
+    	<table class="data operation" align="center">
     		<thead>
     			<tr>
-    				<td><b>Parameter</b></td>
-    				<td><b>Value</b></td>
-            <td><b>Notes</b></td>
+    				<th><b>Parameter</b></th>
+    				<th><b>Value</b></th>
+            <th><b>Notes</b></th>
     			</tr>
     		</thead>
     		<tbody>
           <tr>
-            <td><code>tc</code></td>
-            <td><code>cr</code></td>
+            <td><code>TC</code></td>
+            <td><code>CR</code></td>
             <td>Created static resource</td>
     			<tr>
-    				<td><code>rootst</code></td>
-    				<td><code>rst</code></td>
+    				<td><code>ROOTST</code></td>
+    				<td><code>RST</code></td>
             <td>The root [=shape tree=] of the hierarchy</td>
     			</tr>
     			<tr>
-    				<td><code>st</code></td>
-    				<td><code>sst</code></td>
+    				<td><code>ST</code></td>
+    				<td><code>SST</code></td>
             <td>The [=shape tree=] to assign to <code>cr</code>
     			</tr>
     			<tr>
-    				<td><code>rootpath</code></td>
-    				<td><code>rc</code></td>
+    				<td><code>ROOTPATH</code></td>
+    				<td><code>RC</code></td>
             <td>The root container at the top of this shape tree hierarchy</td>
     			</tr>
     	</table>
 
-    1. If <code>sst</code> has any values for
+    1. If <code>SST</code> has any values for
         <code class="vocab">st:contains</code>:
         1. Iterate any <code class="vocab">st:contains</code> IRIs within
-            <code>sst</code>, letting <code>cssti</code> be the current IRI
+            <code>SST</code>, letting <code>CSSTI</code> be the current IRI
             in context
-        1. Let <code>csstit</code> be the shape tree resulting in dereferencing
-            IRI <code>cssti</code>
-        1. If <code>csstit</code> has a <code class="vocab">rdfs:label</code>
+        1. Let <code>CSSTIT</code> be the shape tree resulting in dereferencing
+            IRI <code>CSSTI</code>
+        1. If <code>CSSTIT</code> has a <code class="vocab">rdfs:label</code>
             value then recursively call algorithm
               [Initialize Statics](#initialize-statics) with parameters:
-              <table class="data algorithmparams" align="left">
+              <table class="data operation" align="center">
                 <thead>
                   <tr>
-                    <td><b>Parameter</b></td>
-                    <td><b>Value</b></td>
-                    <td><b>Notes</b></td>
+                    <th><b>Parameter</b></th>
+                    <th><b>Value</b></th>
+                    <th><b>Notes</b></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><code>pc</code></td>
-                    <td><code>cr</code></td>
+                    <td><code>PC</code></td>
+                    <td><code>CR</code></td>
                     <td>Created static resource, now the parent</td>
                   <tr>
-                    <td><code>sst</code></td>
-                    <td><code>csstit</code></td>
+                    <td><code>SST</code></td>
+                    <td><code>CSSTIT</code></td>
                     <td>A [=shape tree=] to be recursively planted</td>
                   </tr>
                   <tr>
-                    <td><code>rst</code></td>
-                    <td><code>rst</code></td>
+                    <td><code>RST</code></td>
+                    <td><code>RST</code></td>
                     <td>The root [=shape tree=] of the hierarchy</td>
                   </tr>
                   <tr>
-                    <td><code>rc</code></td>
-                    <td><code>rc</code></td>
+                    <td><code>RC</code></td>
+                    <td><code>RC</code></td>
                     <td>The root container at the top of this shape tree hierarchy</td>
                   </tr>
               </table>
 
 ## Update Container Metadata ## {#update-container-metadata}
 
-This algorithm is responsible for updating the shape tree metadata for a
-container to reflect what shapetree(s) manage that container
-and the container's location relative to the broader hierarchy of shape trees.
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        This algorithm is responsible for updating the shape tree metadata for a
+        container to reflect what shapetree(s) manage that container
+        and the container's location relative to the broader hierarchy of shape trees.
 
-Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
+        Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
+            [client](#client-side-agent) or [=server-side agent=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`TC`</td>
+      <td>
+        The URI of the [=Container=] to update metadata for
+      </td>
+    </tr>
+    <tr>
+      <td>`ROOTST`</td>
+      <td>
+        The root [=shape tree=] within a hierarchy of shape tree containers
+      </td>
+    </tr>
+    <tr>
+      <td>`ST`</td>
+      <td>
+        A [=shape tree=] that will manage <code>TC</code>
+      </td>
+    </tr>
+    <tr>
+      <td>`ROOTPATH`</td>
+      <td>
+        Tthe URI of the root of this shape tree hierarchy, where <code>ROOTST</code> is planted
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NONE</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
 
-**Inputs**:
-* Let <code>tc</code> be the URI of the [=Container=] to update metadata for
-* Let <code>rootst</code> be the root [=shape tree=] within a hierarchy of
-    shape tree containers
-* Let <code>st</code> be a [=shape tree=] that will manage <code>tc</code>
-* Let <code>rootpath</code> be the URI of the root of this shape tree hierarchy,
-    where <code>rootst</code> is planted
+<div class="opdetails">
 
-**Outputs**:
-* Nothing
-
-**Algorithm Details**
-1. Perform a HEAD on Target Container <code>tc</code>
+1. Perform a HEAD on Target Container <code>TC</code>
 	<figure id="fig-container-head-request">
 		<figcaption>Discover Target Container Shape Tree Metadata URI -
     Request</figcaption>
@@ -1446,10 +1527,10 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 		</pre>
 	</figure>
 
-	Let <code>metauri</code> be the URI of the shape tree metadata resource
-    pertaining to <code>uri</code>.
+	Let <code>METAURI</code> be the URI of the shape tree metadata resource
+    pertaining to <code>TC</code>.
 
-1. Perform a GET on the Target Container's Shape Tree metadata (<code>metauri</code>)
+1. Perform a GET on the Target Container's Shape Tree metadata (<code>METAURI</code>)
 	<figure id="fig-container-get-metadata">
 		<figcaption>Dereference Target Container Shape Tree Metadata URI -
     Request</figcaption>
@@ -1484,12 +1565,12 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 	</figure>
 
     If a 404 is returned that indicates that no shape trees manage this container.
-    Let <code>eg</code> be the existing metadata graph resulting from dereferencing
-    and parsing <code>metauri</code>.
+    Let <code>EG</code> be the existing metadata graph resulting from dereferencing
+    and parsing <code>METAURI</code>.
 
 1. Populate the metadata graph with triples
 
-    Using <code>eg</code>, if it exists, otherwise a new graph, the following
+    Using <code>EG</code>, if it exists, otherwise a new graph, the following
     triples should be added:
 
     <table class="data operationdetails" align="left">
@@ -1511,7 +1592,7 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
     		<tr>
     			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
     			<td><code class="vocab">st:hasRootShapeTree</code></td>
-    			<td><b><i>rootst</i></b></td>
+    			<td><b><i>ROOTST</i></b></td>
     			<td>
             Describes the shape tree planted at the root of this shape tree
             hierarchy
@@ -1520,14 +1601,14 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
     		<tr>
     			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
     			<td><code class="vocab">st:hasShapeTree</code></td>
-    			<td><b><i>st</i></b></td>
+    			<td><b><i>ST</i></b></td>
     			<td>Describes the shape tree planted at this container</td>
     		</tr>
     		</tr>
     		<tr>
     			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
     			<td><code class="vocab">st:hasShapeTreeInstanceRoot</code></td>
-    			<td><b><i>rootpath</i></b></td>
+    			<td><b><i>ROOTPATH</i></b></td>
     			<td>
             Describes the URI to the root container of this shape tree
             hierarchy
@@ -1545,25 +1626,57 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
     	</tbody>
     </table>
 
-1. Persist the above triples to <code>metauri</code>.
+1. Persist the above triples to <code>METAURI</code>.
 
 ## Remove Shape Tree From Container Metadata ## {#remove-shapetree-metadata}
 
-This algorithm is responsible for updating the shape tree metadata for a
-container to remove a [=shape tree=] from managing a container.
+<table class="data operation" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <thead>
+    <tr><th colspan=2>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan=2>
+        This algorithm is responsible for updating the shape tree metadata for a
+        container to remove a [=shape tree=] from managing a container.
 
-Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
-    [client](#client-side-agent) or [=server-side agent=].
+        Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
+            [client](#client-side-agent) or [=server-side agent=].
+      </td>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Inputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>`TC`</td>
+      <td>
+        The URI of the [=Container=] to update metadata for
+      </td>
+    </tr>
+    <tr>
+      <td>`ST`</td>
+      <td>
+        A [=shape tree=] that will no longer manage <code>TC</code>
+      </td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr><th colspan=2>Outputs</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NONE</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
 
-**Inputs**:
-* Let <code>tc</code> be the URI of the [=Container=] to update metadata for
-* Let <code>st</code> be a [=shape tree=] that will no longer manage <code>tc</code>
+<div class="opdetails">
 
-**Outputs**:
-* Nothing
-
-**Algorithm Details**
-1. Perform a HEAD on Target Container <code>tc</code>
+1. Perform a HEAD on Target Container <code>TC</code>
 	<figure id="fig-unplant-container-head-request">
 		<figcaption>Discover Target Container Shape Tree Metadata URI -
     Request</figcaption>
@@ -1582,10 +1695,10 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 		</pre>
 	</figure>
 
-	Let <code>metauri</code> be the URI of the shape tree metadata resource
-    pertaining to <code>uri</code>.
+	Let <code>METAURI</code> be the URI of the shape tree metadata resource
+    pertaining to <code>TC</code>.
 
-1. Perform a GET on the Target Container's Shape Tree metadata (<code>metauri</code>)
+1. Perform a GET on the Target Container's Shape Tree metadata (<code>METAURI</code>)
 	<figure id="fig-unplant-container-get-metadata">
 		<figcaption>Dereference Target Container Shape Tree Metadata URI -
     Request</figcaption>
@@ -1620,20 +1733,20 @@ Note: This algorithm <em class="rfc2119">MAY</em> be performed by either a
 	</figure>
 
     If a 404 is returned that indicates that no shape trees manage this container.
-    Let <code>eg</code> be the existing metadata graph resulting from dereferencing
-    and parsing <code>metauri</code>.
+    Let <code>EG</code> be the existing metadata graph resulting from dereferencing
+    and parsing <code>METAURI</code>.
 
 1. Remove pertinent shape tree triples
 
-    Let <code>s</code> be the subject of type
+    Let <code>S</code> be the subject of type
     <code class="vocab">ShapeTreeLocator</code> with a
-    <code class="vocab">st:hasShapeTree</code> matching <code>st</code>.
+    <code class="vocab">st:hasShapeTree</code> matching <code>ST</code>.
 
-    Remove the subject <code>s</code> along with the
-    <code class="vocab">st:hasShapeTreeLocator</code> referencing <code>s</code>
+    Remove the subject <code>S</code> along with the
+    <code class="vocab">st:hasShapeTreeLocator</code> referencing <code>S</code>
     from the metadata graph.
 
-1. Persist the updated graph to <code>metauri</code>.
+1. Persist the updated graph to <code>METAURI</code>.
 
 
 Describing Shape Trees {#describing}
