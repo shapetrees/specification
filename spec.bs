@@ -100,6 +100,11 @@ Abstract:
     padding-bottom: .05em;
   }
 
+  .opdetails code.vocab {
+    color: #339966;
+    background-color: #FFFFFF;
+  }
+
   .opdetails ol {
     margin-left: 0;
     padding-left: 1em;
@@ -121,7 +126,7 @@ Abstract:
 		color: #337700;
 	}
 
-  code.vocab {
+    code.vocab {
 		color: #339966;
 	}
 </style>
