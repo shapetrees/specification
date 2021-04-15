@@ -14,7 +14,8 @@ For applications that operate on more complex and interconnected resources,
 Shape Trees express the layout of those resources and associate them with
 their respective shapes.
 
-* Specification Editor's Draft - [Rendered](https://shapetrees.github.io/specification/spec) - [Source](spec.html)
+* Specification Editor's Draft - [Rendered](https://shapetrees.org/TR/specification/index.html)
+* Primer Editor's Draft - [Rendered](https://shapetrees.org/TR/primer/index.html) - [Source](https://github.com/shapetrees/primer/)
 * Specification Test Suite - [Source](https://github.com/shapetrees/test-suite)
 
 Shape Trees are a
