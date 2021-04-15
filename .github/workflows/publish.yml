@@ -1,10 +1,10 @@
 # Workflow for processing and publishing bikeshed proposals to github pages
 
-name: publish proposals
+name: publish specification
 on:
   push:
-    # only concerned with changes in the master branch
-    branches: [ master ]
+    # only concerned with changes in the main branch
+    branches: [ main ]
     # only invoke when a bikeshed document is updated
     # paths: [ '*.bs' ]
 
@@ -20,15 +20,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-    
+
       - name: upgrade pip
         run: python3 -m pip install --upgrade pip
-                    
+
       - name: install bikeshed
         run: |
           python3 -m pip install --upgrade bikeshed
           bikeshed update
-          
+
       - name: generate html
         run: for index in *.bs; do bikeshed spec $index; done
 
@@ -41,20 +41,15 @@ jobs:
           aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
           aws-region: 'us-east-1'
-        
+
       - name: Copy files
         run: |
-          cp spec.html index.html
           aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/specification/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
-          cp primer.html index.html
-          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/primer/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl"  --recursive
-          rm index.html
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           #github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
-          #publish_branch: master
-          personal_token: ${{ secrets.GITHUB_TOKEN }} 
-          
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+
