@@ -22,7 +22,6 @@ Shape Trees are a
 Changes to the Shape Trees specification and supporting documentation are
 reviewed by the editors:
 
-- [Josh Collins](https://github.com/joshdcollins)
 - [Eric Prud'hommeaux](https://github.com/ericprud)
 - [Justin Bingham](https://github.com/justinwb)
 

@@ -8,7 +8,6 @@ Group: w3c
 URL: https://shapetrees.org/TR/specification/
 Editor: Eric Prud'hommeaux
 Editor: Justin Bingham
-Editor: Josh Collins
 Markup Shorthands: markdown yes
 Abstract:
     Semantic Web Applications interoperate by sharing semantics of terms and
