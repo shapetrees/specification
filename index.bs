@@ -235,7 +235,6 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
   <figcaption>ShEx Schema for a Shape Tree</figcaption>
 	<pre highlight="turtle">
   PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
-  PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
   PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
 	&lt;#ShapeTree&gt; {
@@ -264,7 +263,6 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
   <figcaption>Example Shape Tree Locator</figcaption>
 	<pre highlight="turtle">
 PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
-PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
 PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
 &lt;#ShapeTreeLocatorShape&gt; {
@@ -288,8 +286,6 @@ In the following example, the Shape Tree Locator (<code>&lt;#loc&gt;</code>) has
   <figcaption>Example ShapeTreeLocator with Multiple Locations</figcaption>
     		<pre highlight="turtle">
 PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
-PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
-PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
 &lt;#loc&gt;
   a st:ShapeTreeLocator ;
@@ -308,7 +304,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   ]
 .
     		</pre>
-                [[try it](http://shex.io/webapps/shex.js/doc/shex-simple?schema=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0APREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3C%23ShapeTreeLocatorShape%3E%20%7B%0A%20%20a%20%5Bst%3AShapeTreeLocator%5D%20%3B%0A%20%20st%3Alocation%20%7B%0A%20%20%20%20st%3AhasRootShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20IRI%20%3B%0A%20%20%20%20st%3Anode%20IRI%20%3B%0A%20%20%20%20st%3Ashape%20IRI%20%3B%0A%20%20%7D%2B%0A%7D&amp;data=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0APREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3C%23loc%3E%0A%20%20a%20st%3AShapeTreeLocator%20%3B%0A%20%20st%3Alocation%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23container-tree%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23container-tree%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2FCommonNotes%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%23doc%3E%20%3B%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fcommonnote.example%2Fschema%23NotesContainer%3E%20%3B%0A%20%20%5D%2C%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23ContainerST%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23ContainerST%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2FCommonNotes%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%23doc%3E%20%3B%20%23%20maybe%20another%20node%3F%20don%E2%80%99t%20know%20why%20not.%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fmysite.example%2Fshapes%23MyContainerShape%3E%20%3B%0A%20%20%5D%0A.&amp;manifestURL=&amp;shape-map=%3C%23loc%3E%40%3C%23ShapeTreeLocatorShape%3E&amp;interface=human&amp;success=proof&amp;regexpEngine=eval-threaded-nerr)]
+                [[try it](http://shex.io/webapps/shex.js/doc/shex-simple?schema=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3C%23ShapeTreeLocatorShape%3E%20%7B%0A%20%20a%20%5Bst%3AShapeTreeLocator%5D%20%3B%0A%20%20st%3Alocation%20%7B%0A%20%20%20%20st%3AhasRootShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20IRI%20%3B%0A%20%20%20%20st%3Anode%20IRI%20%3B%0A%20%20%20%20st%3Ashape%20IRI%20%3B%0A%20%20%7D%2B%0A%7D&data=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0A%0A%3C%23loc%3E%0A%20%20a%20st%3AShapeTreeLocator%20%3B%0A%20%20st%3Alocation%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23NotesContainer%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23Note%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2FCommonNotes%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node2%3E%20%3B%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fcommonnote.example%2Fschema%23NotesContainer%3E%20%3B%0A%20%20%5D%2C%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23UserData%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23Container%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node3%3E%20%3B%20%23%20Not%20necessarily%20the%20same%20node.%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fmysite.example%2Fshapes%23MyContainerShape%3E%20%3B%0A%20%20%5D%0A.%0A&shape-map=%3C%23loc%3E%40%3C%23ShapeTreeLocatorShape%3E&interface=human&success=proof&regexpEngine=eval-threaded-nerr&manifestURL=)]
     	</figure>
 
 These assert that, in the described document:
