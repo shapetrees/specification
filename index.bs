@@ -328,7 +328,7 @@ These operations make use of reusable, internal algorithms defined in
         Response</figcaption>
     		<pre highlight="http">
     		HTTP/1.1 200 OK
-    		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
+    		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTreeLocator"
         Link: &lt;http://www.w3.org/ns/ldp#Container&gt;; rel="type"
     		...other headers omitted...
     		</pre>
@@ -341,7 +341,7 @@ These operations make use of reusable, internal algorithms defined in
 
     	Let <code>METAURI</code> be the URI of the shape tree metadata resource
         pertaining to <code>URI</code> through the Link header with relation
-        `http://shapetrees.org/#ShapeTree`.
+        `http://shapetrees.org/#ShapeTreeLocator`.
 
 
 1. Perform a GET on the discovered Shape Tree metadata resource (<code>METAURI</code>)
@@ -430,7 +430,7 @@ These operations make use of reusable, internal algorithms defined in
       <td>`REQ`</td>
       <td>A POST or PUT HTTP request with the following characteristics:
         * Let <code>LINKST</code> be one or more Link headers with the relation of
-            &quot;http://shapetrees.org/#ShapeTree&quot;.  This represents one or more
+            &quot;http://shapetrees.org/#ShapeTreeLocator&quot;.  This represents one or more
             [=shape trees=] to be planted by the plant operation.
         * A Link header with the relation &quot;type&quot; and a value of a compatible
             [=container=] (e.g. &lt;http://www.w3.org/ns/ldp#BasicContainer&gt;)
@@ -1032,7 +1032,7 @@ These operations make use of reusable, internal algorithms defined in
       <td>
         A DELETE HTTP request with the following characteristics:
           * Let <code>LINKST</code> be a Link header with the relation of
-              "http://shapetrees.org/#ShapeTree" indicating the [=shape tree=] that
+              "http://shapetrees.org/#ShapeTreeLocator" indicating the [=shape tree=] that
               should no longer manage the target [=container=]
       </td>
     </tr>
@@ -1521,7 +1521,7 @@ The below algorithms detail key pieces of logic required for
     Response</figcaption>
 		<pre highlight="http">
 		HTTP/1.1 200 OK
-		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
+		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTreeLocator"
 		...other headers omitted...
 		</pre>
 	</figure>
@@ -1689,7 +1689,7 @@ The below algorithms detail key pieces of logic required for
     Response</figcaption>
 		<pre highlight="http">
 		HTTP/1.1 200 OK
-		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTree"
+		Link: &lt;/data/CommonNotes/meta/UUID&gt;; rel="http://shapetrees.org/#ShapeTreeLocator"
 		...other headers omitted...
 		</pre>
 	</figure>
