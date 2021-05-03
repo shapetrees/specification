@@ -50,6 +50,25 @@ Abstract:
     color: #000000;
   }
 
+  table.classinfo thead tr th[colspan] {
+    text-align: left;
+    font-size: 15px;
+  }
+
+  table.classinfo thead tr th {
+    text-align: left;
+    font-size: 14px;
+  }
+
+  table.classinfo tbody tr:nth-child(odd) {
+    background-color: lightgray;
+    font-size: 12px;
+  }
+
+  table.classinfo tbody tr td {
+    font-size: 12px;
+  }
+
   table.operation {
     border-collapse: separate;
     border: 3px solid #808080;
@@ -178,30 +197,69 @@ data validation, and data migration.
 
 [=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a [server](#server-side-agent), or a [=client-side agent=] that pre-processes requests
-to a server.
+implemented by a [server](#server-side-agent), or a [=client-side agent=] 
+that pre-processes requests
+to a server. <span class="issue">Reword this to be client/server specific</span>
 
 While [=shape trees=] are intended to adapt to different technology platforms
 that support the notion of [=containers=] and [=resources=], examples in this
 specification will reflect usage in an [[LDP]] environment.
 
-Structure {#structure}
+Shape Tree {#tree}
 =====================
 
-A <dfn>shape tree</dfn> is a machine-readable template describing the expected
-layout of a tree of resources in a [=container=]-based [=ecosystem=].
+A <dfn>shape tree</dfn> is a machine-readable [=RDF=] template describing the 
+expected layout of a tree of resources in a [=container=]-based [=ecosystem=].
+A [=shape tree=] expresses a tree hierarchy by containing
+other [=shape trees=]. The terms used to express a [=shape tree=] are described 
+using an [[RDF]] [vocabulary](shapetree.ttl).
 
-The terms used to express a [=shape tree=] are described using an [=RDF=]
-[vocabulary](shapetree.ttl).
+A <dfn>shape tree instance</dfn> is a resource or set of resources assigned to 
+and in conformance with a given [=shape tree=]. A resource in a
+[=shape tree instance=] is considered to be a <dfn>managed resource</dfn>.
 
-The realization of a [=shape tree=] is a <dfn>planted shape tree</dfn>.
-The upper-most Container of that tree is the <dfn>instance root</dfn>.
+A [=shape tree=] is assigned to a [=managed resource=] by a 
+associating a <dfn>shape tree locator</dfn> with that resource. A client 
+may discover that a resource is a [=managed resource=] through the
+[=shape tree locator=] associated with that resource.
+
+[=Shape trees=] prescribe physical hierarchies and can reference other
+shape trees to form virtual hierarchies. In
+a physical hierarchy, a [=shape tree=] expresses a [=managed resource=] 
+that explicitly contains another [=managed resource=] via `st:contains`. 
+For example, in [[LDP]] and [[Solid]], this would be
+the equivalent of using `ldp:contains` to identify a resource member of
+a given container. 
+
+Issue: Add example
+
+In a virtual hierarchy, a [=shape tree=] identifies
+links in a graph connecting two disparate [=managed resources=] via 
+`st:references`.
+
+Issue: Add example
+
+- Different types supported
+- Shape validation
+- Mechanism of validation
+
+Issue: Need to be more clear about instance roots, etc. This may be
+better in the section on Shape Tree Locators.
+
+The upper-most Container of that tree
+is the <dfn>instance root</dfn>.
+
+
+
 
 Let <code>ST</code> be a [=shape tree=];
 
 Let <code>T</code> be a corresponding instance tree.
 
 For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
+
+Issue: This section mixes up the shape tree definition with the shape tree
+instance.
 
 * The <code class="vocab">st:expectsType</code> [=arc=] identifies the type of a
     corresponding resource <code>R</code> in <code>T</code> where validate
@@ -215,12 +273,13 @@ For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
 * An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> }
     [=arc=] indicates that <code>R</code> <em class="rfc2119">MUST</em>
     have exactly one node which conforms to [=shape=] <code>Sh</code>.
-* Any { <code>S</code> <code class="vocab">st:contains</code> <code>S2</code> }
-    [=arcs=] indicate there is a nested [=shape tree=] and corresponding nested
+* An { <code>S</code> <code class="vocab">st:contains</code> <code>R2</code> }
+    [=arc=] indicates a nested [=shape tree=] and corresponding nested
     resource <code>R2</code>.
 * An { <code>S</code> <code class="vocab">st:references</code> <code>S3</code> }
     [=arc=] indicates that [=shape tree=] <code>S3</code> is referenced through the
     instance data for <code>S</code>.
+    
 * An { <code>S</code> <code class="vocab">st:supports</code> <code>S4</code> }
     [=arc=] indicates that <code>S</code> provides a different representation of
     <code>S4</code> for aggregation purposes.
@@ -1857,6 +1916,35 @@ The following terms are used throughout this specification:
 
   <pre class="biblio">
   {
+    "ldp": {
+      "href": "https://www.w3.org/TR/ldp/",
+      "title": "Linked Data Platform 1.0",
+      "authors": [
+        "Steve Speicher",
+        "John Arwe",
+        "Ashok Malhotra"
+      ]
+    },
+    "solid": {
+          "href": "https://solidproject.org/TR/protocol",
+          "title": "Solid Protocol",
+          "authors": [
+            "Sarven Capasdisli",
+            "Tim Berners-Lee",
+            "Kjetil Kjernsmo",
+            "Justin Bingham",
+            "Ruben Verborgh",
+            "Dmitri Zagidulin"]
+    },
+    "rdf": {
+          "href": "https://www.w3.org/TR/rdf11-concepts",
+          "title": "RDF 1.1 Concepts and Abstract Syntax",
+          "authors": [
+            "Richard Cyganiak",
+            "David Wood",
+            "Markus Lanthaler"
+          ]
+        },
     "shex": {
       "href": "http://shex.io/shex-semantics/index.html",
       "title": "Shape Expressions Language 2.1",
