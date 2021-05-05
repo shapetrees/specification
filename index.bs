@@ -260,7 +260,7 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 ## Shape Tree Locator Schema ## {#st-locator-schema}
 
 <figure id="shapetree-shex">
-  <figcaption>Example Shape Tree Locator</figcaption>
+  <figcaption>ShEx Schema for a Shape Tree Locator</figcaption>
 	<pre highlight="turtle">
 PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
 PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
