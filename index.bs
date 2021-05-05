@@ -280,7 +280,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 The cardinality of <code class="vocab">st:location</code> is <code>+</code> (i.e. one or more).
 If there are more than one location, all apply to the document or Container described by the <code class="vocab">ShapeTreeLocator</code>.
 
-In the following example, the Shape Tree Locator (<code>&lt;#loc&gt;</code>) has two <code class="vocab">st:location</code>:
+In the following example, the Shape Tree Locator (<code>&lt;#loc&gt;</code>) has two instances of <code class="vocab">st:location</code>:
 
    	<figure id="fig-discover-head-response-managed">
   <figcaption>Example ShapeTreeLocator with Multiple Locations</figcaption>
