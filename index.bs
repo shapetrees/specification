@@ -310,7 +310,7 @@ PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
 These assert that, in the described document:
 <ul>
   <li>(described by the upper <code class="vocab">st:location</code>)<ul>
-    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node2&gt;</code> conforms to the shape <code>&lt;http://commonnote.example/schema#Note&gt;</code></li>
+    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node2&gt;</code> conforms to the shape <code>&lt;http://commonnote.example/schema#NotesContainer&gt;</code></li>
     <li>The Container <code>&lt;/data/CommonNotes/&gt;</code> is the root of this Managed Hierarchy and conforms to the shape <code>&lt;http://commonnote.example/schema#NotesContainer&gt;</code></li>
   </ul>
   <li>(described by the lower <code class="vocab">st:location</code>)<ul>
