@@ -319,7 +319,7 @@ These assert that, in the described document:
   </ul>
 </ul>
 
-In this example, there the two locations describe two different nodes in <code>&lt;Note1&gt;</code>, <code>&lt;note2&gt;</code> and <code>&lt;node3&gt;</code>.
+In this example, the two locations describe two different nodes in <code>&lt;Note1&gt;</code>, <code>&lt;node2&gt;</code> and <code>&lt;node3&gt;</code>.
 These nodes are validated according to the data in the described document (probably, but not necessarily, <code>&lt;Note1&gt;</code>).
 If a described node does not appear in the described document, it can't satisfy any Triple Constraints.
 
