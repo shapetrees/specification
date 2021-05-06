@@ -285,11 +285,16 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
 * An { `ST` <code class="vocab">st:contains</code> `R2` }
     [=arc=] indicates a nested [=shape tree=] and corresponding nested
     resource `R2`.
-* An { `ST` <code class="vocab">st:references</code> `ST2` }
-    [=arc=] indicates that [=shape tree=] `ST2` is referenced through the
-    instance data of `STI`. <span class="issue">explode requirements
-    for st:references here</span>
-    
+* An { `ST` <code class="vocab">st:references</code> `STR` }
+    [=arc=] indicates that the [=shape tree=] identified in 
+    [=shape tree reference=] `STR`, is referenced through the
+    instance data of `STI`.
+    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST2` } [=arc=]
+        indicates a [=shape tree=] referenced through the instance data of `STI`
+    * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
+        [=arc=] identifies the [=shape path=] through which a 
+        [=shape tree instance=] of `ST2` can be found via the instance data of
+        `STI`
 * An { `ST` <code class="vocab">st:supports</code> `ST3` }
     [=arc=] indicates that `ST` provides a different representation of
     `ST3` for aggregation purposes.
@@ -299,6 +304,8 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
     that describes `ST`.
 
 ## Shape Tree Schema ## {#st-schema}
+
+Issue: st:contains doesn't ensure only legitimate types are provided
 
 <figure id="shapetree-shex">
   <figcaption>ShEx Schema for a Shape Tree</figcaption>
