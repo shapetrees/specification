@@ -54,25 +54,6 @@ Abstract:
     color: #000000;
   }
 
-  table.classinfo thead tr th[colspan] {
-    text-align: left;
-    font-size: 15px;
-  }
-
-  table.classinfo thead tr th {
-    text-align: left;
-    font-size: 14px;
-  }
-
-  table.classinfo tbody tr:nth-child(odd) {
-    background-color: lightgray;
-    font-size: 12px;
-  }
-
-  table.classinfo tbody tr td {
-    font-size: 12px;
-  }
-
   table.tree thead tr {
     font-size: 14px;
   }
@@ -236,7 +217,7 @@ and in conformance with a given [=shape tree=]. A resource in a
 [=shape tree instance=] is called a <dfn>managed resource</dfn>.
 
 Every [=managed resource=] has an associated [=shape tree locator=].
-A <dfn>shape tree locator</dfn> identifies the [=shape tree=] associated
+A [=shape tree locator=] identifies the [=shape tree=] associated
 with a [=managed resource=], and additional information needed to navigate 
 nested hierarchies of managed resources.
 
@@ -501,30 +482,27 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
 * An { `ST` <code class="vocab">st:validatedBy</code> `SH` }
     [=arc=] indicates that [=managed resource=] `R` <em class="rfc2119">MUST</em>
     have exactly one node which conforms to [=shape=] `SH`.
-* An { `ST` <code class="vocab">st:contains</code> `R2` }
-    [=arc=] indicates a nested [=shape tree=] and corresponding nested
-    resource `R2`.
+* An { `ST` <code class="vocab">st:contains</code> `ST2` }
+    [=arc=] indicates a nested [=shape tree=] `ST2`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
     [=arc=] indicates that the [=shape tree=] identified in 
     [=shape tree reference=] `STR`, is referenced through the
     instance data of `STI`.
-    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST2` } [=arc=]
+    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=arc=]
         indicates a [=shape tree=] referenced through the instance data of `STI`
     * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
         [=arc=] identifies the [=shape path=] through which a 
-        [=shape tree instance=] of `ST2` can be found via the instance data of
+        [=shape tree instance=] of `ST3` can be found via the instance data of
         `STI`
-* An { `ST` <code class="vocab">st:supports</code> `ST3` }
-    [=arc=] indicates that `ST` provides a different representation of
-    `ST3` for aggregation purposes.
+* An { `ST` <code class="vocab">st:supports</code> `ST4` }
+    [=arc=] indicates that `ST` provides supporting or supplementary
+    context to `ST4`.
 
 A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
     [=arc=] indicates the location of an index of [SKOS hierarchies](#skos-graph) 
     that describes `ST`.
 
 ## Shape Tree Schema ## {#st-schema}
-
-Issue: st:contains doesn't ensure only legitimate types are provided
 
 <figure id="shapetree-shex">
   <figcaption>ShEx Schema for a Shape Tree</figcaption>
@@ -537,6 +515,8 @@ Issue: st:contains doesn't ensure only legitimate types are provided
 	  (
 	    st:expectsType [st:ShapeTreeContainer] ;
 	    st:contains @&lt;#ShapeTree&gt; +
+      |
+      st:expectsType [st:ShapeTreeResource, st:ShapeTreeNonRDFResource]
 	  ) ;
     rdfs:label xsd:string ? ;
 	  st:references @&lt;#ReferencedShapeTree&gt; * ;
@@ -555,12 +535,172 @@ Issue: st:contains doesn't ensure only legitimate types are provided
 Shape Tree Locator {#locator}
 =====================
 
-The cardinality of <code class="vocab">st:location</code> is 
-<code>+</code> (i.e. one or more).
-If there are more than one location, all apply to the document or 
-Container described by the <code class="vocab">ShapeTreeLocator</code>.
+A <dfn>shape tree locator</dfn> associates a [=managed resource=] with 
+one or more [=shape trees=]. No more than one [=shape tree locator=] may be
+associated with a [=managed resource=]. 
 
-In the following example, the Shape Tree Locator (<code>&lt;#loc&gt;</code>) 
+For example, in [[Solid]] a [=shape tree locator=] would be stored in an
+[auxiliary resource](https://solidproject.org/TR/protocol#auxiliary-resources) 
+associated with a given [=managed resource=].
+
+A [=shape tree locator=] includes one or more [=shape tree locations=] via
+<code class="vocab">st:location</code>. Each <dfn>shape tree location</dfn> 
+identifies a [=shape tree=] 
+associated with the [=managed resource=], the focus node for [=shape=] 
+validation, and the information 
+needed to navigate the physical hierarchy in which that [=managed resource=]
+resides.
+
+If there is more than one [=shape tree location=], they are all applied to the 
+[=managed resource=] associated with the [=shape tree locator=].
+
+A [=shape tree location=] identifies the [=shape tree=] to be associated with
+the [=managed resource=] via <code class="vocab">st:hasShapeTree</code>.
+
+A [=shape tree location=] identifies the focus node for [=shape=] validation 
+in the associated [=managed resource=], which is only valid when the
+corresponding [=shape tree=] includes <code class="vocab">st:validatedBy</code>.
+
+[=Shape tree locations=] identify key contextual points in a physical hierarchy:
+
+* A <dfn>shape tree root</dfn> marks the primary, or parent [=shape tree=] in
+    a physical hierarchy, and is set by the [Plant Operation](#plant-shapetree).
+* A <dfn>shape tree instance root</dfn> marks the primary, or parent 
+    [=shape tree instance=] in a physical hierarchy, and is set by the
+    [Plant Operation](#plant-shapetree).
+  
+A [=shape tree root=], and its corresponding [=shape tree instance root=] can
+be planted within an existing managed hierarchy.
+
+<figure id="shapetree-navigation">
+  <figcaption>Navigating a physical shape tree hierarchy</figcaption>
+  <table class="data tree" align="left">
+    <colgroup>
+    <colgroup>
+    <col>
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Shape Tree</th>
+        <th>Shape Tree Root</th>
+        <th>Shape Tree Instance Root</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/data/`</td>
+        <td>`ex:DataTree`</td>
+        <td>`ex:DataTree`</td>
+        <td>`/data/`</td>
+      </tr>
+      <tr>
+        <td>`-- /projects/`</td>
+        <td>`ex:DataCollectionTree`<br/>
+            `ex:ProjectsTree`</td>
+        <td>`ex:DataTree`<br/>
+            `ex:ProjectsTree`</td>
+        <td>`/data/`<br/>
+            `/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---- /project-1/`</td>
+        <td>`ex:ProjectTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`------ /milestone-A/`</td>
+        <td>`ex:MilestoneTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-43/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-48/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-aa89`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-61/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /issue-22/`</td>
+        <td>`ex:IssueTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-cd12`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-ef55`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /issue-31/`</td>
+        <td>`ex:IssueTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<figure id="locator-multiple-locations">
+  <figcaption>[=Shape Tree Locator=] for /data/projects with multiple 
+    [=shape tree locations=]</figcaption>
+  <pre highlight="turtle">
+  PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+  PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+  PREFIX data: &lt;https://storage.example.com/data/&gt;
+
+  &lt;#locator&gt;
+    a st:ShapeTreeLocator ;
+    st:location [
+      st:hasRootShapeTree ex:DataTree ;
+      st:hasShapeTree ex:DataTypeTree ;
+      st:hasShapeTreeInstanceRoot data: ;
+      st:node storage:data#collection ;
+      st:shape ex:DataCollectionShape ;
+    ], [
+      st:hasRootShapeTree ex:ProjectsTree ;
+      st:hasShapeTree ex:ProjectsTree ;
+      st:hasShapeTreeInstanceRoot data:projects ;
+      st:node storage:data#collection ;
+      st:shape ex:ProjectCollectionShape ;
+    ] .
+  </pre>
+
+</figure>
+
+Issue: Detail how a location provides the focus node, and two locations
+can actually target two different focus nodes if need be. Refine the following
+example to the project-centric example, and use the intersecting shape
+tree from above instead.
+
+In the following example, the [=shape tree locator=] <code>&lt;#locator&gt;</code> 
 has two instances of <code class="vocab">st:location</code>:
 
 <figure id="fig-discover-head-response-managed">
@@ -571,7 +711,7 @@ has two instances of <code class="vocab">st:location</code>:
   <pre highlight="turtle">
   PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
 
-  &lt;#loc&gt;
+  &lt;#locator&gt;
     a st:ShapeTreeLocator ;
     st:location [
       st:hasRootShapeTree &lt;http://commonnote.example/commonnote#NotesContainer&gt; ;
