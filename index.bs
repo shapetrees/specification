@@ -558,8 +558,11 @@ A [=shape tree location=] identifies the [=shape tree=] to be associated with
 the [=managed resource=] via <code class="vocab">st:hasShapeTree</code>.
 
 A [=shape tree location=] identifies the focus node for [=shape=] validation 
-in the associated [=managed resource=], which is only valid when the
-corresponding [=shape tree=] includes <code class="vocab">st:validatedBy</code>.
+in the associated [=managed resource=] via <code class="vocab">st:node</code>, 
+which is only valid when the corresponding [=shape tree=] includes 
+<code class="vocab">st:validatedBy</code>. [=Shape tree locations=] 
+in a given [=shape tree locator=] may have different
+focus nodes.
 
 [=Shape tree locations=] identify key contextual points in a physical hierarchy:
 
@@ -570,7 +573,8 @@ corresponding [=shape tree=] includes <code class="vocab">st:validatedBy</code>.
     [Plant Operation](#plant-shapetree).
   
 A [=shape tree root=], and its corresponding [=shape tree instance root=] can
-be planted within an existing managed hierarchy.
+be planted within an existing managed hierarchy, alongside or within other
+[=shape tree roots=] and [=shape tree instance roots=].
 
 <figure id="shapetree-navigation">
   <figcaption>Navigating a physical shape tree hierarchy</figcaption>
@@ -670,7 +674,7 @@ be planted within an existing managed hierarchy.
 
 <figure id="locator-multiple-locations">
   <figcaption>[=Shape Tree Locator=] for /data/projects with multiple 
-    [=shape tree locations=]</figcaption>
+    [=shape tree locations=] in a nested physical hierarchy</figcaption>
   <pre highlight="turtle">
   PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
   PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
@@ -682,80 +686,86 @@ be planted within an existing managed hierarchy.
       st:hasRootShapeTree ex:DataTree ;
       st:hasShapeTree ex:DataTypeTree ;
       st:hasShapeTreeInstanceRoot data: ;
-      st:node storage:data#collection ;
+      st:node data:projects#collection ;
       st:shape ex:DataCollectionShape ;
     ], [
       st:hasRootShapeTree ex:ProjectsTree ;
       st:hasShapeTree ex:ProjectsTree ;
       st:hasShapeTreeInstanceRoot data:projects ;
-      st:node storage:data#collection ;
+      st:node data:projects#collection ;
       st:shape ex:ProjectCollectionShape ;
     ] .
   </pre>
 
 </figure>
 
-Issue: Detail how a location provides the focus node, and two locations
-can actually target two different focus nodes if need be. Refine the following
-example to the project-centric example, and use the intersecting shape
-tree from above instead.
-
-In the following example, the [=shape tree locator=] <code>&lt;#locator&gt;</code> 
-has two instances of <code class="vocab">st:location</code>:
-
-<figure id="fig-discover-head-response-managed">
-  <figcaption>
-    Example ShapeTreeLocator with Multiple Locations - 
-    [[try it](http://shex.io/webapps/shex.js/doc/shex-simple?schema=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3C%23ShapeTreeLocatorShape%3E%20%7B%0A%20%20a%20%5Bst%3AShapeTreeLocator%5D%20%3B%0A%20%20st%3Alocation%20%7B%0A%20%20%20%20st%3AhasRootShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20IRI%20%3B%0A%20%20%20%20st%3Anode%20IRI%20%3B%0A%20%20%20%20st%3Ashape%20IRI%20%3B%0A%20%20%7D%2B%0A%7D&amp;data=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0A%0A%3C%23loc%3E%0A%20%20a%20st%3AShapeTreeLocator%20%3B%0A%20%20st%3Alocation%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23NotesContainer%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23Note%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2FCommonNotes%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node2%3E%20%3B%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fcommonnote.example%2Fschema%23NotesContainer%3E%20%3B%0A%20%20%5D%2C%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23UserData%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23Container%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node3%3E%20%3B%20%23%20Not%20necessarily%20the%20same%20node.%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fmysite.example%2Fshapes%23MyContainerShape%3E%20%3B%0A%20%20%5D%0A.%0A&amp;shape-map=%3C%23loc%3E%40%3C%23ShapeTreeLocatorShape%3E&amp;interface=human&amp;success=proof&amp;regexpEngine=eval-threaded-nerr&amp;manifestURL=)]
-  </figcaption>
+<figure id="locator-multiple-locations">
+  <figcaption>[=Shape Tree Locator=] for 
+    /data/projects/project-1/milestone-A/task-48 with a single 
+    [=shape tree location=] in a nested physical hierarchy</figcaption>
   <pre highlight="turtle">
-  PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+  PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+  PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+  PREFIX data: &lt;https://storage.example.com/data/&gt;
 
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
     st:location [
-      st:hasRootShapeTree &lt;http://commonnote.example/commonnote#NotesContainer&gt; ;
-      st:hasShapeTree &lt;http://commonnote.example/commonnote#Note&gt; ;
-      st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; ;
-      st:node &lt;/data/CommonNotes/Note1#node2&gt; ;
-      st:shape &lt;http://commonnote.example/schema#NotesContainer&gt; ;
-    ], [
-      st:hasRootShapeTree &lt;http://mysite.example/shapeTrees/management#UserData&gt; ;
-      st:hasShapeTree &lt;http://mysite.example/shapeTrees/management#Container&gt; ;
-      st:hasShapeTreeInstanceRoot &lt;/data/&gt; ;
-      st:node &lt;/data/CommonNotes/Note1#node3&gt; ; # Not necessarily the same node.
-      st:shape &lt;http://mysite.example/shapes#MyContainerShape&gt; ;
-  ] .
-</pre>
+      st:hasRootShapeTree ex:ProjectsTree ;
+      st:hasShapeTree ex:ProjectsTree ;
+      st:hasShapeTreeInstanceRoot data:projects ;
+      st:node data:projects#collection ;
+      st:shape ex:ProjectCollectionShape ;
+    ] .
+  </pre>
+
 </figure>
 
-These assert that, in the described document:
-<ul>
-  <li>(described by the upper <code class="vocab">st:location</code>)<ul>
-    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node2&gt;</code> 
-      conforms to the shape 
-      <code>&lt;http://commonnote.example/schema#NotesContainer&gt;</code></li>
-    <li>The Container <code>&lt;/data/CommonNotes/&gt;</code> is the root of 
-      this Managed Hierarchy and conforms to the shape tree 
-      <code>&lt;http://commonnote.example/commonnote#NotesContainer&gt;</code></li>
-  </ul>
-  <li>(described by the lower <code class="vocab">st:location</code>)<ul>
-    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node3&gt;</code> 
-      conforms to the shape 
-      <code>&lt;http://mysite.example/shapeTrees/management#Container&gt;</code></li>
-    <li>The Container <code>&lt;/data/&gt;</code> is the root of this 
-      Managed Hierarchy and conforms to the shape tree 
-      <code>&lt;http://mysite.example/shapeTrees/management#UserData&gt;</code></li>
-  </ul>
-</ul>
+A [=shape tree location=] may be used to provide shape validation only,
+in which case only the focus node and shape are provided, via 
+<code class="vocab">st:node</code> and 
+<code class="vocab">st:validatedBy</code>, respectively. 
 
-In this example, the two locations describe two different nodes in 
-<code>&lt;Note1&gt;</code>, <code>&lt;node2&gt;</code> 
-and <code>&lt;node3&gt;</code>.
-These nodes are validated according to the data in the described document 
-(probably, but not necessarily, <code>&lt;Note1&gt;</code>).
-If a described node does not appear in the described document, 
-it can't satisfy any Triple Constraints.
+<figure id="shapetree-navigation">
+  <figcaption>A [=shape tree locator=] providing only 
+  shape validation</figcaption>
+  <table class="data tree" align="left">
+    <colgroup>
+    <colgroup>
+    <col>
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Shape</th>
+        <th>Focus Node</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/data/projects/project-1`</td>
+        <td>`ex:ProjectShape`</td>
+        <td>`/data/projects/project-1#project`</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<pre highlight="turtle">
+PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+PREFIX project1: &lt;https://storage.example.com/data/projects/project-1#&gt;
+
+&lt;#locator&gt;
+  a st:ShapeTreeLocator ;
+  st:location [
+    st:node project1:project ;
+    st:shape ex:ProjectShape ;
+] .
+
+</pre>
+
 
 ## Shape Tree Locator Schema ## {#st-locator-schema}
 
@@ -767,14 +777,26 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
 &lt;#ShapeTreeLocatorShape&gt; {
   a [st:ShapeTreeLocator] ;
-  st:location {
-    st:hasRootShapeTree IRI ;
+  st:location @&lt;#ShapeTreeLocationShape&gt;+
+}	
+
+&lt;#ShapeTreeLocationShape&gt; {
+  ( st:hasRootShapeTree IRI ;
     st:hasShapeTree IRI ;
     st:hasShapeTreeInstanceRoot IRI ;
     st:node IRI ;
-    st:shape IRI ;
-  }+
-}	</pre>
+    st:shape IRI
+  |
+    st:hasRootShapeTree IRI ;
+    st:hasShapeTree IRI ;
+    st:hasShapeTreeInstanceRoot IRI
+  |
+    st:node IRI ;
+    st:shape IRI
+  )
+}
+
+</pre>
 </figure>
 
 Shape Tree Operations {#operations}
@@ -787,9 +809,9 @@ processing logic.
 The key operations used to manage [=shape trees=] are:
 * [Discover Shape Tree](#discover)
 * [Plant Shape Tree](#plant-shapetree)
-* [Create Data Instance](#create-data-instance)
-* [Update Data Instance](#update-data-instance)
-* [Delete Data Instance](#delete-data-instance)
+* [Create Shape Tree Instance](#create-shape-tree-instance)
+* [Update Shape Tree Instance](#update-shape-tree-instance)
+* [Delete Shape Tree Instance](#delete-shape-tree-instance)
 * [Unplant Shape Tree](#unplant-shapetree)
 
 These operations make use of reusable, internal algorithms defined in
@@ -1220,7 +1242,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
           </tr>
       </table>
 
-## Create Data Instance ## {#create-data-instance}
+## Create Shape Tree Instance ## {#create-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1231,7 +1253,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>create data instance</b> operation creates an instance of a shape
+        The <b>create shape tree instance</b> operation creates an instance of a shape
         tree within a managed container.
       </td>
   </tbody>
@@ -1379,7 +1401,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
           </tr>
       </table>
 
-## Update Data Instance ## {#update-data-instance}
+## Update Shape Tree Instance ## {#update-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1390,7 +1412,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>update data instance</b> operation updates an instance of a
+        The <b>update shape tree instance</b> operation updates an instance of a
         [=shape tree=] within a managed container.      
       </td>
   </tbody>
@@ -1484,7 +1506,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
     Note: This step <em class="rfc2119">MAY</em> be performed by either a client
         or server side agent.
 
-## Delete Data Instance ## {#delete-data-instance}
+## Delete Shape Tree Instance ## {#delete-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1495,7 +1517,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>delete data instance</b> operation deletes an instance of a
+        The <b>delete shape tree instance</b> operation deletes an instance of a
         [=shape tree=] within a managed container.
       </td>
   </tbody>
