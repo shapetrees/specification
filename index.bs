@@ -782,19 +782,14 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 }	
 
 &lt;#ShapeTreeLocationShape&gt; {
-  ( st:hasRootShapeTree IRI ;
-    st:hasShapeTree IRI ;
-    st:hasShapeTreeInstanceRoot IRI ;
-    st:node IRI ;
-    st:shape IRI
+  st:hasRootShapeTree IRI ;
+  st:hasShapeTree IRI ;
+  st:hasShapeTreeInstanceRoot IRI ;
+  ( st:node IRI ;
+    st:shape IRI )?
   |
-    st:hasRootShapeTree IRI ;
-    st:hasShapeTree IRI ;
-    st:hasShapeTreeInstanceRoot IRI
-  |
-    st:node IRI ;
-    st:shape IRI
-  )
+  st:node IRI ;
+  st:shape IRI
 }
 
 </pre>
