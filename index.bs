@@ -168,7 +168,7 @@ Introduction {#introduction}
 
 Realizing the value proposition of the Semantic Web lies in building useful and
 robust applications that can interoperate over linked data. Protocols such as
-[[LDP]] and Solid organize linked data graphs into resource hierarchies,
+[[LDP]] and [[Solid]] organize linked data graphs into resource hierarchies,
 providing a foundation upon which these robust and interoperable applications
 can be created.
 
@@ -195,9 +195,10 @@ data validation, and data migration.
 
 [=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a [server](#server-side-agent), or a [=client-side agent=] 
-that pre-processes requests
-to a server. <span class="issue">Reword this to be client/server specific</span>
+implemented by a [=server-side agent=], or a [=client-side agent=] 
+that pre-processes requests to a server. In the most typical use case, 
+a [=server-side agent=] enforces the expected behaviors
+on data as it is manipulated by a [=client-side agent=].
 
 While [=shape trees=] are intended to adapt to different technology platforms
 that support the notion of [=containers=] and [=resources=], examples in this
