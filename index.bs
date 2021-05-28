@@ -245,7 +245,7 @@ types via `st:expectsType`:
 </table>
 
 A [=shape tree=] may prescribe that a [=managed resource=] conforms to a
-given [[ShEx]] or [[SHACL]] shape via `st:validatedBy`.
+given [[ShEx]] or [[SHACL]] shape via `st:shape`.
 
 [=Shape trees=] prescribe physical hierarchies and can reference other
 shape trees to form virtual hierarchies. 
@@ -321,28 +321,28 @@ by `S2`.
     <#ProjectTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeContainer ;
-      st:validatedBy ex:ProjectShape ;
+      st:shape ex:ProjectShape ;
       st:contains <#MilestoneTree> ,
                   st:AllowNone .
 
     <#MilestoneTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeContainer ;
-      st:validatedBy ex:MilestoneShape ;
+      st:shape ex:MilestoneShape ;
       st:contains <#TaskTree>, <#IssueTree> ; 
       st:AllowNone .
 
     <#TaskTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeContainer ;
-      st:validatedBy ex:TaskShape ;
+      st:shape ex:TaskShape ;
       st:contains <#AttachmentTree> ,
       st:AllowNone .
 
     <#IssueTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeContainer ;
-      st:validatedBy ex:IssueShape ;
+      st:shape ex:IssueShape ;
       st:contains <#AttachmentTree> ,
       st:AllowNone .
 
@@ -423,7 +423,7 @@ of a [=shape=] schema. [[SHEXPATH]]
     <#VirtualProjectTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeResource ;
-      st:validatedBy ex:ProjectShape ;
+      st:shape ex:ProjectShape ;
       st:references [
         st:hasShapeTree <#VirtualMilestoneTree> ;
         st:traverseViaShapePath "@ex:ProjectShape/ex:hasMilestone"
@@ -432,7 +432,7 @@ of a [=shape=] schema. [[SHEXPATH]]
     <#VirtualMilestoneTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeResource ;
-      st:validatedBy ex:MilestoneShape ;
+      st:shape ex:MilestoneShape ;
       st:references [
         st:hasShapeTree <#VirtualTaskTree> ;
         st:traverseViaShapePath "@ex:MilestoneShape/ex:hasTask"
@@ -445,7 +445,7 @@ of a [=shape=] schema. [[SHEXPATH]]
     <#VirtualTaskTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeResource ;
-      st:validatedBy ex:TaskShape ;
+      st:shape ex:TaskShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
         st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
@@ -454,7 +454,7 @@ of a [=shape=] schema. [[SHEXPATH]]
     <#VirtualIssueTree>
       a st:ShapeTree ;
       st:expectsType st:ShapeTreeContainer ;
-      st:validatedBy ex:IssueShape ;
+      st:shape ex:IssueShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
         st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
@@ -480,7 +480,7 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
 * An { `ST` <code class="vocab">rdfs:label</code> `L` } [=arc=]
     indicates that there is exactly one corresponding [=managed resource=] 
     `R` in `STI` and it has the name `L`.
-* An { `ST` <code class="vocab">st:validatedBy</code> `SH` }
+* An { `ST` <code class="vocab">st:shape</code> `SH` }
     [=arc=] indicates that [=managed resource=] `R` <em class="rfc2119">MUST</em>
     have exactly one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
@@ -521,7 +521,7 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
 	  ) ;
     rdfs:label xsd:string ? ;
 	  st:references @&lt;#ReferencedShapeTree&gt; * ;
-	  st:validatedBy IRI ? ;
+	  st:shape IRI ? ;
     st:contains IRI ? ;
     st:supports IRI ? ;
 	}
@@ -561,7 +561,7 @@ the [=managed resource=] via <code class="vocab">st:hasShapeTree</code>.
 A [=shape tree location=] identifies the focus node for [=shape=] validation 
 in the associated [=managed resource=] via <code class="vocab">st:node</code>, 
 which is only valid when the corresponding [=shape tree=] includes 
-<code class="vocab">st:validatedBy</code>. [=Shape tree locations=] 
+<code class="vocab">st:shape</code>. [=Shape tree locations=] 
 in a given [=shape tree locator=] may have different
 focus nodes.
 
@@ -725,7 +725,7 @@ be planted within an existing managed hierarchy, alongside or within other
 A [=shape tree location=] may be used to provide shape validation only,
 in which case only the focus node and shape are provided, via 
 <code class="vocab">st:node</code> and 
-<code class="vocab">st:validatedBy</code>, respectively. 
+<code class="vocab">st:shape</code>, respectively. 
 
 <figure id="shapetree-navigation">
   <figcaption>A [=shape tree locator=] providing only 
@@ -1039,7 +1039,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
         are met:
     	* any shape tree has a <code class="vocab">st:expectsResourceType</code>
             with a value other than <code class="vocab">st:ShapeTreeContainer</code>
-    	* more than one shape tree has a <code class="vocab">st:validatedBy</code> value
+    	* more than one shape tree has a <code class="vocab">st:shape</code> value
     	* more than one shape tree has a <code class="vocab">st:contains</code> value
 
     If any of the above static validations fail, this operation
@@ -1054,13 +1054,13 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
     1. Let <code>VST</code> be the validating shape tree that is identified by the
         only [=shape tree=] in <code>ALLST</code> having a
-        <code class="vocab">st:validatedBy</code> value
+        <code class="vocab">st:shape</code> value
     1. If <code>VST</code> is present and the plant operation (<code>REQ</code>)
         includes an RDF graph body and ShEx validation is used and a [=Focus Node=]
         (<code>LINKFN</code>) is not present, this operation
         <em class="rfc2119">MUST</em> return a 422 status code
     1. Perform a validation of the RDF graph body of <code>REQ</code> using the
-        <code>VST</code> <code class="vocab">st:validatedBy</code> shape,
+        <code>VST</code> <code class="vocab">st:shape</code> shape,
         targeting the graph's <code>LINKFN</code>.  If validation fails, this
         operation <em class="rfc2119">MUST</em> return a 422 status code
 
@@ -1727,13 +1727,13 @@ The below algorithms detail key pieces of logic required for
 1. If <code>RT</code> does not match <code>MCST</code>'s
     <code class="vocab">st:expectsType</code> value, this operation
     <em class="rfc2119">MUST</em> return a 422 status code
-1. If <code>MCST</code> has a <code class="vocab">st:validatedBy</code> value,
+1. If <code>MCST</code> has a <code class="vocab">st:shape</code> value,
     and the plant operation (<code>REQ</code>) includes an RDF graph body and
     ShEx validation is used and a [=Focus Node=] (<code>LINKFN</code>) is not
     present, this operation <em class="rfc2119">MUST</em> return a
     422 status code
 1. Perform a validation of the RDF graph body of <code>REQ</code> using the
-    <code>mcst</code> <code class="vocab">st:validatedBy</code> shape,
+    <code>mcst</code> <code class="vocab">st:shape</code> shape,
     targeting the graph's <code>LINKFN</code>.  If validation fails,
     this operation <em class="rfc2119">MUST</em> return a 422 status code
 
