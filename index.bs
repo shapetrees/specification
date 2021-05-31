@@ -755,17 +755,17 @@ in which case only the focus node and shape are provided, via
 </figure>
 
 <pre highlight="turtle">
-PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
-PREFIX ex: &lt;http://www.example/ns/ex#&gt;
-PREFIX project1: &lt;https://storage.example/data/projects/project-1#&gt;
-
-&lt;#locator&gt;
-  a st:ShapeTreeLocator ;
-  st:location [
-    st:node project1:project ;
-    st:shape ex:ProjectShape ;
-] .
-
+  PREFIX st: &lt;http://www.w3.org/ns/st#&gt; 
+  PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
+  PREFIX ex: &lt;http://www.example/ns/ex#&gt;
+  PREFIX project1: &lt;https://storage.example/data/projects/project-1#&gt;
+  
+  &lt;#locator&gt;
+    a st:ShapeTreeLocator ;
+    st:location [
+      st:node &lt;https://storage.example/data/projects/project-1#project&gt; ;
+      st:shape ex:ProjectShape ;
+  ] .
 </pre>
 
 
@@ -774,25 +774,25 @@ PREFIX project1: &lt;https://storage.example/data/projects/project-1#&gt;
 <figure id="shapetree-locator-shex">
   <figcaption>ShEx Schema for a Shape Tree Locator</figcaption>
 	<pre highlight="turtle">
-PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
-PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
-
-&lt;#ShapeTreeLocatorShape&gt; {
-  a [st:ShapeTreeLocator] ;
-  st:location @&lt;#ShapeTreeLocationShape&gt;+
-}	
-
-&lt;#ShapeTreeLocationShape&gt; {
-  st:hasRootShapeTree IRI ;
-  st:hasShapeTree IRI ;
-  st:hasShapeTreeInstanceRoot IRI ;
-  ( st:node IRI ;
-    st:shape IRI )?
-  |
-  st:node IRI ;
-  st:shape IRI
-}
-
+    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
+    PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
+    
+    &lt;#ShapeTreeLocatorShape&gt; {
+      a [st:ShapeTreeLocator] ;
+      st:location @&lt;#ShapeTreeLocationShape&gt;+
+    }	
+    
+    &lt;#ShapeTreeLocationShape&gt; {
+      st:hasRootShapeTree IRI ;
+      st:hasShapeTree IRI ;
+      st:hasShapeTreeInstanceRoot IRI ;
+      ( st:node IRI ;
+        st:shape IRI )?
+      |
+      st:node IRI ;
+      st:shape IRI
+    }
 </pre>
 </figure>
 
