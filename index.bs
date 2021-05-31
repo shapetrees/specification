@@ -708,15 +708,16 @@ be planted within an existing managed hierarchy, alongside or within other
   PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
   PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
   PREFIX data: &lt;https://storage.example.com/data/&gt;
+  PREFIX task-48: &lt;https://storage.example.com/data/projects/project-1/milestone-A/task-48&gt;
 
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
     st:location [
       st:hasRootShapeTree ex:ProjectsTree ;
-      st:hasShapeTree ex:ProjectsTree ;
+      st:hasShapeTree ex:TaskTree ;
       st:hasShapeTreeInstanceRoot data:projects ;
-      st:node data:projects#collection ;
-      st:shape ex:ProjectCollectionShape ;
+      st:node task-48#task ;
+      st:shape ex:TaskShape ;
     ] .
   </pre>
 
