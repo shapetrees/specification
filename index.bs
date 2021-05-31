@@ -207,7 +207,7 @@ specification will reflect usage in an [[LDP]] environment.
 Shape Tree {#tree}
 =====================
 
-A <dfn>shape tree</dfn> is a machine-readable [=RDF=] template describing the 
+A <dfn>shape tree</dfn> is a machine-readable template describing the 
 expected layout of a tree of resources in a [=container=]-based [=ecosystem=].
 A [=shape tree=] expresses a tree hierarchy by containing
 other [=shape trees=]. The terms used to express a [=shape tree=] are described 
@@ -222,8 +222,8 @@ A [=shape tree locator=] identifies the [=shape tree=] associated
 with a [=managed resource=], and additional information needed to navigate 
 nested hierarchies of managed resources.
 
-A [=shape tree=] may prescribe that a [=managed resource=] be one of three
-types via `st:expectsType`:
+The <code class="vocab">st:expectsType</code> property specifies that the 
+described [=managed resource=] be one of these three types:
 
 <table class="data" align="left">
   <colgroup></colgroup>
@@ -244,20 +244,22 @@ types via `st:expectsType`:
   </tbody>
 </table>
 
-A [=shape tree=] may prescribe that a [=managed resource=] conforms to a
-given [[ShEx]] or [[SHACL]] shape via `st:shape`.
+The <code class="vocab">st:shape</code> property specifies that the 
+described [=managed resource=] conforms to the stated [[ShEx]] or [[SHACL]] 
+shape.
 
 [=Shape trees=] prescribe physical hierarchies and can reference other
 shape trees to form virtual hierarchies. 
 
 In a physical hierarchy, a [=shape tree=] expresses a [=managed resource=] 
-that explicitly contains another [=managed resource=] via `st:contains`. 
+that explicitly contains another [=managed resource=] via
+<code class="vocab">st:contains</code>. 
 
-If [=shape tree=] `S1` `st:contains` [=shape tree=] `S2`, `S1` describes a 
-[=container=] that contains another [=managed resource=] described by 
-`S2`. For example, in [[LDP]], `S1` describes 
-an [[LDP]] [=container=] which `ldp:contains` nested resources described
-by `S2`.
+If [=shape tree=] `S1` <code class="vocab">st:contains</code> [=shape tree=] 
+`S2`, `S1` describes a [=container=] that contains another [=managed resource=] 
+described by `S2`. For example, in [[LDP]], `S1` describes 
+an [[LDP]] [=container=] which <code class="vocab">ldp:contains</code> nested 
+resources described by `S2`.
 
 <figure id="shapetree-physical">
   <figcaption>Shape tree validation of a physical hierarchy</figcaption>
@@ -354,9 +356,11 @@ by `S2`.
 </figure>
 
 In a virtual hierarchy, a [=shape tree=] defines one or more 
-[=shape tree references=] via `st:references`. A <dfn>shape tree reference</dfn> 
-identifies the [=shape tree=] to be referenced via `st:hasShapeTree`, and 
-the [=shape path=] through which it is linked via `st:traverseViaShapePath`. 
+[=shape tree references=] via <code class="vocab">st:references</code>. 
+A <dfn>shape tree reference</dfn> 
+identifies the [=shape tree=] to be referenced via 
+<code class="vocab">st:hasShapeTree</code>, and the [=shape path=] through 
+which it is linked via <code class="vocab">st:traverseViaShapePath</code>. 
 
 A <dfn>shape path</dfn> is a string that defines a traversal 
 of a [=shape=] schema. [[SHEXPATH]]
@@ -481,8 +485,8 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
     indicates that there is exactly one corresponding [=managed resource=] 
     `R` in `STI` and it has the name `L`.
 * An { `ST` <code class="vocab">st:shape</code> `SH` }
-    [=arc=] indicates that [=managed resource=] `R` <em class="rfc2119">MUST</em>
-    have exactly one node which conforms to [=shape=] `SH`.
+    [=arc=] indicates that [=managed resource=] `R` has
+    exactly one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
     [=arc=] indicates a nested [=shape tree=] `ST2`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
@@ -555,27 +559,64 @@ resides.
 If there is more than one [=shape tree location=], they are all applied to the 
 [=managed resource=] associated with the [=shape tree locator=].
 
-A [=shape tree location=] identifies the [=shape tree=] to be associated with
-the [=managed resource=] via <code class="vocab">st:hasShapeTree</code>.
-
-A [=shape tree location=] identifies the focus node for [=shape=] validation 
-in the associated [=managed resource=] via <code class="vocab">st:node</code>, 
-which is only valid when the corresponding [=shape tree=] includes 
-<code class="vocab">st:shape</code>. [=Shape tree locations=] 
-in a given [=shape tree locator=] may have different
-focus nodes.
-
 [=Shape tree locations=] identify key contextual points in a physical hierarchy:
 
-* A <dfn>shape tree root</dfn> marks the primary, or parent [=shape tree=] in
-    a physical hierarchy, and is set by the [Plant Operation](#plant-shapetree).
+* A <dfn>shape tree root</dfn> marks the primary, or parent [=shape tree=]
+    in a physical hierarchy, and is set by the 
+    [Plant Operation](#plant-shapetree).
+
 * A <dfn>shape tree instance root</dfn> marks the primary, or parent 
     [=shape tree instance=] in a physical hierarchy, and is set by the
     [Plant Operation](#plant-shapetree).
+
+<figure id="shapetree-location-properties">
+  <figcaption>Shape Tree Location properties</figcaption>
+  <table class="data" align="left">
+    <colgroup></colgroup>
+    <colgroup></colgroup>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Description</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="vocab">st:hasShapeTree</code></td>
+        <td>Identifies the [=shape tree=] to be associated with 
+        the [=managed resource=]</td>
+      </tr>
+      <tr>
+        <td><code class="vocab">st:node</code></td>
+        <td>Identifies the focus node for [=shape=] validation 
+        in the associated [=managed resource=], and is only valid when the 
+        corresponding [=shape tree=] includes 
+        <code class="vocab">st:shape</code></td>
+      </tr>    
+      <tr>
+        <td><code class="vocab">st:shape</code></td>
+        <td>Identifies the [=shape=] to which <code class="vocab">st:node</code> 
+        must conform</td>
+      </tr>
+      <tr>
+        <td><code class="vocab">st:hasRootShapeTree</code></td>
+        <td>Identifies the [=shape tree root=]</td>
+      </tr>    
+      <tr>
+        <td><code class="vocab">st:hasShapeTreeInstanceRoot</code></td>
+        <td>Identifies the [=shape tree instance root=]</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
   
 A [=shape tree root=], and its corresponding [=shape tree instance root=] can
 be planted within an existing managed hierarchy, alongside or within other
 [=shape tree roots=] and [=shape tree instance roots=].
+
+[=Shape tree locations=]
+in a given [=shape tree locator=] may have different
+focus nodes.
 
 <figure id="shapetree-navigation">
   <figcaption>Navigating a physical shape tree hierarchy</figcaption>
