@@ -271,7 +271,7 @@
 # Properties in domain of ShapeTreeLocator
 #########################################################
 
-:hasShapeTreeInstanceRoot
+:hasRootShapeTreeInstance
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeLocator ;
   rdfs:comment "Represents the IRI of a root of a planted ShapeTree hierarchy"@en ;

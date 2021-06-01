@@ -29,7 +29,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 <#ShapeTreeLocationShape> {
   st:hasRootShapeTree IRI ;
   st:hasShapeTree IRI ;
-  st:hasShapeTreeInstanceRoot IRI ;
+  st:hasRootShapeTreeInstance IRI ;
   ( st:node IRI ;
     st:shape IRI )?
   |

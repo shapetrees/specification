@@ -604,7 +604,7 @@ If there is more than one [=shape tree location=], they are all applied to the
         <td>Identifies the [=shape tree root=]</td>
       </tr>    
       <tr>
-        <td><code class="vocab">st:hasShapeTreeInstanceRoot</code></td>
+        <td><code class="vocab">st:hasRootShapeTreeInstance</code></td>
         <td>Identifies the [=shape tree instance root=]</td>
       </tr>
     </tbody>
@@ -728,13 +728,13 @@ focus nodes.
     st:location [
       st:hasRootShapeTree ex:DataTree ;
       st:hasShapeTree ex:DataTypeTree ;
-      st:hasShapeTreeInstanceRoot &lt;https://storage.example/data/&gt; ;
+      st:hasRootShapeTreeInstance &lt;https://storage.example/data/&gt; ;
       st:node &lt;https://storage.example/data/projects#collection&gt; ;
       st:shape ex:DataCollectionShape ;
     ], [
       st:hasRootShapeTree ex:ProjectsTree ;
       st:hasShapeTree ex:ProjectsTree ;
-      st:hasShapeTreeInstanceRoot &lt;https://storage.example/data/projects/&gt; ;
+      st:hasRootShapeTreeInstance &lt;https://storage.example/data/projects/&gt; ;
       st:node &lt;https://storage.example/data/projects#collection&gt; ;
       st:shape ex:ProjectCollectionShape ;
     ] .
@@ -756,7 +756,7 @@ focus nodes.
     st:location [
       st:hasRootShapeTree ex:ProjectsTree ;
       st:hasShapeTree ex:TaskTree ;
-      st:hasShapeTreeInstanceRoot &lt;https://storage.example/data/projects/&gt; ;
+      st:hasRootShapeTreeInstance &lt;https://storage.example/data/projects/&gt; ;
       st:node &lt;https://storage.example/data/projects/project-1/milestone-A/task-48#task&gt; ;
       st:shape ex:ProjectCollectionShape ;
     ] .
@@ -827,7 +827,7 @@ in which case only the focus node and shape are provided, via
     &lt;#ShapeTreeLocationShape&gt; {
       st:hasRootShapeTree IRI ;
       st:hasShapeTree IRI ;
-      st:hasShapeTreeInstanceRoot IRI ;
+      st:hasRootShapeTreeInstance IRI ;
       ( st:node IRI ;
         st:shape IRI )?
       |
@@ -949,13 +949,13 @@ status code and composition of HTTP responses.
     st:location [
       st:hasRootShapeTree ex:DataTree ;
       st:hasShapeTree ex:DataTypeTree ;
-      st:hasShapeTreeInstanceRoot &lt;https://storage.example/data/&gt; ;
+      st:hasRootShapeTreeInstance &lt;https://storage.example/data/&gt; ;
       st:node &lt;https://storage.example/data/projects#collection&gt; ;
       st:shape ex:DataCollectionShape ;
     ], [
       st:hasRootShapeTree ex:ProjectsTree ;
       st:hasShapeTree ex:ProjectsTree ;
-      st:hasShapeTreeInstanceRoot &lt;https://storage.example/data/projects/> ;
+      st:hasRootShapeTreeInstance &lt;https://storage.example/data/projects/> ;
       st:node &lt;https://storage.example/data/projects#collection> ;
       st:shape ex:ProjectCollectionShape ;
     ] .
@@ -2115,7 +2115,7 @@ The below algorithms detail key pieces of logic required for
 		  st:location [
 		    st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
 		    st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
-		    st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; ;
+		    st:hasRootShapeTreeInstance &lt;/data/CommonNotes/&gt; ;
 		    st:node &lt;/data/CommonNotes/Note1#doc&gt; ;
 		    st:shape &lt;http://commonnote.example/schema#NotesContainer&gt; ;
 		  ]
@@ -2174,7 +2174,7 @@ The below algorithms detail key pieces of logic required for
     		</tr>
     		<tr>
     			<td>&lt;#<b><i>generated UUID</i></b>&gt;</td>
-    			<td><code class="vocab">st:hasShapeTreeInstanceRoot</code></td>
+    			<td><code class="vocab">st:hasRootShapeTreeInstance</code></td>
     			<td><b><i>ROOTPATH</i></b></td>
     			<td>
             Describes the URI to the root container of this shape tree
@@ -2188,7 +2188,7 @@ The below algorithms detail key pieces of logic required for
     			<td>
             Identifies the <code class="vocab">st:node</code> and <code class="vocab">st:shape</code> for validation as well as the 
             corresponding node in the ShapeTree (<code class="vocab">st:hasShapeTree</code>),
-            ShapeTree root in the resource hierarchy (<code class="vocab">st:hasShapeTreeInstanceRoot</code>) and
+            ShapeTree root in the resource hierarchy (<code class="vocab">st:hasRootShapeTreeInstance</code>) and
             root node in the ShapeTree (<code class="vocab">st:hasRootShapeTree</code>).
           </td>
     		</tr>
@@ -2287,7 +2287,7 @@ The below algorithms detail key pieces of logic required for
 		  st:location [
 		    st:hasRootShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
 		    st:hasShapeTree &lt;http://commonnote.example/commonnote#container-tree&gt; ;
-		    st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; ;
+		    st:hasRootShapeTreeInstance &lt;/data/CommonNotes/&gt; ;
 		    st:node &lt;/data/CommonNotes/Note1#doc&gt; ;
 		    st:shape &lt;http://commonnote.example/schema#NotesContainer&gt; ;
 		  ]
