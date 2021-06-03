@@ -235,7 +235,8 @@ described [=managed resource=] be one of these three types:
     </tr>
     <tr>
       <td><code class="vocab">st:ShapeTreeContainer</code></td>
-      <td>RDF resource that contains other resources</td>
+      <td>RDF resource that uses server-managed metadata to
+      enumerate nested resources</td>
     </tr>
     <tr>
       <td><code class="vocab">st:ShapeTreeNonRDFResource</code></td>
