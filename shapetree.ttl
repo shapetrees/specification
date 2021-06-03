@@ -50,12 +50,12 @@
   rdfs:comment "Links a ShapeTree to a ShapeTreeReference"@en ;
   rdfs:label "References"@en .
 
-:validatedBy
+:shape
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:comment "Links a ShapeTree to a Shape"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Validated By"@en .
+  rdfs:label "Shape"@en .
 
 :supports
   a owl:ObjectProperty ;

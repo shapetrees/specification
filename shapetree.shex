@@ -1,0 +1,38 @@
+PREFIX st: <http://www.w3.org/ns/st#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+<#ShapeTree> {
+  a st:ShapeTree ;
+  (
+    st:expectsType [st:ShapeTreeContainer] ;
+    st:contains @<#ShapeTree> +
+    |
+    st:expectsType [st:ShapeTreeResource, st:ShapeTreeNonRDFResource]
+  ) ;
+  rdfs:label xsd:string ? ;
+  st:references @<#ReferencedShapeTree> * ;
+  st:shape IRI ? ;
+  st:contains IRI ? ;
+  st:supports IRI ? ;
+}
+
+<#ReferencedShapeTree> {
+  st:hasShapeTree IRI ;
+  st:traverseViaShapePath xsd:string
+}
+
+<#ShapeTreeLocatorShape> {
+  a [st:ShapeTreeLocator] ;
+  st:location @<#ShapeTreeLocationShape>+
+}
+
+<#ShapeTreeLocationShape> {
+  st:hasRootShapeTree IRI ;
+  st:hasShapeTree IRI ;
+  st:hasShapeTreeInstanceRoot IRI ;
+  ( st:node IRI ;
+    st:shape IRI )?
+  |
+  st:node IRI ;
+  st:shape IRI
+}
