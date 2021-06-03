@@ -31,6 +31,10 @@ Abstract:
     text-align: left;
   }
 
+  pre {
+    font-size: 12px;
+  }
+
   a[href*=".ttl"] {
     color: #339966;
     border-bottom: 1px solid #339966;
@@ -48,6 +52,19 @@ Abstract:
 
   a[data-link-type=dfn] {
     color: #000000;
+  }
+
+  table.tree thead tr {
+    font-size: 14px;
+  }
+  
+  table.tree tbody tr:nth-child(even) {
+    background-color: lightgray;
+    font-size: 14px;
+  }
+  
+  table.tree tbody td {
+    font-size: 12px;
   }
 
   table.operation {
@@ -151,7 +168,7 @@ Introduction {#introduction}
 
 Realizing the value proposition of the Semantic Web lies in building useful and
 robust applications that can interoperate over linked data. Protocols such as
-[[LDP]] and Solid organize linked data graphs into resource hierarchies,
+[[LDP]] and [[Solid]] organize linked data graphs into resource hierarchies,
 providing a foundation upon which these robust and interoperable applications
 can be created.
 
@@ -178,56 +195,317 @@ data validation, and data migration.
 
 [=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a [server](#server-side-agent), or a [=client-side agent=] that pre-processes requests
-to a server.
+implemented by a [=server-side agent=], or a [=client-side agent=] 
+that pre-processes requests to a server. In the most typical use case, 
+a [=server-side agent=] enforces the expected behaviors
+on data as it is manipulated by a [=client-side agent=].
 
 While [=shape trees=] are intended to adapt to different technology platforms
 that support the notion of [=containers=] and [=resources=], examples in this
 specification will reflect usage in an [[LDP]] environment.
 
-Structure {#structure}
+Shape Tree {#tree}
 =====================
 
-A <dfn>shape tree</dfn> is a machine-readable template describing the expected
-layout of a tree of resources in a [=container=]-based [=ecosystem=].
+A <dfn>shape tree</dfn> is a machine-readable template describing the 
+expected layout of a tree of resources in a [=container=]-based [=ecosystem=].
+A [=shape tree=] expresses a tree hierarchy by containing
+other [=shape trees=]. The terms used to express a [=shape tree=] are described 
+using an [[RDF]] [vocabulary](shapetree.ttl).
 
-The terms used to express a [=shape tree=] are described using an [=RDF=]
-[vocabulary](shapetree.ttl).
+A <dfn>shape tree instance</dfn> is a resource or set of resources assigned to 
+and in conformance with a given [=shape tree=]. A resource in a
+[=shape tree instance=] is called a <dfn>managed resource</dfn>.
 
-The realization of a [=shape tree=] is a <dfn>planted shape tree</dfn>.
-The upper-most Container of that tree is the <dfn>instance root</dfn>.
+Every [=managed resource=] has an associated [=shape tree locator=].
+A [=shape tree locator=] identifies the [=shape tree=] associated
+with a [=managed resource=], and additional information needed to navigate 
+nested hierarchies of managed resources.
 
-Let <code>ST</code> be a [=shape tree=];
+The <code class="vocab">st:expectsType</code> property specifies that the 
+described [=managed resource=] be one of these three types:
 
-Let <code>T</code> be a corresponding instance tree.
+<table class="data" align="left">
+  <colgroup></colgroup>
+  <colgroup></colgroup>
+  <tbody>
+    <tr>
+      <td><code class="vocab">st:ShapeTreeResource</code></td>
+      <td>Regular RDF resource that is not a container</td>
+    </tr>
+    <tr>
+      <td><code class="vocab">st:ShapeTreeContainer</code></td>
+      <td>RDF resource that contains other resources</td>
+    </tr>
+    <tr>
+      <td><code class="vocab">st:ShapeTreeNonRDFResource</code></td>
+      <td>Non-RDF resource such as binaries or images</td>
+    </tr>
+  </tbody>
+</table>
 
-For any [=shape tree=] <code>S</code> linked in <code>ST</code>:
+The <code class="vocab">st:shape</code> property specifies that the 
+described [=managed resource=] conforms to the stated [[ShEx]] or [[SHACL]] 
+shape.
 
-* The <code class="vocab">st:expectsType</code> [=arc=] identifies the type of a
-    corresponding resource <code>R</code> in <code>T</code> where validate
-    values <em class="rfc2119">MUST</em> be one of
+[=Shape trees=] prescribe physical hierarchies and can reference other
+shape trees to form virtual hierarchies. 
+
+In a physical hierarchy, a [=shape tree=] expresses a [=managed resource=] 
+that explicitly contains another [=managed resource=] via
+<code class="vocab">st:contains</code>. 
+
+If [=shape tree=] `S1` <code class="vocab">st:contains</code> [=shape tree=] 
+`S2`, `S1` describes a [=container=] that contains another [=managed resource=] 
+described by `S2`. For example, in [[LDP]], `S1` describes 
+an [[LDP]] [=container=] which <code class="vocab">ldp:contains</code> nested 
+resources described by `S2`.
+
+<figure id="shapetree-physical">
+  <figcaption>Shape tree validation of a physical hierarchy</figcaption>
+  <table class="data tree" align="left">
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Associated Shape Tree</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/project-1/`</td>
+        <td>`ex:ProjectTree`</td>
+      </tr>
+      <tr>
+        <td>`-- /milestone-A/`</td>
+        <td>`ex:MilestoneTree`</td>
+      </tr>
+      <tr>
+        <td>`---- /task-43/`</td>
+        <td>`ex:TaskTree`</td>
+      </tr>
+      <tr>
+        <td>`---- /task-48/`</td>
+        <td>`ex:TaskTree`</td>
+      </tr>
+      <tr>
+        <td>`------ /attachment-aa89`</td>
+        <td>`ex:AttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`---- /task-61/`</td>
+        <td>`ex:TaskTree`</td>
+      </tr>
+      <tr>
+        <td>`---- /issue-22/`</td>
+        <td>`ex:IssueTree`</td>
+      </tr>
+      <tr>
+        <td>`------ /attachment-cd12`</td>
+        <td>`ex:AttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`------ /attachment-ef55`</td>
+        <td>`ex:AttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`---- /issue-31/`</td>
+        <td>`ex:IssueTree`</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <pre highlight="turtle">
+    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+
+    <#ProjectTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeContainer ;
+      st:shape ex:ProjectShape ;
+      st:contains <#MilestoneTree> ,
+                  st:AllowNone .
+
+    <#MilestoneTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeContainer ;
+      st:shape ex:MilestoneShape ;
+      st:contains <#TaskTree>, <#IssueTree> ; 
+      st:AllowNone .
+
+    <#TaskTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeContainer ;
+      st:shape ex:TaskShape ;
+      st:contains <#AttachmentTree> ,
+      st:AllowNone .
+
+    <#IssueTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeContainer ;
+      st:shape ex:IssueShape ;
+      st:contains <#AttachmentTree> ,
+      st:AllowNone .
+
+    <#AttachmentTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeNonRDFResource .
+  </pre>
+
+</figure>
+
+In a virtual hierarchy, a [=shape tree=] defines one or more 
+[=shape tree references=] via <code class="vocab">st:references</code>. 
+A <dfn>shape tree reference</dfn> 
+identifies the [=shape tree=] to be referenced via 
+<code class="vocab">st:hasShapeTree</code>, and the [=shape path=] through 
+which it is linked via <code class="vocab">st:traverseViaShapePath</code>. 
+
+A <dfn>shape path</dfn> is a string that defines a traversal 
+of a [=shape=] schema. [[SHEXPATH]]
+
+<figure id="shapetree-virtual">
+  <figcaption>Shape tree validation of a virtual hierarchy</figcaption>
+  <table class="data tree" align="left">
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Associated Shape Tree</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/project-1`</td>
+        <td>`ex:VirtualProjectTree`</td>
+      </tr>
+      <tr>
+        <td>`/milestone-A`</td>
+        <td>`ex:VirtualMilestoneTree`</td>
+      </tr>
+      <tr>
+        <td>`/task-43`</td>
+        <td>`ex:VirtualTaskTree`</td>
+      </tr>
+      <tr>
+        <td>`/task-48`</td>
+        <td>`ex:VirtualTaskTree`</td>
+      </tr>
+      <tr>
+        <td>`/attachment-aa89`</td>
+        <td>`ex:VirtualAttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`/task-61`</td>
+        <td>`ex:VirtualTaskTree`</td>
+      </tr>
+      <tr>
+        <td>`/issue-22`</td>
+        <td>`ex:VirtualIssueTree`</td>
+      </tr>
+      <tr>
+        <td>`/attachment-cd12`</td>
+        <td>`ex:VirtualAttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`/attachment-ef55`</td>
+        <td>`ex:VirtualAttachmentTree`</td>
+      </tr>
+      <tr>
+        <td>`/issue-31`</td>
+        <td>`ex:VirtualIssueTree`</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pre highlight="turtle">
+    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+
+    <#VirtualProjectTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeResource ;
+      st:shape ex:ProjectShape ;
+      st:references [
+        st:hasShapeTree <#VirtualMilestoneTree> ;
+        st:traverseViaShapePath "@ex:ProjectShape/ex:hasMilestone"
+      ] .
+
+    <#VirtualMilestoneTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeResource ;
+      st:shape ex:MilestoneShape ;
+      st:references [
+        st:hasShapeTree <#VirtualTaskTree> ;
+        st:traverseViaShapePath "@ex:MilestoneShape/ex:hasTask"
+      ] ,
+      [
+        st:hasShapeTree <#VirtualIssueTree> ;
+        st:traverseViaShapePath "@ex:IssueShape/ex:hasIssue"
+      ] .
+
+    <#VirtualTaskTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeResource ;
+      st:shape ex:TaskShape ;
+      st:references [
+        st:hasShapeTree <#VirtualAttachmentTree> ;
+        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+      ] .
+
+    <#VirtualIssueTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeTreeContainer ;
+      st:shape ex:IssueShape ;
+      st:references [
+        st:hasShapeTree <#VirtualAttachmentTree> ;
+        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+      ] .
+
+    <#VirtualAttachmentTree>
+      a st:ShapeTree ;
+      st:expectsType st:ShapeNonRDFResource .
+  </pre>
+
+</figure>
+
+Let <code>ST</code> be a [=shape tree=]. 
+Let <code>STI</code> be a corresponding [=shape tree instance=].
+
+* An { `ST` <code class="vocab">st:expectsType</code> `T` } [=arc=] identifies 
+    the resource type `T` of a  corresponding [=managed resource=] 
+    <code>R</code> in <code>STI</code> 
+    where `T` <em class="rfc2119">MUST</em> be one of
     <code class="vocab">st:ShapeTreeResource</code>,
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
-* An { <code>S</code> <code class="vocab">rdfs:label</code> <code>L</code> } [=arc=]
-    indicates that there is exactly one corresponding resource <code>R</code>
-    and it has the name <code>L</code>.
-* An { <code>S</code> <code class="vocab">st:validatedBy</code> <code>Sh</code> }
-    [=arc=] indicates that <code>R</code> <em class="rfc2119">MUST</em>
-    have exactly one node which conforms to [=shape=] <code>Sh</code>.
-* Any { <code>S</code> <code class="vocab">st:contains</code> <code>S2</code> }
-    [=arcs=] indicate there is a nested [=shape tree=] and corresponding nested
-    resource <code>R2</code>.
-* An { <code>S</code> <code class="vocab">st:references</code> <code>S3</code> }
-    [=arc=] indicates that [=shape tree=] <code>S3</code> is referenced through the
-    instance data for <code>S</code>.
-* An { <code>S</code> <code class="vocab">st:supports</code> <code>S4</code> }
-    [=arc=] indicates that <code>S</code> provides a different representation of
-    <code>S4</code> for aggregation purposes.
+* An { `ST` <code class="vocab">rdfs:label</code> `L` } [=arc=]
+    indicates that there is exactly one corresponding [=managed resource=] 
+    `R` in `STI` and it has the name `L`.
+* An { `ST` <code class="vocab">st:shape</code> `SH` }
+    [=arc=] indicates that [=managed resource=] `R` has
+    exactly one node which conforms to [=shape=] `SH`.
+* An { `ST` <code class="vocab">st:contains</code> `ST2` }
+    [=arc=] indicates a nested [=shape tree=] `ST2`.
+* An { `ST` <code class="vocab">st:references</code> `STR` }
+    [=arc=] indicates that the [=shape tree=] identified in 
+    [=shape tree reference=] `STR`, is referenced through the
+    instance data of `STI`.
+    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=arc=]
+        indicates a [=shape tree=] referenced through the instance data of `STI`
+    * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
+        [=arc=] identifies the [=shape path=] through which a 
+        [=shape tree instance=] of `ST3` can be found via the instance data of
+        `STI`
+* An { `ST` <code class="vocab">st:supports</code> `ST4` }
+    [=arc=] indicates that `ST` provides supporting or supplementary
+    context to `ST4`.
 
-A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
-    [=arc=] indicates the location of an index of [SKOS hierarchies](#skos-graph) that describe
-    <code>ST</code>.
+A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
+    [=arc=] indicates the location of an index of [SKOS hierarchies](#skos-graph) 
+    that describes `ST`.
 
 ## Shape Tree Schema ## {#st-schema}
 
@@ -242,10 +520,12 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 	  (
 	    st:expectsType [st:ShapeTreeContainer] ;
 	    st:contains @&lt;#ShapeTree&gt; +
+      |
+      st:expectsType [st:ShapeTreeResource, st:ShapeTreeNonRDFResource]
 	  ) ;
     rdfs:label xsd:string ? ;
 	  st:references @&lt;#ReferencedShapeTree&gt; * ;
-	  st:validatedBy IRI ? ;
+	  st:shape IRI ? ;
     st:contains IRI ? ;
     st:supports IRI ? ;
 	}
@@ -257,6 +537,279 @@ A { <code class="vocab">st:hasShapeTreeDecoratorIndex</code> <code>Si</code> }
 	</pre>
 </figure>
 
+Shape Tree Locator {#locator}
+=====================
+
+A <dfn>shape tree locator</dfn> associates a [=managed resource=] with 
+one or more [=shape trees=]. No more than one [=shape tree locator=] may be
+associated with a [=managed resource=]. 
+
+For example, in [[Solid]] a [=shape tree locator=] would be stored in an
+[auxiliary resource](https://solidproject.org/TR/protocol#auxiliary-resources) 
+associated with a given [=managed resource=].
+
+A [=shape tree locator=] includes one or more [=shape tree locations=] via
+<code class="vocab">st:location</code>. Each <dfn>shape tree location</dfn> 
+identifies a [=shape tree=] 
+associated with the [=managed resource=], the focus node for [=shape=] 
+validation, and the information 
+needed to navigate the physical hierarchy in which that [=managed resource=]
+resides.
+
+If there is more than one [=shape tree location=], they are all applied to the 
+[=managed resource=] associated with the [=shape tree locator=].
+
+[=Shape tree locations=] identify key contextual points in a physical hierarchy:
+
+* A <dfn>shape tree root</dfn> marks the primary, or parent [=shape tree=]
+    in a physical hierarchy, and is set by the 
+    [Plant Operation](#plant-shapetree).
+
+* A <dfn>shape tree instance root</dfn> marks the primary, or parent 
+    [=shape tree instance=] in a physical hierarchy, and is set by the
+    [Plant Operation](#plant-shapetree).
+
+<figure id="shapetree-location-properties">
+  <figcaption>Shape Tree Location properties</figcaption>
+  <table class="data" align="left">
+    <colgroup></colgroup>
+    <colgroup></colgroup>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Description</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code class="vocab">st:hasShapeTree</code></td>
+        <td>Identifies the [=shape tree=] to be associated with 
+        the [=managed resource=]</td>
+      </tr>
+      <tr>
+        <td><code class="vocab">st:node</code></td>
+        <td>Identifies the focus node for [=shape=] validation 
+        in the associated [=managed resource=], and is only valid when the 
+        corresponding [=shape tree=] includes 
+        <code class="vocab">st:shape</code></td>
+      </tr>    
+      <tr>
+        <td><code class="vocab">st:shape</code></td>
+        <td>Identifies the [=shape=] to which <code class="vocab">st:node</code> 
+        must conform</td>
+      </tr>
+      <tr>
+        <td><code class="vocab">st:hasRootShapeTree</code></td>
+        <td>Identifies the [=shape tree root=]</td>
+      </tr>    
+      <tr>
+        <td><code class="vocab">st:hasShapeTreeInstanceRoot</code></td>
+        <td>Identifies the [=shape tree instance root=]</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+  
+A [=shape tree root=], and its corresponding [=shape tree instance root=] can
+be planted within an existing managed hierarchy, alongside or within other
+[=shape tree roots=] and [=shape tree instance roots=].
+
+[=Shape tree locations=]
+in a given [=shape tree locator=] may have different
+focus nodes.
+
+<figure id="shapetree-navigation">
+  <figcaption>Navigating a physical shape tree hierarchy</figcaption>
+  <table class="data tree" align="left">
+    <colgroup>
+    <colgroup>
+    <col>
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Shape Tree</th>
+        <th>Shape Tree Root</th>
+        <th>Shape Tree Instance Root</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/data/`</td>
+        <td>`ex:DataTree`</td>
+        <td>`ex:DataTree`</td>
+        <td>`/data/`</td>
+      </tr>
+      <tr>
+        <td>`-- /projects/`</td>
+        <td>`ex:DataCollectionTree`<br/>
+            `ex:ProjectsTree`</td>
+        <td>`ex:DataTree`<br/>
+            `ex:ProjectsTree`</td>
+        <td>`/data/`<br/>
+            `/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---- /project-1/`</td>
+        <td>`ex:ProjectTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`------ /milestone-A/`</td>
+        <td>`ex:MilestoneTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-43/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-48/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-aa89`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /task-61/`</td>
+        <td>`ex:TaskTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /issue-22/`</td>
+        <td>`ex:IssueTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-cd12`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`---------- /attachment-ef55`</td>
+        <td>`ex:AttachmentTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+      <tr>
+        <td>`-------- /issue-31/`</td>
+        <td>`ex:IssueTree`</td>
+        <td>`ex:ProjectsTree`</td>
+        <td>`/data/projects/`</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<figure id="locator-multiple-locations">
+  <figcaption>[=Shape Tree Locator=] for /data/projects with multiple 
+    [=shape tree locations=] in a nested physical hierarchy</figcaption>
+  <pre highlight="turtle">
+  PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+  PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+  PREFIX data: &lt;https://storage.example.com/data/&gt;
+
+  &lt;#locator&gt;
+    a st:ShapeTreeLocator ;
+    st:location [
+      st:hasRootShapeTree ex:DataTree ;
+      st:hasShapeTree ex:DataTypeTree ;
+      st:hasShapeTreeInstanceRoot data: ;
+      st:node data:projects#collection ;
+      st:shape ex:DataCollectionShape ;
+    ], [
+      st:hasRootShapeTree ex:ProjectsTree ;
+      st:hasShapeTree ex:ProjectsTree ;
+      st:hasShapeTreeInstanceRoot data:projects ;
+      st:node data:projects#collection ;
+      st:shape ex:ProjectCollectionShape ;
+    ] .
+  </pre>
+
+</figure>
+
+<figure id="locator-multiple-locations">
+  <figcaption>[=Shape Tree Locator=] for 
+    /data/projects/project-1/milestone-A/task-48 with a single 
+    [=shape tree location=] in a nested physical hierarchy</figcaption>
+  <pre highlight="turtle">
+  PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+  PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+  PREFIX data: &lt;https://storage.example.com/data/&gt;
+  PREFIX task-48: &lt;https://storage.example.com/data/projects/project-1/milestone-A/task-48&gt;
+
+  &lt;#locator&gt;
+    a st:ShapeTreeLocator ;
+    st:location [
+      st:hasRootShapeTree ex:ProjectsTree ;
+      st:hasShapeTree ex:TaskTree ;
+      st:hasShapeTreeInstanceRoot data:projects ;
+      st:node task-48#task ;
+      st:shape ex:TaskShape ;
+    ] .
+  </pre>
+
+</figure>
+
+A [=shape tree location=] may be used to provide shape validation only,
+in which case only the focus node and shape are provided, via 
+<code class="vocab">st:node</code> and 
+<code class="vocab">st:shape</code>, respectively. 
+
+<figure id="shapetree-navigation">
+  <figcaption>A [=shape tree locator=] providing only 
+  shape validation</figcaption>
+  <table class="data tree" align="left">
+    <colgroup>
+    <colgroup>
+    <col>
+    <col>
+    <col>
+    <thead>
+      <tr>
+        <th>Managed Resource</th>
+        <th>Shape</th>
+        <th>Focus Node</th> 
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`/data/projects/project-1`</td>
+        <td>`ex:ProjectShape`</td>
+        <td>`/data/projects/project-1#project`</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<pre highlight="turtle">
+PREFIX st: &lthttp://www.w3.org/ns/st#&gt; 
+PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
+PREFIX project1: &lt;https://storage.example.com/data/projects/project-1#&gt;
+
+&lt;#locator&gt;
+  a st:ShapeTreeLocator ;
+  st:location [
+    st:node project1:project ;
+    st:shape ex:ProjectShape ;
+] .
+
+</pre>
+
+
 ## Shape Tree Locator Schema ## {#st-locator-schema}
 
 <figure id="shapetree-shex">
@@ -267,61 +820,22 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
 &lt;#ShapeTreeLocatorShape&gt; {
   a [st:ShapeTreeLocator] ;
-  st:location {
-    st:hasRootShapeTree IRI ;
-    st:hasShapeTree IRI ;
-    st:hasShapeTreeInstanceRoot IRI ;
-    st:node IRI ;
-    st:shape IRI ;
-  }+
-}	</pre>
+  st:location @&lt;#ShapeTreeLocationShape&gt;+
+}	
+
+&lt;#ShapeTreeLocationShape&gt; {
+  st:hasRootShapeTree IRI ;
+  st:hasShapeTree IRI ;
+  st:hasShapeTreeInstanceRoot IRI ;
+  ( st:node IRI ;
+    st:shape IRI )?
+  |
+  st:node IRI ;
+  st:shape IRI
+}
+
+</pre>
 </figure>
-
-The cardinality of <code class="vocab">st:location</code> is <code>+</code> (i.e. one or more).
-If there are more than one location, all apply to the document or Container described by the <code class="vocab">ShapeTreeLocator</code>.
-
-In the following example, the Shape Tree Locator (<code>&lt;#loc&gt;</code>) has two instances of <code class="vocab">st:location</code>:
-
-   	<figure id="fig-discover-head-response-managed">
-  <figcaption>Example ShapeTreeLocator with Multiple Locations</figcaption>
-    		<pre highlight="turtle">
-PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
-
-&lt;#loc&gt;
-  a st:ShapeTreeLocator ;
-  st:location [
-    st:hasRootShapeTree &lt;http://commonnote.example/commonnote#NotesContainer&gt; ;
-    st:hasShapeTree &lt;http://commonnote.example/commonnote#Note&gt; ;
-    st:hasShapeTreeInstanceRoot &lt;/data/CommonNotes/&gt; ;
-    st:node &lt;/data/CommonNotes/Note1#node2&gt; ;
-    st:shape &lt;http://commonnote.example/schema#NotesContainer&gt; ;
-  ], [
-    st:hasRootShapeTree &lt;http://mysite.example/shapeTrees/management#UserData&gt; ;
-    st:hasShapeTree &lt;http://mysite.example/shapeTrees/management#Container&gt; ;
-    st:hasShapeTreeInstanceRoot &lt;/data/&gt; ;
-    st:node &lt;/data/CommonNotes/Note1#node3&gt; ; # Not necessarily the same node.
-    st:shape &lt;http://mysite.example/shapes#MyContainerShape&gt; ;
-  ]
-.
-    		</pre>
-                [[try it](http://shex.io/webapps/shex.js/doc/shex-simple?schema=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3C%23ShapeTreeLocatorShape%3E%20%7B%0A%20%20a%20%5Bst%3AShapeTreeLocator%5D%20%3B%0A%20%20st%3Alocation%20%7B%0A%20%20%20%20st%3AhasRootShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTree%20IRI%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20IRI%20%3B%0A%20%20%20%20st%3Anode%20IRI%20%3B%0A%20%20%20%20st%3Ashape%20IRI%20%3B%0A%20%20%7D%2B%0A%7D&amp;data=PREFIX%20st%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2Fns%2Fst%23%3E%0A%0A%3C%23loc%3E%0A%20%20a%20st%3AShapeTreeLocator%20%3B%0A%20%20st%3Alocation%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23NotesContainer%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fcommonnote.example%2Fcommonnote%23Note%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2FCommonNotes%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node2%3E%20%3B%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fcommonnote.example%2Fschema%23NotesContainer%3E%20%3B%0A%20%20%5D%2C%20%5B%0A%20%20%20%20st%3AhasRootShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23UserData%3E%20%3B%0A%20%20%20%20st%3AhasShapeTree%20%3Chttp%3A%2F%2Fmysite.example%2FshapeTrees%2Fmanagement%23Container%3E%20%3B%0A%20%20%20%20st%3AhasShapeTreeInstanceRoot%20%3C%2Fdata%2F%3E%20%3B%0A%20%20%20%20st%3Anode%20%3C%2Fdata%2FCommonNotes%2FNote1%23node3%3E%20%3B%20%23%20Not%20necessarily%20the%20same%20node.%0A%20%20%20%20st%3Ashape%20%3Chttp%3A%2F%2Fmysite.example%2Fshapes%23MyContainerShape%3E%20%3B%0A%20%20%5D%0A.%0A&amp;shape-map=%3C%23loc%3E%40%3C%23ShapeTreeLocatorShape%3E&amp;interface=human&amp;success=proof&amp;regexpEngine=eval-threaded-nerr&amp;manifestURL=)]
-    	</figure>
-
-These assert that, in the described document:
-<ul>
-  <li>(described by the upper <code class="vocab">st:location</code>)<ul>
-    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node2&gt;</code> conforms to the shape <code>&lt;http://commonnote.example/schema#NotesContainer&gt;</code></li>
-    <li>The Container <code>&lt;/data/CommonNotes/&gt;</code> is the root of this Managed Hierarchy and conforms to the shape tree <code>&lt;http://commonnote.example/commonnote#NotesContainer&gt;</code></li>
-  </ul>
-  <li>(described by the lower <code class="vocab">st:location</code>)<ul>
-    <li>The RDF node <code>&lt;/data/CommonNotes/Note1#node3&gt;</code> conforms to the shape <code>&lt;http://mysite.example/shapeTrees/management#Container&gt;</code></li>
-    <li>The Container <code>&lt;/data/&gt;</code> is the root of this Managed Hierarchy and conforms to the shape tree <code>&lt;http://mysite.example/shapeTrees/management#UserData&gt;</code></li>
-  </ul>
-</ul>
-
-In this example, the two locations describe two different nodes in <code>&lt;Note1&gt;</code>, <code>&lt;node2&gt;</code> and <code>&lt;node3&gt;</code>.
-These nodes are validated according to the data in the described document (probably, but not necessarily, <code>&lt;Note1&gt;</code>).
-If a described node does not appear in the described document, it can't satisfy any Triple Constraints.
 
 Shape Tree Operations {#operations}
 =====================
@@ -333,9 +847,9 @@ processing logic.
 The key operations used to manage [=shape trees=] are:
 * [Discover Shape Tree](#discover)
 * [Plant Shape Tree](#plant-shapetree)
-* [Create Data Instance](#create-data-instance)
-* [Update Data Instance](#update-data-instance)
-* [Delete Data Instance](#delete-data-instance)
+* [Create Shape Tree Instance](#create-shape-tree-instance)
+* [Update Shape Tree Instance](#update-shape-tree-instance)
+* [Delete Shape Tree Instance](#delete-shape-tree-instance)
 * [Unplant Shape Tree](#unplant-shapetree)
 
 These operations make use of reusable, internal algorithms defined in
@@ -567,7 +1081,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
         are met:
     	* any shape tree has a <code class="vocab">st:expectsResourceType</code>
             with a value other than <code class="vocab">st:ShapeTreeContainer</code>
-    	* more than one shape tree has a <code class="vocab">st:validatedBy</code> value
+    	* more than one shape tree has a <code class="vocab">st:shape</code> value
     	* more than one shape tree has a <code class="vocab">st:contains</code> value
 
     If any of the above static validations fail, this operation
@@ -582,13 +1096,13 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
 
     1. Let <code>VST</code> be the validating shape tree that is identified by the
         only [=shape tree=] in <code>ALLST</code> having a
-        <code class="vocab">st:validatedBy</code> value
+        <code class="vocab">st:shape</code> value
     1. If <code>VST</code> is present and the plant operation (<code>REQ</code>)
         includes an RDF graph body and ShEx validation is used and a [=Focus Node=]
         (<code>LINKFN</code>) is not present, this operation
         <em class="rfc2119">MUST</em> return a 422 status code
     1. Perform a validation of the RDF graph body of <code>REQ</code> using the
-        <code>VST</code> <code class="vocab">st:validatedBy</code> shape,
+        <code>VST</code> <code class="vocab">st:shape</code> shape,
         targeting the graph's <code>LINKFN</code>.  If validation fails, this
         operation <em class="rfc2119">MUST</em> return a 422 status code
 
@@ -766,7 +1280,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
           </tr>
       </table>
 
-## Create Data Instance ## {#create-data-instance}
+## Create Shape Tree Instance ## {#create-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -777,7 +1291,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>create data instance</b> operation creates an instance of a shape
+        The <b>create shape tree instance</b> operation creates an instance of a shape
         tree within a managed container.
       </td>
   </tbody>
@@ -925,7 +1439,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
           </tr>
       </table>
 
-## Update Data Instance ## {#update-data-instance}
+## Update Shape Tree Instance ## {#update-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -936,7 +1450,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>update data instance</b> operation updates an instance of a
+        The <b>update shape tree instance</b> operation updates an instance of a
         [=shape tree=] within a managed container.      
       </td>
   </tbody>
@@ -1030,7 +1544,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
     Note: This step <em class="rfc2119">MAY</em> be performed by either a client
         or server side agent.
 
-## Delete Data Instance ## {#delete-data-instance}
+## Delete Shape Tree Instance ## {#delete-shape-tree-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1041,7 +1555,7 @@ PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   <tbody>
     <tr>
       <td colspan=2>
-        The <b>delete data instance</b> operation deletes an instance of a
+        The <b>delete shape tree instance</b> operation deletes an instance of a
         [=shape tree=] within a managed container.
       </td>
   </tbody>
@@ -1255,13 +1769,13 @@ The below algorithms detail key pieces of logic required for
 1. If <code>RT</code> does not match <code>MCST</code>'s
     <code class="vocab">st:expectsType</code> value, this operation
     <em class="rfc2119">MUST</em> return a 422 status code
-1. If <code>MCST</code> has a <code class="vocab">st:validatedBy</code> value,
+1. If <code>MCST</code> has a <code class="vocab">st:shape</code> value,
     and the plant operation (<code>REQ</code>) includes an RDF graph body and
     ShEx validation is used and a [=Focus Node=] (<code>LINKFN</code>) is not
     present, this operation <em class="rfc2119">MUST</em> return a
     422 status code
 1. Perform a validation of the RDF graph body of <code>REQ</code> using the
-    <code>mcst</code> <code class="vocab">st:validatedBy</code> shape,
+    <code>mcst</code> <code class="vocab">st:shape</code> shape,
     targeting the graph's <code>LINKFN</code>.  If validation fails,
     this operation <em class="rfc2119">MUST</em> return a 422 status code
 
@@ -1933,6 +2447,35 @@ The following terms are used throughout this specification:
 
   <pre class="biblio">
   {
+    "ldp": {
+      "href": "https://www.w3.org/TR/ldp/",
+      "title": "Linked Data Platform 1.0",
+      "authors": [
+        "Steve Speicher",
+        "John Arwe",
+        "Ashok Malhotra"
+      ]
+    },
+    "solid": {
+          "href": "https://solidproject.org/TR/protocol",
+          "title": "Solid Protocol",
+          "authors": [
+            "Sarven Capasdisli",
+            "Tim Berners-Lee",
+            "Kjetil Kjernsmo",
+            "Justin Bingham",
+            "Ruben Verborgh",
+            "Dmitri Zagidulin"]
+    },
+    "rdf": {
+          "href": "https://www.w3.org/TR/rdf11-concepts",
+          "title": "RDF 1.1 Concepts and Abstract Syntax",
+          "authors": [
+            "Richard Cyganiak",
+            "David Wood",
+            "Markus Lanthaler"
+          ]
+        },
     "shex": {
       "href": "http://shex.io/shex-semantics/index.html",
       "title": "Shape Expressions Language 2.1",
