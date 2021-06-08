@@ -42,6 +42,14 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Contains"@en .
 
+:option
+  a owl:ObjectProperty ;
+  rdfs:domain :ShapeTree ;
+  rdfs:range :ShapeTree  ;
+  rdfs:comment "Provides an optional attribute to influence evaluation of contained shape trees"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Option"@en .
+
 :references
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
@@ -96,11 +104,11 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow All"@en .
 
-:AllowNone
+:AllowOnly
   a :ShapeTree ;
   rdfs:comment "If no matching :contains ShapeTree is found, do not allow any content"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Allow None"@en .
+  rdfs:label "Allow Only"@en .
 
 # ShapeTreeContainer IRI (maps to ldp:Container)
 #############################################################################

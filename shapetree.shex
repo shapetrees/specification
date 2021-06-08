@@ -1,13 +1,16 @@
 PREFIX st: <http://www.w3.org/ns/st#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <#ShapeTree> {
   a st:ShapeTree ;
   (
     st:expectsType [st:ShapeTreeContainer] ;
-    st:contains @<#ShapeTree> +
+    st:contains @<#ShapeTree> + ;
+    ( st:option st:AllowAll? |
+      st:option [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
     |
-    st:expectsType [st:ShapeTreeResource, st:ShapeTreeNonRDFResource]
+    st:expectsType [st:ShapeTreeResource st:ShapeTreeNonRDFResource]
   ) ;
   rdfs:label xsd:string ? ;
   st:references @<#ReferencedShapeTree> * ;
