@@ -1281,6 +1281,26 @@ to the `HTTP PUT` on `LOCATORURI` by the [=client-side agent=] in the
 
 <div class="opdetails">
 
+1. Let `LOCATOR` be the [=shape tree locator=] associated with `TR`
+1. Let `LN` be the [=shape tree location=] associated with `TR` where:
+    * `LN st:hasShapeTree` is `TST`
+    * `LN st:hasShapeTreeRoot` is `ROOTST`
+    * `LN st:hasShapeTreeRootInstance` is `ROOTSTI`
+1. If `LOCATOR` or `LN` are empty <em class="rfc2119">MUST</em> return 
+    `404 Not Found`
+
+1. If `TR` is a [=container=]
+    1. Call [[#unassign-container]] with inputs:
+        * `TR` - Target Container
+        * `TST` - Target Shape Tree to unassign
+        * `ROOTST` - Root Shape Tree to unplant
+        * `ROOTSTI` - Root Shape Tree instance to unplant
+1. If `TR` is a non-container [=resource=]
+    1. Call [[#unassign-resource]] with inputs:
+        * `TR` - Target Resource
+        * `TST` - Target Shape Tree to unassign
+        * `ROOTST` - Root Shape Tree to unplant
+        * `ROOTSTI` - Root Shape Tree instance to unplant
 
 </div>
 
@@ -1979,9 +1999,6 @@ The below algorithms detail key pieces of logic required for
 </table>
 
 <div class="opdetails">
-
-1. Let `LOCATOR` be the [=Shape Tree Locator=] directly associated with
-    `TR`, such as by calling [[#discover]].
 
 1. Let `LOCATOR` be the [=shape tree locator=] associated with `TC`
 1. Let `LN` be the [=shape tree location=] associated with `TC` where:
