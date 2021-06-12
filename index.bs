@@ -543,8 +543,9 @@ Issue: Do we want a notion for [=static resources=]?
     exactly one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
     [=arc=] identifies a nested [=shape tree=] `ST2`.
-* An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] controls what
-    unmanaged resources types may appear in a managed container  `ST`.
+* An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] identifies
+    unmanaged resources types permitted beyond those [=in-scope=] in a managed 
+    container  `ST`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
     [=arc=] indicates that the [=shape tree=] identified in 
     [=shape tree reference=] `STR`, is referenced through the
