@@ -271,6 +271,7 @@ tree=] identifies unmanaged resource types permitted beyond those
 [=in-scope=]:
 
 Issue: need a more specific name than `st:option`.
+[Related Issue](https://github.com/shapetrees/specification/issues/48)
 
 <table class="data" align="left">
   <colgroup></colgroup>
