@@ -216,12 +216,13 @@ using an [[RDF]] [vocabulary](shapetree.ttl).
 A <dfn>shape tree instance</dfn> is a resource or set of resources assigned to 
 and in conformance with a given [=shape tree=]. A resource in a
 [=shape tree instance=] is called a <dfn>managed resource</dfn>.
-A resource can become a [=managed resource=] with the [=Plant Operation=].
 
 Every [=managed resource=] has an associated [=shape tree locator=].
 A [=shape tree locator=] identifies the [=shape tree=] associated
 with a [=managed resource=], and additional information needed to navigate 
-nested hierarchies of managed resources.
+nested hierarchies of managed resources. A resource becomes a 
+[=managed resource=] when a [=shape tree locator=] is associated with it 
+through the [[#plant-shapetree]] operation.
 
 The <code class="vocab">st:expectsType</code> property specifies that the 
 described [=managed resource=] be one of these three types:
