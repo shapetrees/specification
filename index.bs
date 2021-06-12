@@ -401,8 +401,8 @@ Issue: need a more specific name than `st:option`.
 
 </figure>
 
-A virtual hierarchy is defined by [=shape tree references=] linked to
-a [=shape tree=] by the <code class="vocab">st:references</code>
+A virtual hierarchy is defined by [=shape tree references=] that link to
+other [=shape trees=] by the <code class="vocab">st:references</code>
 property.
 A <dfn>shape tree reference</dfn> 
 identifies the [=shape tree=] to be referenced via 
