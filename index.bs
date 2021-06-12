@@ -220,7 +220,9 @@ and in conformance with a given [=shape tree=]. A resource in a
 Every [=managed resource=] has an associated [=shape tree locator=].
 A [=shape tree locator=] identifies the [=shape tree=] associated
 with a [=managed resource=], and additional information needed to navigate 
-nested hierarchies of managed resources.
+nested hierarchies of managed resources. A resource becomes a 
+[=managed resource=] when a [=shape tree locator=] is associated with it 
+through the [[#plant-shapetree]] operation.
 
 The <code class="vocab">st:expectsType</code> property specifies that the 
 described [=managed resource=] be one of these three types:
@@ -252,20 +254,24 @@ shape.
 [=Shape trees=] prescribe physical hierarchies and can reference other
 shape trees to form virtual hierarchies. 
 
-In a physical hierarchy, a [=shape tree=] expresses a [=managed resource=] 
-that explicitly contains another [=managed resource=] via
-<code class="vocab">st:contains</code>. 
+For physical hierarchies, the <code class="vocab">st:contains</code>
+property asserts that a [=managed resource=] is a [=container=] that
+explicitly contains another [=managed resource=].
 
 If [=shape tree=] `S1` <code class="vocab">st:contains</code> [=shape tree=] 
 `S2`, `S1` describes a [=container=] that contains another [=managed resource=] 
 described by `S2`. For example, in [[LDP]], `S1` describes 
 an [[LDP]] [=container=] which <code class="vocab">ldp:contains</code> nested 
-resources described by `S2`.
+resources described by `S2`. [=Shape tree=] `S2` and the nested resources 
+associated with it are considered to be <dfn>in-scope</dfn> of the containing 
+[=shape tree=] `S1`.
 
-The <code class="vocab">st:option</code> property 
-influences the evaluation of a contained [=resource=] when no
-matching [=shape trees=] specified by <code class="vocab">st:contains</code>
-are found:
+The <code class="vocab">st:option</code> property in a containing [=shape
+tree=] identifies unmanaged resource types permitted beyond those
+[=in-scope=]:
+
+Issue: need a more specific name than `st:option`.
+[Related Issue](https://github.com/shapetrees/specification/issues/48)
 
 <table class="data" align="left">
   <colgroup></colgroup>
@@ -273,31 +279,31 @@ are found:
   <tbody>
     <tr>
       <td><code class="vocab">st:AllowOnly</code></td>
-      <td>Don't allow anything else when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Don't allow anything else when no [=shape trees=] are 
+      found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowAll</code></td>
-      <td>Allow all types of unexpected content when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Allow all types of unexpected content when no [=shape trees=] 
+      are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowResources</code></td>
-      <td>Allow if the requested content is 
-        <code class="vocab">st:ShapeTreeResource</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Allow if the requested content is a 
+        <code class="vocab">st:ShapeTreeResource</code> when no [=shape trees=] 
+        are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowContainers</code></td>
-      <td>Allow if the requested content is 
+      <td>Allow if the proposed content is a 
         <code class="vocab">st:ShapeTreeContainer</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+        [=shape trees=] are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowNonRDFResources</code></td>
-        <td>Allow if the requested content is 
-        <code class="vocab">st:ShapeTreeNonRDFResource</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+        <td>Allow if the proposed content is a 
+        <code class="vocab">st:ShapeTreeNonRDFResource</code> when no 
+        [=shape trees=] are found [=in-scope=]</td>
     </tr>
   </tbody>
 </table>
@@ -396,8 +402,9 @@ are found:
 
 </figure>
 
-In a virtual hierarchy, a [=shape tree=] defines one or more 
-[=shape tree references=] via <code class="vocab">st:references</code>. 
+A virtual hierarchy is defined by [=shape tree references=] that link to
+other [=shape trees=] by the <code class="vocab">st:references</code>
+property.
 A <dfn>shape tree reference</dfn> 
 identifies the [=shape tree=] to be referenced via 
 <code class="vocab">st:hasShapeTree</code>, and the [=shape path=] through 
@@ -523,16 +530,20 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
 * An { `ST` <code class="vocab">rdfs:label</code> `L` } [=arc=]
-    indicates that there is exactly one corresponding [=managed resource=] 
-    `R` in `STI` and it has the name `L`.
+    indicates that there is at most one corresponding [=managed resource=] 
+    `R` in `STI` and it has the name `L`. `L` is a <dfn>static resource</dfn>.
+
+Issue: Do we want a notion for [=static resources=]? 
+[Related Issue](https://github.com/shapetrees/specification/issues/47)
+
 * An { `ST` <code class="vocab">st:shape</code> `SH` }
     [=arc=] indicates that [=managed resource=] `R` has
-    exactly one node which conforms to [=shape=] `SH`.
+    at most one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
-    [=arc=] indicates a nested [=shape tree=] `ST2`.
-* An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] influences the
-    evaluation of [=resource=] `R` when no matching [=shape trees=] for `R` 
-    are found in <code class="vocab">st:contains</code>.
+    [=arc=] identifies a nested [=shape tree=] `ST2`.
+* An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] identifies
+    unmanaged resources types permitted beyond those [=in-scope=] in a managed 
+    container  `ST`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
     [=arc=] indicates that the [=shape tree=] identified in 
     [=shape tree reference=] `STR`, is referenced through the
@@ -603,7 +614,7 @@ validation, and the information
 needed to navigate the physical hierarchy in which that [=managed resource=]
 resides.
 
-If there is more than one [=shape tree location=], they are all applied to the 
+If there is more than one [=shape tree location=], they all apply to the
 [=managed resource=] associated with the [=shape tree locator=].
 
 [=Shape tree locations=] identify key contextual points in a physical hierarchy:
