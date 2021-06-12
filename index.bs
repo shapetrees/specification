@@ -262,17 +262,15 @@ If [=shape tree=] `S1` <code class="vocab">st:contains</code> [=shape tree=]
 `S2`, `S1` describes a [=container=] that contains another [=managed resource=] 
 described by `S2`. For example, in [[LDP]], `S1` describes 
 an [[LDP]] [=container=] which <code class="vocab">ldp:contains</code> nested 
-resources described by `S2`.
+resources described by `S2`. [=Shape tree=] `S2` and the nested resources 
+associated with it are considered to be <dfn>in-scope</dfn> of the containing 
+[=shape tree=] `S1`.
 
-The <code class="vocab">st:option</code> property in a [=container=] [=shape
-tree=] controls what unmanaged resources types are permitted (i.e. those that
-don't correspond to any contained in the [=shape tree=]:
+The <code class="vocab">st:option</code> property in a containing [=shape
+tree=] identifies unmanaged resource types permitted beyond those
+[=in-scope=]:
 
-Issue: need a more specific name than `option`.
-
-Issue: `unmanaged` or `unmatched`?.
-Alternative approach: define a notion of `in-scope`. This would replace
-<code class="vocab">ldp:contains</code> in following list:
+Issue: need a more specific name than `st:option`.
 
 <table class="data" align="left">
   <colgroup></colgroup>
@@ -280,31 +278,31 @@ Alternative approach: define a notion of `in-scope`. This would replace
   <tbody>
     <tr>
       <td><code class="vocab">st:AllowOnly</code></td>
-      <td>Don't allow anything else when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Don't allow anything else when no [=shape trees=] are 
+      found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowAll</code></td>
-      <td>Allow all types of unexpected content when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Allow all types of unexpected content when no [=shape trees=] 
+      are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowResources</code></td>
-      <td>Allow if the requested content is 
-        <code class="vocab">st:ShapeTreeResource</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+      <td>Allow if the requested content is a 
+        <code class="vocab">st:ShapeTreeResource</code> when no [=shape trees=] 
+        are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowContainers</code></td>
-      <td>Allow if the requested content is 
+      <td>Allow if the proposed content is a 
         <code class="vocab">st:ShapeTreeContainer</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+        [=shape trees=] are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowNonRDFResources</code></td>
-        <td>Allow if the requested content is 
-        <code class="vocab">st:ShapeTreeNonRDFResource</code> when no matching 
-        <code class="vocab">st:contains</code> [=shape trees=] are found</td>
+        <td>Allow if the proposed content is a 
+        <code class="vocab">st:ShapeTreeNonRDFResource</code> when no 
+        [=shape trees=] are found [=in-scope=]</td>
     </tr>
   </tbody>
 </table>
