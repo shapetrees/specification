@@ -529,18 +529,15 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
 * An { `ST` <code class="vocab">rdfs:label</code> `L` } [=arc=]
-    indicates that there is exactly one corresponding [=managed resource=] 
+    indicates that there is at most one corresponding [=managed resource=] 
     `R` in `STI` and it has the name `L`. `L` is a <dfn>static resource</dfn>.
 
-Issue: Exactly one or at most one?
-Is a ShapeTree inconistent before a client gets around to creating static resources?
-Applies below as well.
-
-Issue: Do we want a notion for [=static resources=]?
+Issue: Do we want a notion for [=static resources=]? 
+[Related Issue](https://github.com/shapetrees/specification/issues/47)
 
 * An { `ST` <code class="vocab">st:shape</code> `SH` }
     [=arc=] indicates that [=managed resource=] `R` has
-    exactly one node which conforms to [=shape=] `SH`.
+    at most one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
     [=arc=] identifies a nested [=shape tree=] `ST2`.
 * An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] identifies
