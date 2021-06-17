@@ -213,8 +213,8 @@ consistency=] by managing all manipulations of data within a resource hierarchy
 If a server does not support [=shape trees=], some [=shape tree consistency=]
 can be achieved by implementing [=shape tree=] support in the client, typically
 in a library than can enforce consistency for any clients using the
-library. <span class="issue">[@@Primitive??]</span> Operations by other clients not using the library may not leave the
-resource hiearchy in a consistent state.
+library. Primitive operations by other clients not using the library may leave the
+resource hierarchy in an inconsistent state.
 
 For client-side shape tree libraries that operate by intercepting HTTP
 operations, this specification serves as an API for those client
