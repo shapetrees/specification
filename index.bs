@@ -193,16 +193,40 @@ This allows one to treat a set of related resources as a single grouping, and
 apply that to a range of operations including access control, data organization,
 data validation, and data migration.
 
-[=Shape trees=] are defined as an [=RDF graph=] structure that expresses a set
-of expected behaviors by agents that work with them. These semantics CAN be
-implemented by a [=server-side agent=], or a [=client-side agent=] 
-that pre-processes requests to a server. In the most typical use case, 
-a [=server-side agent=] enforces the expected behaviors
-on data as it is manipulated by a [=client-side agent=].
-
 While [=shape trees=] are intended to adapt to different technology platforms
 that support the notion of [=containers=] and [=resources=], examples in this
 specification will reflect usage in an [[LDP]] environment.
+
+[=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
+of expected behaviors by agents that work with them. This provides a sort of
+type-safety of resource hierarchies called <dfn>shape tree consistency</dfn>.
+These semantics CAN be implemented by a [=server-side agent=], or by a
+[=client-side agent=] that implements [=shape tree=] operations as primitive
+requests to a server.
+
+[=Shape tree=] support by a [=server-side agent=] ensures [=shape tree
+consistency=] by managing all manipulations of data within a resource hierarchy
+(see [=managed resource=]).
+
+## ShapeTree Support From Proxy or Client-side Library
+
+If a server does not support [=shape trees=], some [=shape tree consistency=]
+can be achieved by implementing [=shape tree=] support in the client, typically
+in a library than can enforce consistency for any clients using the
+library. Primitive operations by other clients not using the library may leave the
+resource hierarchy in an inconsistent state.
+
+For client-side shape tree libraries that operate by intercepting HTTP
+operations, this specification serves as an API for those client
+interactions. (Additionally, if [=shape tree=] support is later added to the
+server, the client's execution of [=shape tree=] operations does not change.) In
+the remainder of this document, [=shape tree=] operations are described in terms
+of a [=client-side agent=] performing operations on a [=server-side agent=] with
+support for [=shape trees=].
+
+A proxy performing [=shape tree=] operations would be indistinguishable from
+server support except that clients performing primitive operations directly on
+the server (bypassing the proxy) may leave the server in an inconsistent state.
 
 Shape Tree {#tree}
 =====================
@@ -905,10 +929,6 @@ In regular use, a [=client-side agent=] manipulates resources on a
 [=resource server=] running a [=server-side agent=]. That [=server-side agent=] 
 applies logic for [=shape tree=] validation and navigation where applicable
 when processing requests from [=client-side agents=]. 
-
-Note: A [=client-side agent=] may choose to apply [=shape tree=] validation
-logic, especially in cases where a [=server-side agent=] cannot provide 
-the same.
 
 The key operations used to manage [=shape trees=] are:
 * [Discover Shape Tree](#discover) - determine the [=shape tree=] linked to some [=managed resource=].
