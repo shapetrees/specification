@@ -522,14 +522,14 @@ of a [=shape=] schema. [[SHEXPATH]]
 Let <code>ST</code> be a [=shape tree=]. 
 Let <code>STI</code> be a corresponding [=shape tree instance=].
 
-* An { `ST` <code class="vocab">st:expectsType</code> `T` } [=arc=] identifies 
+* An { `ST` <code class="vocab">st:expectsType</code> `T` } [=triple=] identifies
     the resource type `T` of a  corresponding [=managed resource=] 
     <code>R</code> in <code>STI</code> 
     where `T` <em class="rfc2119">MUST</em> be one of
     <code class="vocab">st:ShapeTreeResource</code>,
     <code class="vocab">st:ShapeTreeContainer</code>, or
     <code class="vocab">st:ShapeTreeNonRDFResource</code>.
-* An { `ST` <code class="vocab">rdfs:label</code> `L` } [=arc=]
+* An { `ST` <code class="vocab">rdfs:label</code> `L` } [=triple=]
     indicates that there is at most one corresponding [=managed resource=] 
     `R` in `STI` and it has the name `L`. `L` is a <dfn>static resource</dfn>.
 
@@ -537,29 +537,29 @@ Issue: Do we want a notion for [=static resources=]?
 [Related Issue](https://github.com/shapetrees/specification/issues/47)
 
 * An { `ST` <code class="vocab">st:shape</code> `SH` }
-    [=arc=] indicates that [=managed resource=] `R` has
+    [=triple=] indicates that [=managed resource=] `R` has
     at most one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
-    [=arc=] identifies a nested [=shape tree=] `ST2`.
-* An { `ST` <code class="vocab">st:option</code> `OP` } [=arc=] identifies
+    [=triple=] identifies a nested [=shape tree=] `ST2`.
+* An { `ST` <code class="vocab">st:option</code> `OP` } [=triple=] identifies
     unmanaged resources types permitted beyond those [=in-scope=] in a managed 
     container  `ST`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
-    [=arc=] indicates that the [=shape tree=] identified in 
+    [=triple=] indicates that the [=shape tree=] identified in
     [=shape tree reference=] `STR`, is referenced through the
     instance data of `STI`.
-    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=arc=]
+    * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=triple=]
         indicates a [=shape tree=] referenced through the instance data of `STI`
     * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
-        [=arc=] identifies the [=shape path=] through which a 
+        [=triple=] identifies the [=shape path=] through which a
         [=shape tree instance=] of `ST3` can be found via the instance data of
         `STI`
 * An { `ST` <code class="vocab">st:supports</code> `ST4` }
-    [=arc=] indicates that `ST` provides supporting or supplementary
+    [=triple=] indicates that `ST` provides supporting or supplementary
     context to `ST4`.
 
 A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
-    [=arc=] indicates the location of an index of [SKOS hierarchies](#skos-graph) 
+    [=triple=] indicates the location of an index of [SKOS hierarchies](#skos-graph)
     that describes `ST`.
 
 ## Shape Tree Schema ## {#st-schema}
@@ -2234,25 +2234,25 @@ describe the shape tree in human-readable terms.
 * Let <code>STR</code> be an RDF document containing one or more
     [=shape trees=] <code>STs</code>.
 * The { &lt;&gt; <code class="vocab">st:hasShapeTreeDecoratorIndex</code>
-    <code>IDX</code> } [=arc=] indicates that there is exactly one
+    <code>IDX</code> } [=triple=] indicates that there is exactly one
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> located at
     <code>IDX</code>.
 * The { <code>IDX</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorIndex</code> } [=arc=] indicates a
+    <code class="vocab">st:ShapeTreeDecoratorIndex</code> } [=triple=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorIndex</code> that represents an
     index of <code class="vocab">st:ShapeTreeDecoratorSet</code>.
 * The { <code>IDX</code> <code class="vocab">st:hasSet</code>
-    <code>SET</code> } [=arc=] indicates linkage to one or more
+    <code>SET</code> } [=triple=] indicates linkage to one or more
     <code class="vocab">st:ShapeTreeDecoratorSet</code>.
 * The { <code>SET</code> <code>a</code>
-    <code class="vocab">st:ShapeTreeDecoratorSet</code> } [=arc=] indicates a
+    <code class="vocab">st:ShapeTreeDecoratorSet</code> } [=triple=] indicates a
     <code class="vocab">st:ShapeTreeDecoratorSet</code> that represents a
     [=SKOS graphs=] for a given language or interpretation.
 * The { <code>SET</code> <code class="vocab">st:hasShapeTreeDecoratorResource</code>
-    <code>DECRESOURCE</code> } [=arc=] indicates linkage to a single
+    <code>DECRESOURCE</code> } [=triple=] indicates linkage to a single
     <code class="vocab">st:ShapeTreeDecoratorResource</code>.
 * The { <code>SET</code> <code class="vocab">st:usesLanguage</code>
-    <code>LANG</code> } [=arc=] indicates the language used by the associated
+    <code>LANG</code> } [=triple=] indicates the language used by the associated
     <code>DECRESOURCE</code>.
 
 <figure id="shapetree-decorator-shex">
@@ -2290,9 +2290,12 @@ SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
 
 Definitions {#definitions}
 =====================
-The following terms are used throughout this specification:
-  * <dfn>Arc</dfn> -- an [RDF triple](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
+Two terms are imported from [[RDF]]:
+  * <dfn>triple</dfn> -- an [RDF triple](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
+  * <dfn>RDF graph</dfn> -- an [RDF graph](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
         as defined in [[RDF]].
+
+The following terms are used throughout this specification:
   * <dfn>Client-side Agent</dfn> -- A software component interacting with a server.
         A client-side agent will typically rely on the server for shape tree 
         evaluation and/or validation, but may choose to apply it locally
@@ -2316,8 +2319,6 @@ The following terms are used throughout this specification:
   * <dfn>Non-RDF Source</dfn> -- the generalized notion of document not
         containing linked-data triples; this may include
         plain text or binary data.
-  * <dfn>RDF graph</dfn> -- an [RDF graph](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
-        as defined in [[RDF]].
   * <dfn>Resource</dfn> -- the generalized notion of document containing linked-data;
         implementations of [=shape trees=] may use a resource implementation such
         as [[LDP]] (ldp:Resource, etc.)
