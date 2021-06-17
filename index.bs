@@ -256,16 +256,16 @@ described [=managed resource=] be one of these three types:
   <colgroup></colgroup>
   <tbody>
     <tr>
-      <td><code class="vocab">st:ShapeTreeResource</code></td>
+      <td><code class="vocab">st:Resource</code></td>
       <td>Regular RDF resource that is not a container</td>
     </tr>
     <tr>
-      <td><code class="vocab">st:ShapeTreeContainer</code></td>
+      <td><code class="vocab">st:Container</code></td>
       <td>RDF resource that uses server-managed metadata to
       enumerate nested resources</td>
     </tr>
     <tr>
-      <td><code class="vocab">st:ShapeTreeNonRDFResource</code></td>
+      <td><code class="vocab">st:NonRDFResource</code></td>
       <td>Non-RDF resource such as binaries or images</td>
     </tr>
   </tbody>
@@ -314,19 +314,19 @@ Issue: need a more specific name than `st:option`.
     <tr>
       <td><code class="vocab">st:AllowResources</code></td>
       <td>Allow if the requested content is a 
-        <code class="vocab">st:ShapeTreeResource</code> when no [=shape trees=] 
+        <code class="vocab">st:Resource</code> when no [=shape trees=] 
         are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowContainers</code></td>
       <td>Allow if the proposed content is a 
-        <code class="vocab">st:ShapeTreeContainer</code> when no matching 
+        <code class="vocab">st:Container</code> when no matching 
         [=shape trees=] are found [=in-scope=]</td>
     </tr>
     <tr>
       <td><code class="vocab">st:AllowNonRDFResources</code></td>
         <td>Allow if the proposed content is a 
-        <code class="vocab">st:ShapeTreeNonRDFResource</code> when no 
+        <code class="vocab">st:NonRDFResource</code> when no 
         [=shape trees=] are found [=in-scope=]</td>
     </tr>
   </tbody>
@@ -393,28 +393,28 @@ Issue: need a more specific name than `st:option`.
 
     <#ProjectTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeContainer ;
+      st:expectsType st:Container ;
       st:shape ex:ProjectShape ;
       st:contains <#MilestoneTree> ,
                   st:AllowOnly .
 
     <#MilestoneTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeContainer ;
+      st:expectsType st:Container ;
       st:shape ex:MilestoneShape ;
       st:contains <#TaskTree>, <#IssueTree> ; 
       st:AllowOnly .
 
     <#TaskTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeContainer ;
+      st:expectsType st:Container ;
       st:shape ex:TaskShape ;
       st:contains <#AttachmentTree> ,
       st:AllowOnly .
 
     <#IssueTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeContainer ;
+      st:expectsType st:Container ;
       st:shape ex:IssueShape ;
       st:contains <#AttachmentTree> ,
       st:AllowOnly .
@@ -432,7 +432,7 @@ property.
 A <dfn>shape tree reference</dfn> 
 identifies the [=shape tree=] to be referenced via 
 <code class="vocab">st:hasShapeTree</code>, and the [=shape path=] through 
-which it is linked via <code class="vocab">st:traverseViaShapePath</code>. 
+which it is linked via <code class="vocab">st:viaShapePath</code>. 
 
 A <dfn>shape path</dfn> is a string that defines a traversal 
 of a [=shape=] schema. [[SHEXPATH]]
@@ -498,42 +498,42 @@ of a [=shape=] schema. [[SHEXPATH]]
 
     <#VirtualProjectTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeResource ;
+      st:expectsType st:Resource ;
       st:shape ex:ProjectShape ;
       st:references [
         st:hasShapeTree <#VirtualMilestoneTree> ;
-        st:traverseViaShapePath "@ex:ProjectShape/ex:hasMilestone"
+        st:viaShapePath "@ex:ProjectShape/ex:hasMilestone"
       ] .
 
     <#VirtualMilestoneTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeResource ;
+      st:expectsType st:Resource ;
       st:shape ex:MilestoneShape ;
       st:references [
         st:hasShapeTree <#VirtualTaskTree> ;
-        st:traverseViaShapePath "@ex:MilestoneShape/ex:hasTask"
+        st:viaShapePath "@ex:MilestoneShape/ex:hasTask"
       ] ,
       [
         st:hasShapeTree <#VirtualIssueTree> ;
-        st:traverseViaShapePath "@ex:IssueShape/ex:hasIssue"
+        st:viaShapePath "@ex:IssueShape/ex:hasIssue"
       ] .
 
     <#VirtualTaskTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeResource ;
+      st:expectsType st:Resource ;
       st:shape ex:TaskShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
-        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+        st:viaShapePath "@ex:AttachmentShape/ex:hasAttachment"
       ] .
 
     <#VirtualIssueTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeTreeContainer ;
+      st:expectsType st:Container ;
       st:shape ex:IssueShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
-        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+        st:viaShapePath "@ex:AttachmentShape/ex:hasAttachment"
       ] .
 
     <#VirtualAttachmentTree>
@@ -550,9 +550,9 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
     the resource type `T` of a  corresponding [=managed resource=] 
     <code>R</code> in <code>STI</code> 
     where `T` <em class="rfc2119">MUST</em> be one of
-    <code class="vocab">st:ShapeTreeResource</code>,
-    <code class="vocab">st:ShapeTreeContainer</code>, or
-    <code class="vocab">st:ShapeTreeNonRDFResource</code>.
+    <code class="vocab">st:Resource</code>,
+    <code class="vocab">st:Container</code>, or
+    <code class="vocab">st:NonRDFResource</code>.
 * An { `ST` <code class="vocab">rdfs:label</code> `L` } [=triple=]
     indicates that there is at most one corresponding [=managed resource=] 
     `R` in `STI` and it has the name `L`. `L` is a <dfn>static resource</dfn>.
@@ -574,7 +574,7 @@ Issue: Do we want a notion for [=static resources=]?
     instance data of `STI`.
     * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=triple=]
         indicates a [=shape tree=] referenced through the instance data of `STI`
-    * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
+    * An { `STR` <code class="vocab">st:viaShapePath</code> `SHPH` } 
         [=triple=] identifies the [=shape path=] through which a
         [=shape tree instance=] of `ST3` can be found via the instance data of
         `STI`
@@ -598,12 +598,12 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
     <#ShapeTree> {
       a st:ShapeTree ;
       (
-        st:expectsType [st:ShapeTreeContainer] ;
+        st:expectsType [st:Container] ;
         st:contains @<#ShapeTree> + ;
         ( st:option st:AllowAll? |
         st:option [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
         |
-        st:expectsType [st:ShapeTreeResource st:ShapeTreeNonRDFResource]
+        st:expectsType [st:Resource st:NonRDFResource]
       ) ;
       rdfs:label xsd:string ? ;
       st:references @<#ReferencedShapeTree> * ;
@@ -614,7 +614,7 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
     
     <#ReferencedShapeTree> {
       st:hasShapeTree IRI ;
-      st:traverseViaShapePath xsd:string
+      st:viaShapePath xsd:string
     }
 	</pre>
 </figure>
@@ -2214,25 +2214,25 @@ The following algorithms define a library of functions referenced in the above
     type to be created without matching the shape tree
 1. If <code class="vocab">st:AllowResources</code> exists within
     `CSTC`:
-    1. And the resource type of `TR` isn't an `st:ShapeTreeResource`,
+    1. And the resource type of `TR` isn't an `st:Resource`,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
-    1. And the resource type of `TR` is a `st:ShapeTreeResource`,
+    1. And the resource type of `TR` is a `st:Resource`,
           return `NULL` - indicating that while no match was found,
           `PC` has been configured to allow non-container [=resources=] to be
           created without matching the shape tree
 1. If <code class="vocab">st:AllowContainers</code> exists within
     `CSTC`:
-    1. And the resource type of `TR` is not an `st:ShapeTreeContainer`,
+    1. And the resource type of `TR` is not an `st:Container`,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
-    1. And the resource type of `TR` is an `st:ShapeTreeContainer`,
+    1. And the resource type of `TR` is an `st:Container`,
           return `NULL` - indicating that while no match was found,
           `PC` has been configured to allow [=containers=] to be
           created without matching the shape tree
 1. If <code class="vocab">st:AllowNonRDFSources</code> exists within
     `CSTC`:
-    1. And the resource type of `TR` is not an `st:ShapeTreeNonRDFResource`,
+    1. And the resource type of `TR` is not an `st:NonRDFResource`,
           this algorithm <em class="rfc2119">MUST</em>
           return a status code of 422
     1. And the resource type of `TR` is a Non-RDF [=resource=],

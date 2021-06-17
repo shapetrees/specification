@@ -5,12 +5,12 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 <#ShapeTree> {
   a st:ShapeTree ;
   (
-    st:expectsType [st:ShapeTreeContainer] ;
+    st:expectsType [st:Container] ;
     st:contains @<#ShapeTree> + ;
     ( st:option st:AllowAll? |
       st:option [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
     |
-    st:expectsType [st:ShapeTreeResource st:ShapeTreeNonRDFResource]
+    st:expectsType [st:Resource st:NonRDFResource]
   ) ;
   rdfs:label xsd:string ? ;
   st:references @<#ReferencedShapeTree> * ;
@@ -21,7 +21,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <#ReferencedShapeTree> {
   st:hasShapeTree IRI ;
-  st:traverseViaShapePath xsd:string
+  st:viaShapePath xsd:string
 }
 
 <#ShapeTreeLocatorShape> {
