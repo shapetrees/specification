@@ -29,7 +29,7 @@
 :expectsType
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
-  rdfs:range [ owl:oneOf ( :ShapeTreeContainer :ShapeTreeResource ) ] ;
+  rdfs:range [ owl:oneOf ( :Container :Resource ) ] ;
   rdfs:comment "Describes the expected type of resource the ShapeTree will validate against."@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
@@ -38,7 +38,7 @@
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
   rdfs:range :ShapeTree  ;
-  rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted ShapeTreeContainer"@en ;
+  rdfs:comment "Links a ShapeTree to another ShapeTree that is directly contained within its planted Container"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Contains"@en .
 
@@ -74,19 +74,19 @@
 #
 :AllowResources
   a :ShapeTree ;
-  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeResource"@en ;
+  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :Resource"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow Resources"@en .
 
 :AllowContainers
   a :ShapeTree ;
-  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :ShapeTreeContainer"@en ;
+  rdfs:comment "If no matching :contains ShapeTree is found, allow if the requested content is a :Container"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow Containers"@en .
 
 :AllowNonRDFSources
   a :ShapeTree ;
-  rdfs:comment "If no matching :contains ShapeTree is found, only allow if the requested content is a :ShapeTreeNonRDFResource"@en ;
+  rdfs:comment "If no matching :contains ShapeTree is found, only allow if the requested content is a :NonRDFResource"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow NonRDFSources"@en .
 
@@ -102,33 +102,33 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow None"@en .
 
-# ShapeTreeContainer IRI (maps to ldp:Container)
+# Container IRI (maps to ldp:Container)
 #############################################################################
 # An IRI that represents a generalized container used in a ShapeTree
 #############################################################################
-:ShapeTreeContainer
+:Container
   rdfs:comment "Describes a generalized container within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeContainer"@en .
+  rdfs:label "Container"@en .
 
 
-# ShapeTreeResource IRI (maps to ldp:Resource)
+# Resource IRI (maps to ldp:Resource)
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeResource
+:Resource
   rdfs:comment "Describes a generalized RDF resource (non-container) within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeResource"@en .
+  rdfs:label "Resource"@en .
 
-# ShapeTreeNonRDFResource IRI (maps to ldp:NonRDFSource)
+# NonRDFResource IRI (maps to ldp:NonRDFSource)
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeNonRDFResource
+:NonRDFResource
   rdfs:comment "Describes a generalized non RDF / binary content within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeResource"@en .
+  rdfs:label "Non-RDF Resource"@en .
 
 
 # ShapeTreeReference class
@@ -197,8 +197,8 @@
 # ShapeTreeDecoratorSet class
 #############################################################################
 # A ShapeTreeDecoratorSet details a set of ShapeTreeDecoratorResource classes
-# Primary use is grouping TreeDecoratorResource instances by a common discriminator
-# such as language or intended audience
+# Primary use is grouping ShapeTreeDecoratorResource instances by a common
+# discriminator such as language or intended audience
 #############################################################################
 :ShapeTreeDecoratorSet
   a rdfs:Class ;

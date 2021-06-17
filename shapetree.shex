@@ -4,10 +4,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 <#ShapeTree> {
   a st:ShapeTree ;
   (
-    st:expectsType [st:ShapeTreeContainer] ;
+    st:expectsType [st:Container] ;
     st:contains @<#ShapeTree> +
     |
-    st:expectsType [st:ShapeTreeResource, st:ShapeTreeNonRDFResource]
+    st:expectsType [st:Resource, st:NonRDFResource]
   ) ;
   rdfs:label xsd:string ? ;
   st:references @<#ReferencedShapeTree> * ;
