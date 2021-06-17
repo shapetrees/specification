@@ -1619,7 +1619,7 @@ Shape Tree Algorithms {#algorithms}
 =====================
 
 The following algorithms define a library of functions referenced in the above
-operations.
+[operations](#operations).
 
 ## Assign Shape Tree to Container ## {#assign-container}
 
