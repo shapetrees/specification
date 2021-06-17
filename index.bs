@@ -911,12 +911,12 @@ logic, especially in cases where a [=server-side agent=] cannot provide
 the same.
 
 The key operations used to manage [=shape trees=] are:
-* [Discover Shape Tree](#discover)
-* [Plant Shape Tree](#plant-shapetree)
-* [Create Shape Tree Instance](#create-shape-tree-instance)
-* [Update Shape Tree Instance](#update-shape-tree-instance)
-* [Delete Shape Tree Instance](#delete-shape-tree-instance)
-* [Unplant Shape Tree](#unplant-shapetree)
+* [Discover Shape Tree](#discover) - determine the [=shape tree=] linked to some [=managed resource=].
+* [Plant Shape Tree](#plant-shapetree) - declare that a resource will henceforth be managed by the provided [=shape tree=].
+* [Create Shape Tree Instance](#create-shape-tree-instance) - add a resource to a managed resource hierarchy.
+* [Update Shape Tree Instance](#update-shape-tree-instance) - modify a resource in a managed resource hierarchy.
+* [Delete Shape Tree Instance](#delete-shape-tree-instance) - remove a resource in a managed resource hierarchy.
+* [Unplant Shape Tree](#unplant-shapetree) - assert that a managed resource should no longer be managed by the provided [=shape tree=].
 
 These operations make use of reusable, internal algorithms defined in
 [Shape Tree Algorithms](#algorithms).
