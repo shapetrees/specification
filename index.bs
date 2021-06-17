@@ -175,7 +175,7 @@ can be created.
 Application interoperability depends on applications sharing semantics for
 relationships and data structures.  Existing technologies fulfill portions
 of those dependencies:
-* [=RDF=]&apos;s foundation in unambiguous identifiers provides an infrastructure
+* [[RDF]]&apos;s foundation in unambiguous identifiers provides an infrastructure
     that allows for interoperability, but does not specifically encourage or enforce it.
 * [=Shape=] languages (e.g. [[ShEx]] and [[SHACL]]) provide machine-readable,
     enforceable data structure definitions on single resources.
@@ -184,7 +184,7 @@ For applications that operate on more complex and interconnected resources,
 <i>[=Shape Trees=]</i> express the layout of those resources and associate them
 with their respective [=shapes=].
 
-[=Shape trees=] marry [=RDF=] vocabularies, shapes, and resources into
+[=Shape trees=] marry [[RDF]] vocabularies, shapes, and resources into
 "little trees" that provide machine to machine interoperability, combining them
 into concepts that humans can easily comprehend, such as medical records, notes,
 notebooks, calendars, and financial records.
@@ -193,7 +193,7 @@ This allows one to treat a set of related resources as a single grouping, and
 apply that to a range of operations including access control, data organization,
 data validation, and data migration.
 
-[=Shape trees=] are defined as an [=RDF=] graph structure that expresses a set
+[=Shape trees=] are defined as an [=RDF graph=] structure that expresses a set
 of expected behaviors by agents that work with them. These semantics CAN be
 implemented by a [=server-side agent=], or a [=client-side agent=] 
 that pre-processes requests to a server. In the most typical use case, 
@@ -1421,8 +1421,8 @@ to the `HTTP PUT` on `LOCATORURI` by the [=client-side agent=] in the
         [=root shape tree instance=] associated with the [=Shape Tree Location=]
         for `PCST`
     1. Let `TSTMATCH` be the return value of [[#matching-contained-shapetree]]
-        with inputs: `PC`, `TR`, `TST`, `FN`. `TSTMATCH` is a
-         graph containing:
+        with inputs: `PC`, `TR`, `TST`, `FN`. `TSTMATCH` is an
+         [=RDF graph=] containing:
              * `st:hasShapeTree` - matched [=shape tree=] in `PC st:contains`
              * `st:shape` - matching shape (if applicable)
              * `st:node` - focus node of shape match (if applicable)
@@ -1719,8 +1719,8 @@ operations.
     if `RECURSIVE` is `FALSE` and `TC` contains any number of [=resources=]
 1. If `TST` is `NULL`: 
     1. Let `TSTMATCH` be the return value of [[#matching-contained-shapetree]] 
-        with inputs: `PC`, `TR`, `NULL`, `NULL`. `TSTMATCH` is a 
-        graph containing: 
+        with inputs: `PC`, `TR`, `NULL`, `NULL`. `TSTMATCH` is an
+        [=RDF graph=] containing: 
             * `st:hasShapeTree` - matched [=shape tree=] in `PC st:contains`
             * `st:shape` - matching shape (if applicable)
             * `st:node` - focus node of shape match (if applicable)
@@ -1846,8 +1846,8 @@ operations.
     `TR`, such as by calling [[#discover]].
 1. If `TST` is `NULL`:
     1. Let `TSTMATCH` be the return value of [[#matching-contained-shapetree]]
-          with inputs: `PC`, `TR`, `NULL`, `NULL`. `TSTMATCH` is a
-          graph containing:
+          with inputs: `PC`, `TR`, `NULL`, `NULL`. `TSTMATCH` is an
+          [=RDF graph=] containing:
           * `st:hasShapeTree` - matched [=shape tree=] in `PC st:contains`
           * `st:shape` - matching shape (if applicable)
           * `st:node` - focus node of shape match (if applicable)
@@ -2079,10 +2079,10 @@ operations.
     the value of `TST st:expectsType` does not match the resource type of `TR`
 1. Server <em class="rfc2119">MUST</em> return `422 Unprocessable Entity` if
     the value of `TST st:shape` is not empty and shape validation of the 
-    graph body of `REQ` fails.
+    [=RDF graph=] body of `REQ` fails.
     * If `TST st:node` is not empty, it should be considered as the focus node
         for shape validation. Otherwise, shape validation should be
-        evaluated against all subject nodes in the graph body of `REQ`
+        evaluated against all subject nodes in the [=RDF graph=] body of `REQ`
 
 ## Find Matching Contained Shape Tree ## {#matching-contained-shapetree}
 
@@ -2143,7 +2143,7 @@ operations.
     <tr>
       <td>`CSTMATCH`</td>
       <td>
-        A graph containing:
+        An [=RDF graph=] containing:
         <ul>
           <li>`st:hasShapeTree` - matched [=shape tree=] in `PC st:contains`</li>
           <li>`st:shape` - matching shape (if applicable)</li>
@@ -2164,7 +2164,7 @@ operations.
 1. If `TST` is specified
     1. and `TST` does NOT exist within `CSTC` this
           algorithm <em class="rfc2119">MUST</em> return a 400 status code
-    1. and `TST` exists within `CSTC` return a graph containing:
+    1. and `TST` exists within `CSTC` return an [=RDF graph=] containing:
         * `st:hasShapeTree` - `TST`
         * `st:shape` - `TST st:shape`
         * `st:node` - `FN`
@@ -2174,7 +2174,7 @@ operations.
         the same as `CSTC-ST st:expectsType`
     1. Continue to the next iteration if there is no subject node in `TR` that
         successfully validates against `CSTC-ST st:shape`
-    1. Return a graph containing:
+    1. Return an [=RDF graph=] containing:
         * `st:hasShapeTree` - `CSTC-ST`
         * `st:shape` - `CSTC-ST st:shape`
         * `st:node` - the matching subject node from successful validation of
@@ -2306,9 +2306,9 @@ The following terms are used throughout this specification:
   * <dfn>Ecosystem</dfn> -- a software environment with resources organized in
         some hierarchical grouping that rely on [=shape tree=] concepts to
         better organize and validate structures of data
-  * <dfn>Focus Node</dfn> -- a node in an RDF graph.  In
+  * <dfn>Focus Node</dfn> -- a node in an [=RDF graph=].  In
         the context of [=shape trees=], one usage is directing [=shape=] validation
-        to the appropriate node in a graph.
+        to the appropriate node in an [=RDF graph=].
   * <dfn>Managed Container</dfn> -- any [=managed resource=] that is a 
         [=container=]. A [=Managed Container=] <em class="rfc2119">MAY</em>
         be an [=Instance Root=] or hierarchically nested within the
@@ -2327,7 +2327,7 @@ The following terms are used throughout this specification:
   * <dfn>Shape</dfn> -- a schema definition allowing validation of an RDF
         subject.  Example specifications supporting the notion of shapes include 
         [[ShEx]] and [[SHACL]].
-  * <dfn>SKOS Graph</dfn> -- an RDF graph conforming to [[skos-reference]]
+  * <dfn>SKOS Graph</dfn> -- an [=RDF graph=] conforming to [[skos-reference]]
         data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
         human-readable terms.
