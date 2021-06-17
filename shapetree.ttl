@@ -145,13 +145,13 @@
 #
 # Properties in domain of ShapeTreeReference
 #
-:traverseViaShapePath
+:viaShapePath
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeReference ;
   rdfs:range xsd:string ;
   rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Traverse Via ShapePath"@en .
+  rdfs:label "Via ShapePath"@en .
 
 
 #

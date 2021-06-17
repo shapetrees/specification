@@ -360,7 +360,7 @@ In a virtual hierarchy, a [=shape tree=] defines one or more
 A <dfn>shape tree reference</dfn> 
 identifies the [=shape tree=] to be referenced via 
 <code class="vocab">st:hasShapeTree</code>, and the [=shape path=] through 
-which it is linked via <code class="vocab">st:traverseViaShapePath</code>. 
+which it is linked via <code class="vocab">st:viaShapePath</code>. 
 
 A <dfn>shape path</dfn> is a string that defines a traversal 
 of a [=shape=] schema. [[SHEXPATH]]
@@ -430,7 +430,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:ProjectShape ;
       st:references [
         st:hasShapeTree <#VirtualMilestoneTree> ;
-        st:traverseViaShapePath "@ex:ProjectShape/ex:hasMilestone"
+        st:viaShapePath "@ex:ProjectShape/ex:hasMilestone"
       ] .
 
     <#VirtualMilestoneTree>
@@ -439,11 +439,11 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:MilestoneShape ;
       st:references [
         st:hasShapeTree <#VirtualTaskTree> ;
-        st:traverseViaShapePath "@ex:MilestoneShape/ex:hasTask"
+        st:viaShapePath "@ex:MilestoneShape/ex:hasTask"
       ] ,
       [
         st:hasShapeTree <#VirtualIssueTree> ;
-        st:traverseViaShapePath "@ex:IssueShape/ex:hasIssue"
+        st:viaShapePath "@ex:IssueShape/ex:hasIssue"
       ] .
 
     <#VirtualTaskTree>
@@ -452,7 +452,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:TaskShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
-        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+        st:viaShapePath "@ex:AttachmentShape/ex:hasAttachment"
       ] .
 
     <#VirtualIssueTree>
@@ -461,7 +461,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:IssueShape ;
       st:references [
         st:hasShapeTree <#VirtualAttachmentTree> ;
-        st:traverseViaShapePath "@ex:AttachmentShape/ex:hasAttachment"
+        st:viaShapePath "@ex:AttachmentShape/ex:hasAttachment"
       ] .
 
     <#VirtualAttachmentTree>
@@ -495,7 +495,7 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
     instance data of `STI`.
     * An { `STR` <code class="vocab">st:hasShapeTree</code> `ST3` } [=arc=]
         indicates a [=shape tree=] referenced through the instance data of `STI`
-    * An { `STR` <code class="vocab">st:traverseViaShapePath</code> `SHPH` } 
+    * An { `STR` <code class="vocab">st:viaShapePath</code> `SHPH` } 
         [=arc=] identifies the [=shape path=] through which a 
         [=shape tree instance=] of `ST3` can be found via the instance data of
         `STI`
@@ -532,7 +532,7 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
 
 	&lt;#ReferencedShapeTree&gt; {
 	  st:hasShapeTree IRI ;
-	  st:traverseViaShapePath xsd:string
+	  st:viaShapePath xsd:string
 	}
 	</pre>
 </figure>
