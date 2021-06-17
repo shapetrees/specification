@@ -29,7 +29,7 @@
 :expectsType
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
-  rdfs:range [ owl:oneOf ( :ShapeTreeContainer :ShapeTreeResource ) ] ;
+  rdfs:range [ owl:oneOf ( :Container :Resource ) ] ;
   rdfs:comment "Describes the expected type of resource the ShapeTree will validate against."@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Expects Type"@en .
@@ -110,33 +110,33 @@
   rdfs:isDefinedBy <> ;
   rdfs:label "Allow Only"@en .
 
-# ShapeTreeContainer IRI (maps to ldp:Container)
+# Container IRI (maps to ldp:Container)
 #############################################################################
 # An IRI that represents a generalized container used in a ShapeTree
 #############################################################################
-:ShapeTreeContainer
+:Container
   rdfs:comment "Describes a generalized container within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeContainer"@en .
+  rdfs:label "Container"@en .
 
 
-# ShapeTreeResource IRI (maps to ldp:Resource)
+# Resource IRI (maps to ldp:Resource)
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeResource
+:Resource
   rdfs:comment "Describes a generalized RDF resource (non-container) within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeResource"@en .
+  rdfs:label "Resource"@en .
 
-# ShapeTreeNonRDFResource IRI (maps to ldp:NonRDFSource)
+# NonRDFResource IRI (maps to ldp:NonRDFSource)
 #############################################################################
 # An IRI that represents a generalized resource used in a ShapeTree
 #############################################################################
-:ShapeTreeNonRDFResource
+:NonRDFResource
   rdfs:comment "Describes a generalized non RDF / binary content within a ShapeTree ecosystem"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeResource"@en .
+  rdfs:label "Non-RDF Resource"@en .
 
 
 # ShapeTreeReference class
@@ -153,13 +153,13 @@
 #
 # Properties in domain of ShapeTreeReference
 #
-:traverseViaShapePath
+:viaShapePath
   a owl:DatatypeProperty ;
   rdfs:domain :ShapeTreeReference ;
   rdfs:range xsd:string ;
   rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Traverse Via ShapePath"@en .
+  rdfs:label "Via ShapePath"@en .
 
 
 #
