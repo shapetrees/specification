@@ -290,11 +290,11 @@ resources described by `S2`. [=Shape tree=] `S2` and the nested resources
 associated with it are considered to be <dfn>in-scope</dfn> of the containing 
 [=shape tree=] `S1`.
 
-The <code class="vocab">st:option</code> property in a containing [=shape
+The <code class="vocab">st:alsoAllow</code> property in a containing [=shape
 tree=] identifies unmanaged resource types permitted beyond those
 [=in-scope=]:
 
-Issue: need a more specific name than `st:option`.
+Issue: need a more specific name than `st:alsoAllow`.
 [Related Issue](https://github.com/shapetrees/specification/issues/48)
 
 <table class="data" align="left">
@@ -565,7 +565,7 @@ Issue: Do we want a notion for [=static resources=]?
     at most one node which conforms to [=shape=] `SH`.
 * An { `ST` <code class="vocab">st:contains</code> `ST2` }
     [=triple=] identifies a nested [=shape tree=] `ST2`.
-* An { `ST` <code class="vocab">st:option</code> `OP` } [=triple=] identifies
+* An { `ST` <code class="vocab">st:alsoAllow</code> `OP` } [=triple=] identifies
     unmanaged resources types permitted beyond those [=in-scope=] in a managed 
     container  `ST`.
 * An { `ST` <code class="vocab">st:references</code> `STR` }
@@ -600,8 +600,8 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
       (
         st:expectsType [st:Container] ;
         st:contains @<#ShapeTree> + ;
-        ( st:option st:AllowAll? |
-        st:option [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
+        ( st:alsoAllow st:AllowAll? |
+        st:alsoAllow [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
         |
         st:expectsType [st:Resource st:NonRDFResource]
       ) ;
