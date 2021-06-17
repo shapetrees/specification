@@ -1618,8 +1618,8 @@ to the `HTTP PUT` on `LOCATORURI` by the [=client-side agent=] in the
 Shape Tree Algorithms {#algorithms}
 =====================
 
-The below algorithms detail key pieces of logic required for
-[=shape tree=] implementations.
+The following algorithms define a library of functions referenced in the above
+operations.
 
 ## Assign Shape Tree to Container ## {#assign-container}
 
@@ -2291,7 +2291,8 @@ SKOS constructs such as <code>skos:narrower</code> <em class="rfc2119">MAY</em>
 Definitions {#definitions}
 =====================
 The following terms are used throughout this specification:
-  * <dfn>Arc</dfn> -- the directed relationship between two nodes in an RDF graph
+  * <dfn>Arc</dfn> -- an [RDF triple](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
+        as defined in [[RDF]].
   * <dfn>Client-side Agent</dfn> -- A software component interacting with a server.
         A client-side agent will typically rely on the server for shape tree 
         evaluation and/or validation, but may choose to apply it locally
@@ -2299,14 +2300,15 @@ The following terms are used throughout this specification:
   * <dfn>Container</dfn> -- the generalized notion of a collection of resources;
         implementations of [=shape trees=] <em class="rfc2119">MAY</em> use a
         container implementation such as [[LDP]]
-        (ldp:Container, ldp:BasicContainer, etc.)
+        ([ldp:Container](https://www.w3.org/TR/ldp/#dfn-linked-data-platform-container),
+        [ldp:BasicContainer](https://www.w3.org/TR/ldp/#dfn-linked-data-platform-basic-container),
+        etc.)
   * <dfn>Ecosystem</dfn> -- a software environment with resources organized in
         some hierarchical grouping that rely on [=shape tree=] concepts to
         better organize and validate structures of data
-  * <dfn>Focus Node</dfn> -- the IRI to an RDF subject which is used to
-        specify which subject within a document should be processed first.  In
-        the context of [=shape trees=] one usage is directing [=shape=] validation
-        to the appropriate node in the graph.
+  * <dfn>Focus Node</dfn> -- a node in an RDF graph.  In
+        the context of [=shape trees=], one usage is directing [=shape=] validation
+        to the appropriate node in a graph.
   * <dfn>Managed Container</dfn> -- any [=managed resource=] that is a 
         [=container=]. A [=Managed Container=] <em class="rfc2119">MAY</em>
         be an [=Instance Root=] or hierarchically nested within the
@@ -2314,12 +2316,14 @@ The following terms are used throughout this specification:
   * <dfn>Non-RDF Source</dfn> -- the generalized notion of document not
         containing linked-data triples; this may include
         plain text or binary data.
-  * <dfn>RDF</dfn> -- Resource Description Framework [[rdf11-primer]]
+  * <dfn>RDF graph</dfn> -- an [RDF graph](https://www.w3.org/TR/rdf11-concepts/#dfn-rdf-triple)
+        as defined in [[RDF]].
   * <dfn>Resource</dfn> -- the generalized notion of document containing linked-data;
         implementations of [=shape trees=] may use a resource implementation such
         as [[LDP]] (ldp:Resource, etc.)
   * <dfn>Server-side Agent</dfn> -- A server-side software component.  Server-side
-        agents that support shape trees are responsible for data validation.
+        agents that support shape trees are responsible for data validation and
+        maintaining [=shape tree locators=].
   * <dfn>Shape</dfn> -- a schema definition allowing validation of an RDF
         subject.  Example specifications supporting the notion of shapes include 
         [[ShEx]] and [[SHACL]].
@@ -2327,8 +2331,8 @@ The following terms are used throughout this specification:
         data model.  For purposes of [=shape trees=] a
         [=SKOS Graph=] is used to describe a [=shape tree=] in
         human-readable terms.
-  * <dfn>Unmanaged Resource</dfn> -- any [=resource=] which is not described
-        by a shape tree
+  * <dfn>Unmanaged Resource</dfn> -- any [=resource=] which does not have an associated
+        [=shape tree=].
 
   <pre class="biblio">
   {
