@@ -7,8 +7,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
   (
     st:expectsType [st:Container] ;
     st:contains @<#ShapeTree> + ;
-    ( st:option st:AllowAll? |
-      st:option [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
+    ( st:alsoAllow st:AllowAll? |
+      st:alsoAllow [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
     |
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
