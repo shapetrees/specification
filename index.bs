@@ -961,7 +961,12 @@ status code and composition of HTTP responses.
         [=Shape Tree Locator=] will be returned.  
       </td>
   </tbody>
-  <thead>
+</table>
+
+### [=Client-side Agent|Client-side=] ### {#plant-client}
+
+<table class="data operation" align="left">
+<thead>
     <tr><th colspan=2>Inputs</th></tr>
   </thead>
   <tbody>
@@ -977,7 +982,7 @@ status code and composition of HTTP responses.
     <tr>
       <td>`LOCATOR`</td>
       <td>[=Shape tree locator=] associated with the [=managed resource=]</td>
-    </tr>
+    </tr>  </tbody>
   </tbody>
 </table>
 
@@ -997,10 +1002,8 @@ status code and composition of HTTP responses.
 </pre>
 
 2. Let <code>LOCATORURI</code> be the URI of a [=shape tree locator=] 
-    associated with `RESOURCEURI` with a relation type of 
-    `http://shapetrees.org/#ShapeTreeLocator`. Depending upon the implementing
-    protocol, this relation may be discovered in an HTTP Link header, or in
-    the HTTP response body. 
+    associated with `RESOURCEURI` in an HTTP Link header with a relation type of 
+    `http://shapetrees.org/#ShapeTreeLocator`.
    
 3. If `LOCATORURI` is empty, the resource at 
     `RESOURCEURI` is not a [=managed resource=], and no [=shape tree locator=] 
@@ -1035,7 +1038,7 @@ status code and composition of HTTP responses.
     ] .
 </pre>
 
-5. If a corresponding resource at `LOCATORURI` cannot be found, it 
+5. If a corresponding resource `LOCATOR` at `LOCATORURI` cannot be found, it 
     <em class="rfc2119">MUST</em> be considered
     an [=unmanaged resource=].
 
@@ -1047,7 +1050,7 @@ GET https://storage.example/meta/c560224b#locator
 HTTP/1.1 404 NOT FOUND
 </pre>
 
-5. If `LOCATORURI` is a valid [=shape tree locator=],
+5. If `LOCATOR` is a valid [=shape tree locator=],
     the resource at `RESOURCEURI` <em class="rfc2119">MUST</em> be considered a 
     [=managed resource=].
 
@@ -1119,7 +1122,7 @@ HTTP/1.1 404 NOT FOUND
   </thead>
   <tbody>
     <tr>
-      <td>`LOCATORURI`</td>
+      <td>`RESPONSE`</td>
       <td>An HTTP response containing a Location header with the URI of the 
         [=Shape Tree Locator=] that `TST` was planted in</td>
     </tr>
@@ -1165,7 +1168,7 @@ HTTP/1.1 404 NOT FOUND
   </thead>
   <tbody>
     <tr>
-      <td>`LOCATORURI`</td>
+      <td>`RESPONSE`</td>
       <td>An HTTP response containing a Location header with the URI of the 
         planted [=Shape Tree Locator=]</td>
     </tr>
