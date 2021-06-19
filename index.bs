@@ -418,7 +418,7 @@ tree=] identifies unmanaged resource types permitted beyond those
 
     <#AttachmentTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeNonRDFResource .
+      st:expectsType st:NonRDFResource .
   </pre>
 
 </figure>
@@ -535,7 +535,7 @@ of a [=shape=] schema. [[SHEXPATH]]
 
     <#VirtualAttachmentTree>
       a st:ShapeTree ;
-      st:expectsType st:ShapeNonRDFResource .
+      st:expectsType st:NonRDFResource .
   </pre>
 
 </figure>
