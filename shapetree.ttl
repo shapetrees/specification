@@ -15,7 +15,7 @@
 # ShapeTree Class
 #############################################################################
 # Defines a tree of related resources which combine to enable some task
-# see: https://shapetrees.github.io/specification/primer
+# see: https://shapetrees.org/TR/specification/
 #############################################################################
 :ShapeTree
   a rdfs:Class ;
