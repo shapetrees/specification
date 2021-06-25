@@ -385,7 +385,7 @@ tree=] identifies unmanaged resource types permitted beyond those
   </table>
   
   <pre highlight="turtle">
-    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt;
     PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
 
     <#ProjectTree>
@@ -490,7 +490,7 @@ of a [=shape=] schema. [[SHEXPATH]]
   </table>
 
   <pre highlight="turtle">
-    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt;
     PREFIX ex: &lt;http://www.example.com/ns/ex#&gt;
 
     <#VirtualProjectTree>
@@ -588,7 +588,7 @@ A { `ST` <code class="vocab">st:hasShapeTreeDecoratorIndex</code> `DI` }
 <figure id="shapetree-shex">
   <figcaption>ShEx Schema for a Shape Tree</figcaption>
 	<pre highlight="turtle">
-    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt;
     PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
     PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
     
@@ -797,7 +797,7 @@ focus nodes.
   <figcaption>[=Shape Tree Locator=] for /data/projects with multiple 
     [=shape tree locations=] in a nested physical hierarchy</figcaption>
   <pre highlight="turtle">
-  PREFIX st: &lt;http://www.w3.org/ns/st#&gt; 
+  PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
@@ -825,7 +825,7 @@ focus nodes.
     /data/projects/project-1/milestone-A/task-48 with a single 
     [=shape tree location=] in a nested physical hierarchy</figcaption>
   <pre highlight="turtle">
-  PREFIX st: &lt;http://www.w3.org/ns/st#&gt; 
+  PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
@@ -874,7 +874,7 @@ in which case only the focus node and shape are provided, via
 </figure>
 
 <pre highlight="turtle">
-  PREFIX st: &lt;http://www.w3.org/ns/st#&gt; 
+  PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
   PREFIX project1: &lt;https://storage.example/data/projects/project-1#&gt;
@@ -893,7 +893,7 @@ in which case only the focus node and shape are provided, via
 <figure id="shapetree-locator-shex">
   <figcaption>ShEx Schema for a Shape Tree Locator</figcaption>
 	<pre highlight="turtle">
-    PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+    PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt;
     PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
     PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
     
@@ -1014,7 +1014,7 @@ status code and composition of HTTP responses.
 
 <pre highlight="turtle">
   ...HTTP response headers omitted...
-  PREFIX st: &lthttp://www.w3.org/ns/st#&gt;
+  PREFIX st: &lthttp://www.w3.org/ns/shapetrees#&gt;
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
@@ -2275,7 +2275,7 @@ describe the shape tree in human-readable terms.
 <figure id="shapetree-decorator-shex">
   <figcaption>ShEx validation of a Shape Tree Decorators</figcaption>
   <pre highlight="turtle">
-  PREFIX st: &lt;http://www.w3.org/ns/st#&gt;
+  PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt;
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
   PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;
   PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
