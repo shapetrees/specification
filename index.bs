@@ -801,6 +801,8 @@ focus nodes.
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
+  &lt;&gt; st:hasShapeTreeLocator &lt;#locator&gt; .
+
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
     st:location [
@@ -828,6 +830,8 @@ focus nodes.
   PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
+
+  &lt;&gt; st:hasShapeTreeLocator &lt;#locator&gt; .
 
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
@@ -879,6 +883,8 @@ in which case only the focus node and shape are provided, via
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
   PREFIX project1: &lt;https://storage.example/data/projects/project-1#&gt;
   
+  &lt;&gt; st:hasShapeTreeLocator &lt;#locator&gt; .
+
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
     st:location [
@@ -991,14 +997,14 @@ status code and composition of HTTP responses.
 
 <pre highlight="http">
   HTTP/1.1 200 OK
-  Link: &lt;https://storage.example/meta/c560224b#locator&gt;; rel="http://shapetrees.org/#ShapeTreeLocator"
+  Link: &lt;https://storage.example/meta/c560224b#locator&gt;; rel="http://www.w3.org/ns/shapetrees#ShapeTreeLocator"
   Link: &lt;http://www.w3.org/ns/ldp#Container&gt;; rel="type"
   ...other HTTP response headers omitted...
 </pre>
 
 2. Let <code>LOCATORURI</code> be the URI of a [=shape tree locator=] 
     associated with `RESOURCEURI` with a relation type of 
-    `http://shapetrees.org/#ShapeTreeLocator`. Depending upon the implementing
+    `http://www.w3.org/ns/shapetrees#ShapeTreeLocator`. Depending upon the implementing
     protocol, this relation may be discovered in an HTTP Link header, or in
     the HTTP response body. 
    
@@ -1017,6 +1023,8 @@ status code and composition of HTTP responses.
   PREFIX st: &lthttp://www.w3.org/ns/shapetrees#&gt;
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
+
+  &lt;&gt; st:hasShapeTreeLocator &lt;#locator&gt; .
 
   &lt;#locator&gt;
     a st:ShapeTreeLocator ;
