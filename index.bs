@@ -1401,9 +1401,9 @@ to the `HTTP PUT` on `LOCATORURI` by the [=client-side agent=] in the
 1. Perform an HTTP `POST` or `PUT` on `TR` to create the
     [=shape tree instance=] including:
     * An HTTP `Link` header with the relation of 
-        `http://shapetrees.org/#TargetShapeTree` if `SHAPETREEURI` is provided
+        `http://shapetrees.org/#targetShapeTree` if `SHAPETREEURI` is provided
     * An HTTP `Link` header with the relation of 
-        `http://shapetrees.org/#FocusNode` if `FNURI` is provided
+        `http://shapetrees.org/#focusNode` if `FNURI` is provided
 
 </div>
 
@@ -1439,9 +1439,9 @@ to the `HTTP PUT` on `LOCATORURI` by the [=client-side agent=] in the
 1. Let `PCST` be the URI of a [=shape tree=] with `st:contains` in `LR`
 1. If `PCST` exists
     1. Let `TST` be the target [=shape tree=] URI from an HTTP `Link` header with a
-        relation of `http://shapetrees.org/#TargetShapeTree`
+        relation of `http://shapetrees.org/#targetShapeTree`
     1. Let `FN` be a focus node URI from an HTTP `Link` header with a relation of
-        `http://shapetrees.org/#FocusNode`
+        `http://shapetrees.org/#focusNode`
     1. Let `ROOTST` and `ROOTSTI` be the [=root shape tree=] and 
         [=root shape tree instance=] associated with the [=Shape Tree Location=]
         for `PCST`
