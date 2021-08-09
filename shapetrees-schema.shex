@@ -7,9 +7,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
   a st:ShapeTree ;
   (
     st:expectsType [st:Container] ;
-    st:contains @<#ShapeTree> + ;
-    ( st:alsoAllow st:AllowAll? |
-      st:alsoAllow [ st:AllowResources st:AllowContainers st:AllowNonRDFSources st:AllowOnly ]* )
+    st:contains @<#ShapeTree> * ;
     |
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
@@ -31,9 +29,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 }
 
 <#ShapeTreeLocationShape> {
-  st:hasRootShapeTree IRI ;
   st:hasShapeTree IRI ;
-  st:hasRootShapeTreeInstance IRI ;
+  st:hasManagedResource IRI ;
+  st:hasRootShapeTreeLocation IRI ;
   ( st:node IRI ;
     st:shape IRI )?
   |
