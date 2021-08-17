@@ -453,7 +453,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:ProjectShape ;
       st:references [
         st:hasShapeTree <#VirtualMilestoneTree> ;
-        st:viaShapePath "@ex:ProjectShape.ex:hasMilestone"
+        st:viaShapePath "@ex:ProjectShape~ex:hasMilestone"
       ] .
 
     <#VirtualMilestoneTree>
@@ -462,11 +462,11 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:MilestoneShape ;
       st:references [
         st:hasShapeTree <#VirtualTaskTree> ;
-        st:viaShapePath "@ex:MilestoneShape.ex:hasTask"
+        st:viaShapePath "@ex:MilestoneShape~ex:hasTask"
       ] ,
       [
         st:hasShapeTree <#VirtualIssueTree> ;
-        st:viaShapePath "@ex:MilestoneShape.ex:hasIssue"
+        st:viaShapePath "@ex:MilestoneShape~ex:hasIssue"
       ] .
 
     <#VirtualTaskTree>
@@ -475,7 +475,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:TaskShape ;
       st:references [
         st:hasShapeTree st:NonRDFResourceTree ;
-        st:viaShapePath "@ex:TaskShape.ex:hasAttachment"
+        st:viaShapePath "@ex:TaskShape~ex:hasAttachment"
       ] .
 
     <#VirtualIssueTree>
@@ -484,7 +484,7 @@ of a [=shape=] schema. [[SHEXPATH]]
       st:shape ex:IssueShape ;
       st:references [
         st:hasShapeTree st:NonRDFResourceTree ;
-        st:viaShapePath "@ex:IssueShape.ex:hasAttachment"
+        st:viaShapePath "@ex:IssueShape~ex:hasAttachment"
       ] .
   </pre>
 
