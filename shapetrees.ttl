@@ -41,9 +41,9 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 :references
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTree ;
-  rdfs:range :ShapeTreeReference ;
+  rdfs:range :Reference ;
   rdfs:isDefinedBy <> ;
-  rdfs:comment "Links a ShapeTree to a ShapeTreeReference"@en ;
+  rdfs:comment "Links a ShapeTree to a Shape Tree Reference"@en ;
   rdfs:label "References"@en .
 
 :shape
@@ -52,14 +52,6 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:comment "Links a ShapeTree to a Shape"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Shape"@en .
-
-:supports
-  a owl:ObjectProperty ;
-  rdfs:domain :ShapeTree ;
-  rdfs:range :ShapeTree ;
-  rdfs:comment "Describes a relationship wherein a ShapeTree acts as a support for another, for purposes of indexing, aggregation, etc." ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Supports"@en .
 
 # Container IRI (maps to ldp:Container)
 #############################################################################
@@ -90,174 +82,142 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:label "Non-RDF Resource"@en .
 
 
-# ShapeTreeReference class
+# Shape Tree Reference class
 #############################################################################
-# A ShapeTreeReference provides the necessary context to associate instance
+# An st:Reference provides the necessary context to associate instance
 # data between related ShapeTrees via a ShapePath
 #############################################################################
-:ShapeTreeReference
+:Reference
   a rdfs:Class ;
-  rdfs:comment "Describes how a ShapeTree references another ShapeTree via a ShapePath"@en ;
+  rdfs:comment "Describes how a ShapeTree references another ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeReference"@en .
+  rdfs:label "Shape Tree Reference"@en .
+
+:referencesShapeTree
+  a owl:DatatypeProperty ;
+  rdfs:domain :Reference ;
+  rdfs:range :ShapeTree ;
+  rdfs:comment "Point to the shape tree this is being referenced"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "referencesShapeTree"@en .
 
 :viaShapePath
   a owl:DatatypeProperty ;
-  rdfs:domain :ShapeTreeReference ;
+  rdfs:domain :Reference ;
   rdfs:range xsd:string ;
-  rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree"@en ;
+  rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree via a ShapePath"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Via ShapePath"@en .
 
-# ShapeTreeDecoratorIndex class
+:viaPredicate
+  a owl:DatatypeProperty ;
+  rdfs:domain :Reference ;
+  rdfs:comment "Describes how one ShapeTree traverses its instance data to reach another ShapeTree via predicate"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Via Predicate"@en .
+
+# Shape Tree Description Set
 #############################################################################
-# A ShapeTreeDecoratorIndex details a ShapeTree in a human-readable way.
+# An st:DescriptionSet details a ShapeTree in a human-readable way.
 # It is primarily used for use cases where a ShapeTree must be described to
-# a user for purposes of authorization.
+# a user in scenarios like authorization or data listings
 #############################################################################
-:ShapeTreeDecoratorIndex
+:DescriptionSet
   a rdfs:Class ;
   rdfs:comment "Provides an index of SKOS poly-hierarchies which can be used to describe a ShapeTree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecoratorIndex"@en .
+  rdfs:label "Shape Tree Description Set"@en .
 
-:hasShapeTreeDecoratorIndex
+:hasDescriptionSet
   a owl:ObjectProperty ;
-  rdfs:range :ShapeTreeDecoratorIndex ;
+  rdfs:range :DescriptionSet ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Decorator Index"@en .
-
-:hasSet
-  a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorIndex ;
-  rdfs:range :ShapeTreeDecoratorSet ;
-  rdfs:comment "Links between a ShapeTreeDecoratorIndex and a ShapeTreeDecoratorSet"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has Set"@en .
-
-:defaultLanguage
-  a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorIndex ;
-  rdfs:range xsd:language ;
-  rdfs:comment "Defines default language for use with shape tree decorator when none exist matching user preferences"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Default language"@en .
-
-
-# ShapeTreeDecoratorSet class
-#############################################################################
-# A ShapeTreeDecoratorSet details a set of ShapeTreeDecoratorResource classes
-# Primary use is grouping TreeDecoratorResource instances by a common discriminator
-# such as language or intended audience
-#############################################################################
-:ShapeTreeDecoratorSet
-  a rdfs:Class ;
-  rdfs:comment "Groups a set of ShapeTreeDecoratorResource by a given discriminator"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecoratorSet"@en .
-
-:hasShapeTreeDecoratorResource
-  a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorSet ;
-  rdfs:range :ShapeTreeDecoratorResource ;
-  rdfs:comment "Links between a ShapeTreeDecoratorSet and the decorator resource itself"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has Decorator Resource"@en .
+  rdfs:label "Has Shape Tree Description Set"@en .
 
 :usesLanguage
   a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeDecoratorSeries ;
+  rdfs:domain :ShapeTreeDecoratorIndex ;
   rdfs:range xsd:language ;
   rdfs:comment "Describes the language used by associated ShapeTreeDecoratorResource"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Uses language"@en .
 
-# ShapeTreeDecoratorResource class
+# Shape Tree Description
 #############################################################################
-# A ShapeTreeDecoratorResource represents a SKOS-based resource which
-# is made up of multiple st:ShapeTreeDecorator nodes that describe shape trees
+# A Shape Tree Description is used to explain the details of a Shape Tree
 #############################################################################
-:ShapeTreeDecoratorResource
+:Description
   a rdfs:Class ;
-  rdfs:comment "Represents a SKOS-based resource which is made up of multiple st:ShapeTreeDecorator nodes that describe shape trees"@en ;
+  rdfs:comment "A Shape Tree Description is used to explain the details of a shape tree"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecoratorResource"@en .
+  rdfs:label "Shape Tree Description"@en .
 
-# ShapeTreeDecorator class
-#############################################################################
-# A ShapeTreeDecorator represents a single descriptor of a shape tree
-#############################################################################
-:ShapeTreeDecorator
-  a rdfs:Class ;
-  rdfs:comment "A ShapeTreeDecorator represents a single descriptor of a shape tree"@en ;
+:inDescriptionSet
+  a owl:ObjectProperty ;
+  rdfs:domain :Description ;
+  rdfs:range :DescriptionSet ;
+  rdfs:comment "The DescriptionSet that the Description belongs to"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "ShapeTreeDecorator"@en .
+  rdfs:label "In Description Set"@en .
 
-# ShapeTreeLocator class
+# Shape Tree Manager
 #############################################################################
-# A shape tree locator associates a managed resource with one or more
+# An st:Manager associates a managed resource with one or more
 # shape trees.
 #############################################################################
-:ShapeTreeLocator
+:Manager
   a rdfs:Class ;
   rdfs:comment "Associates a managed resource with one or more shape trees."@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Shape Tree Locator"@en .
+  rdfs:label "Shape Tree Manager"@en .
 
-:hasShapeTreeLocator
+:hasAssignment
   a owl:ObjectProperty ;
-  rdfs:range :ShapeTreeLocator ;
-  rdfs:comment "Represents the association between a subject an one or more ShapeTreeLocator"@en ;
+  rdfs:range :Assignment ;
+  rdfs:comment "Links to a Shape Tree Assignment"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Locator"@en .
+  rdfs:label "Has Shape Tree Assignment"@en .
 
-:location
-  a owl:ObjectProperty ;
-  rdfs:range :ShapeTreeLocation ;
-  rdfs:comment "Links to a ShapeTreeLocation associated with the ShapeTreeLocator"@en ;
-  rdfs:isDefinedBy <> ;
-  rdfs:label "Has Shape Tree Location"@en .
-
-# ShapeTreeLocation class
+# Shape Tree Assignment
 #############################################################################
-# A ShapeTreeLocation identifies a shape tree and the managed resource it is
+# An st:Assignment identifies a shape tree and the managed resource it is
 # associated with, the focus node for shape validation, and the information
 # needed to navigate the physical hierarchy in which that managed resource
 # resides.
 #############################################################################
-:ShapeTreeLocation
+:Assignment
   a rdfs:Class ;
   rdfs:comment "identifies a shape tree and the managed resource it is associated with, the focus node for shape validation, and the information needed to navigate the physical hierarchy in which that managed resource resides"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Shape Tree Location"@en .
+  rdfs:label "Shape Tree Assignment"@en .
 
-:hasManagedResource
+:manages
   a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeLocation ;
-  rdfs:comment "Identifies the managed resource associated with the shape tree location"@en ;
+  rdfs:domain :Manager ;
+  rdfs:comment "Identifies the managed resource the shape tree is assigned to"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Managed Resource"@en .
+  rdfs:label "Manages Resource"@en .
 
-:hasRootShapeTreeLocation
+:hasRootAssignment
   a owl:ObjectProperty ;
-  rdfs:range :ShapeTreeLocation ;
-  rdfs:comment "Identifies the root shape tree location"@en ;
+  rdfs:range :Assignment ;
+  rdfs:comment "Identifies the root shape tree assignment"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Root Shape Tree Location"@en .
+  rdfs:label "Has Root Shape Tree Assignment"@en .
 
-:node
+:focusNode
   a owl:ObjectProperty ;
   rdfs:domain :ShapeTreeLocation ;
   rdfs:comment "Identifies the focus node for shape validation in the associated managed resource"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Focus Node"@en .
 
-:hasShapeTree
+:assigns
   a owl:ObjectProperty ;
   rdfs:range :ShapeTree ;
-  rdfs:comment "Represents the IRI of a ShapeTree that is referenced by some subject"@en ;
+  rdfs:comment "Represents the IRI of a ShapeTree that is assigned"@en ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has ShapeTree Instance Root"@en .
+  rdfs:label "Assigns Shape Tree"@en .
 
 ################################################################
 # Resource Type Shape Tree Definitions
@@ -273,4 +233,4 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 :ContainerTree
     a :ShapeTree ;
-    :expectsType :NonRDFResource .
+    :expectsType :Container .
