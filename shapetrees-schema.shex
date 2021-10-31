@@ -4,7 +4,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <#ShapeTreeShape> {
-  a st:ShapeTree ;
+  a [st:ShapeTree] ;
   (
     st:expectsType [st:Container] ;
     st:contains @<#ShapeTree> * ;
@@ -12,10 +12,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
   rdfs:label xsd:string ? ;
-  st:references @<#ReferencedShapeTree> * ;
-  st:shape IRI ? ;
-  st:contains IRI ? ;
-  st:supports IRI ? ;
+  st:references @<#ReferenceShape> * ;
+  st:shape IRI ?
 }
 
 <#ReferenceShape> {
@@ -27,7 +25,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <#ManagerShape> {
   a [st:Manager] ;
-  st:hasAssignment @<#AssignmentShape>+
+  st:hasAssignment @<#AssignmentShape> +
 }
 
 <#AssignmentShape> {
@@ -36,7 +34,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
   st:manages IRI ;
   st:hasRootAssignment IRI ;
   ( st:focusNode IRI ;
-    st:shape IRI )?
+    st:shape IRI ) ?
 }
 
 <#DescriptionSetShape> {
@@ -47,8 +45,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 <#DescriptionShape> {
   a [st:Description] ;
   st:inDescriptionSet @<#DescriptionSetShape> ;
+  st:describes IRI ;0
   skos:prefLabel xsd:string ;
-  skos:definition xsd:string? ;
-  skos:narrower IRI? ;
+  skos:definition xsd:string ? ;
+  skos:narrower IRI ? ;
   skos:broader IRI? ;
 }

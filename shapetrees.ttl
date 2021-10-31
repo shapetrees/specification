@@ -128,11 +128,11 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:isDefinedBy <> ;
   rdfs:label "Shape Tree Description Set"@en .
 
-:hasDescriptionSet
+:describedBy
   a owl:ObjectProperty ;
   rdfs:range :DescriptionSet ;
   rdfs:isDefinedBy <> ;
-  rdfs:label "Has Shape Tree Description Set"@en .
+  rdfs:label "Described By"@en .
 
 :usesLanguage
   a owl:ObjectProperty ;
@@ -151,6 +151,14 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:comment "A Shape Tree Description is used to explain the details of a shape tree"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Shape Tree Description"@en .
+
+:describes
+  a owl:ObjectProperty ;
+  rdfs:domain :Description ;
+  rdfs:range :ShapeTree ;
+  rdfs:comment "The Shape Tree that the Description describes"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Describes"@en .
 
 :inDescriptionSet
   a owl:ObjectProperty ;
@@ -177,6 +185,12 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:comment "Links to a Shape Tree Assignment"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Shape Tree Assignment"@en .
+
+:managedBy
+  a owl:ObjectProperty ;
+  rdfs:comment "Links a Shape Tree Manager to a managed resource"@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Managed By"@en .
 
 # Shape Tree Assignment
 #############################################################################
