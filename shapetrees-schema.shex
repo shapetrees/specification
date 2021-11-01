@@ -8,7 +8,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
   a [st:ShapeTree] ;
   (
     st:expectsType [st:Container] ;
-    st:contains @<#ShapeTree> * ;
+    st:contains @<#ShapeTreeShape> * ;
     |
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
