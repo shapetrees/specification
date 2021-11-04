@@ -1,0 +1,14 @@
+PREFIX st: <http://www.w3.org/ns/shapetrees#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ex: <http://www.example/ns/ex#>
+
+<>
+  a st:Manager ;
+  st:hasAssignment <#assignment1> .
+
+<#assignment1>
+  st:assigns ex:TaskTree ;
+  st:manages <https://storage.example/data/projects/project-1/milestone-A/task-48> ;
+  st:hasRootAssignment <https://storage.example/data/projects/.shapetree#assignment2> ;
+  st:focusNode <https://storage.example/data/projects/project-1/milestone-A/task-48#task> ;
+  st:shape ex:ProjectCollectionShape .

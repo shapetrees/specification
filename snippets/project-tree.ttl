@@ -1,0 +1,69 @@
+PREFIX st: <http://www.w3.org/ns/shapetrees#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ex: <http://www.example.com/ns/ex#>
+
+<> st:describedBy ex:project-en, ex:project-es, ex:project-nl, ex:project-ko .
+
+<#ProjectTree>
+  a st:ShapeTree ;
+  st:expectsType st:Container ;
+  st:shape ex:ProjectShape ;
+  st:contains <#MilestoneTree> .
+
+<#MilestoneTree>
+  a st:ShapeTree ;
+  st:expectsType st:Container ;
+  st:shape ex:MilestoneShape ;
+  st:contains <#TaskTree>, <#IssueTree> .
+
+<#TaskTree>
+  a st:ShapeTree ;
+  st:expectsType st:Container ;
+  st:shape ex:TaskShape ;
+  st:contains st:NonRDFResourceTree .
+
+<#IssueTree>
+  a st:ShapeTree ;
+  st:expectsType st:Container ;
+  st:shape ex:IssueShape ;
+  st:contains st:NonRDFResourceTree .
+
+<#VirtualProjectTree>
+  a st:ShapeTree ;
+  st:expectsType st:Resource ;
+  st:shape ex:ProjectShape ;
+  st:references [
+    st:referencesShapeTree <#VirtualMilestoneTree> ;
+    st:viaShapePath "@ex:ProjectShape~ex:hasMilestone"
+  ] .
+
+<#VirtualMilestoneTree>
+  a st:ShapeTree ;
+  st:expectsType st:Resource ;
+  st:shape ex:MilestoneShape ;
+  st:references [
+    st:referencesShapeTree <#VirtualTaskTree> ;
+    st:viaPredicate ex:hasTask
+  ] ,
+  [
+    st:referencesShapeTree <#VirtualIssueTree> ;
+    st:viaPredicate ex:hasIssue
+  ] .
+
+<#VirtualTaskTree>
+  a st:ShapeTree ;
+  st:expectsType st:Resource ;
+  st:shape ex:TaskShape ;
+  st:references [
+    st:referencesShapeTree st:NonRDFResourceTree ;
+    st:viaShapePath "@ex:TaskShape~ex:hasAttachment"
+  ] .
+
+<#VirtualIssueTree>
+  a st:ShapeTree ;
+  st:expectsType st:Container ;
+  st:shape ex:IssueShape ;
+  st:references [
+    st:referencesShapeTree st:NonRDFResourceTree ;
+    st:viaShapePath "@ex:IssueShape~ex:hasAttachment"
+  ] .
