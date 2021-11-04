@@ -2,39 +2,64 @@ BASE <http://www.w3.org/ns/shapetrees>
 PREFIX st: <http://www.w3.org/ns/shapetrees#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-<#ShapeTree> {
-  a st:ShapeTree ;
+<#ShapeTreeShape> {
+  a [st:ShapeTree] ;
   (
     st:expectsType [st:Container] ;
-    st:contains @<#ShapeTree> * ;
+    st:contains @<#LocalOrExternalShape> * ;
     |
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
   rdfs:label xsd:string ? ;
-  st:references @<#ReferencedShapeTree> * ;
-  st:shape IRI ? ;
-  st:contains IRI ? ;
-  st:supports IRI ? ;
+  st:references @<#ReferenceShape> * ;
+  st:shape IRI ?
 }
 
-<#ReferencedShapeTree> {
-  st:hasShapeTree IRI ;
-  st:viaShapePath xsd:string
+<#LocalOrExternalShape>
+  @<#ShapeTreeShape> OR
+  ((@<#ReservedShapeTree> OR IRI) AND {})
+
+<#ReservedShapeTree> [
+  st:ResourceTree
+  st:ContainerTree
+  st:NonRDFResourceTree
+]
+
+<#ReferenceShape> {
+  st:referencesShapeTree IRI ;
+  ( st:viaShapePath xsd:string
+    |
+    st:viaPredicate IRI )
 }
 
-<#ShapeTreeLocatorShape> {
-  a [st:ShapeTreeLocator] ;
-  st:location @<#ShapeTreeLocationShape>+
+<#ManagerShape> {
+  a [st:Manager] ;
+  st:hasAssignment @<#AssignmentShape> +
 }
 
-<#ShapeTreeLocationShape> {
-  st:hasShapeTree IRI ;
-  st:hasManagedResource IRI ;
-  st:hasRootShapeTreeLocation IRI ;
-  ( st:node IRI ;
-    st:shape IRI )?
-  |
-  st:node IRI ;
-  st:shape IRI
+<#AssignmentShape> {
+  a [st:Assignment] ;
+  st:assigns IRI ;
+  st:manages IRI ;
+  st:hasRootAssignment IRI ;
+  ( st:focusNode IRI ;
+    st:shape IRI ) ?
+}
+
+<#DescriptionSetShape> {
+  a [st:DescriptionSet] ;
+  st:usesLanguage xsd:language
+}
+
+<#DescriptionShape> {
+  a [st:Description] ;
+  st:inDescriptionSet @<#DescriptionSetShape> ;
+  st:describes IRI ;
+  st:describesInstance IRI ? ;
+  skos:prefLabel xsd:string ;
+  skos:definition xsd:string ? ;
+  skos:narrower IRI ? ;
+  skos:broader IRI? ;
 }
