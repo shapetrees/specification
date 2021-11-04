@@ -2,12 +2,13 @@ BASE <http://www.w3.org/ns/shapetrees>
 PREFIX st: <http://www.w3.org/ns/shapetrees#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
 <#ShapeTreeShape> {
   a [st:ShapeTree] ;
   (
     st:expectsType [st:Container] ;
-    st:contains @<#ShapeTree> * ;
+    st:contains @<#LocalOrExternalShape> * ;
     |
     st:expectsType [st:Resource st:NonRDFResource]
   ) ;
@@ -15,6 +16,16 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
   st:references @<#ReferenceShape> * ;
   st:shape IRI ?
 }
+
+<#LocalOrExternalShape>
+  @<#ShapeTreeShape> OR
+  ((@<#ReservedShapeTree> OR IRI) AND {})
+
+<#ReservedShapeTree> [
+  st:ResourceTree
+  st:ContainerTree
+  st:NonRDFResourceTree
+]
 
 <#ReferenceShape> {
   st:referencesShapeTree IRI ;
@@ -45,7 +56,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 <#DescriptionShape> {
   a [st:Description] ;
   st:inDescriptionSet @<#DescriptionSetShape> ;
-  st:describes IRI ;0
+  st:describes IRI ;
   skos:prefLabel xsd:string ;
   skos:definition xsd:string ? ;
   skos:narrower IRI ? ;
