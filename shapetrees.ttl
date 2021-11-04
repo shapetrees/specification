@@ -160,6 +160,13 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:isDefinedBy <> ;
   rdfs:label "Describes"@en .
 
+:describesInstance
+  a owl:ObjectProperty ;
+  rdfs:domain :Description ;
+  rdfs:comment ""@en ;
+  rdfs:isDefinedBy <> ;
+  rdfs:label "Describes Instance"@en .
+
 :inDescriptionSet
   a owl:ObjectProperty ;
   rdfs:domain :Description ;

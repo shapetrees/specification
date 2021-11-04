@@ -237,9 +237,10 @@ A [=shape tree=] expresses a tree hierarchy by containing
 other [=shape trees=]. The terms used to express a [=shape tree=] are described 
 using an [[RDF]] [vocabulary](shapetrees.ttl).
 
-A <dfn>shape tree instance</dfn> is a resource assigned to 
-and in conformance with a given [=shape tree=]. The primary resource in a
-[=shape tree instance=] is called a <dfn>managed resource</dfn>.
+A <dfn>managed instance</dfn> is a resource assigned to 
+and in conformance with one or more [=shape trees=] via 
+a [=shape tree manager=]. The primary resource in a
+[=managed instance=] is called a <dfn>managed resource</dfn>.
 
 Every [=managed resource=] has an associated [=shape tree manager=].
 A [=shape tree manager=] identifies the [=shape tree=] associated
@@ -429,7 +430,7 @@ of a [=shape=] schema. [[SHEXPATH]]
 </figure>
 
 Let <code>ST</code> be a [=shape tree=]. 
-Let <code>STI</code> be a corresponding [=shape tree instance=].
+Let <code>STI</code> be a corresponding [=managed instance=].
 
 * An { `ST` <code class="vocab">st:expectsType</code> `T` } [=triple=] identifies
     the resource type `T` of a  corresponding [=managed resource=] 
@@ -454,11 +455,11 @@ Let <code>STI</code> be a corresponding [=shape tree instance=].
         indicates a [=shape tree=] referenced through the instance data of `STI`
     * An { `STR` <code class="vocab">st:viaShapePath</code> `PATH` } 
         [=triple=] identifies the [=shape path=] through which a
-        [=shape tree instance=] of `ST3` can be found via the instance data of
+        [=managed instance=] of `ST3` can be found via the instance data of
         `STI`
     * An { `STR` <code class="vocab">st:viaPredicate</code> `PRED` }
         [=triple=] identifies the RDF predicate through which a
-        [=shape tree instance=] of `ST3` can be found via the instance data of
+        [=managed instance=] of `ST3` can be found via the instance data of
         `STI`
 
 ## Shape Tree Schema ## {#st-schema}
@@ -723,9 +724,9 @@ The key operations used to manage [=shape trees=] are:
 * [Discover Shape Tree](#discover) - determine the [=shape tree=] linked to some [=managed resource=].
 * [Plant Shape Tree](#plant-shapetree) - declare that a resource will henceforth be managed by the provided [=shape tree=].
 * [Unplant Shape Tree](#unplant-shapetree) - assert that a managed resource should no longer be managed by the provided [=shape tree=].
-* [Create Shape Tree Instance](#create-shape-tree-instance) - add a resource to a managed resource hierarchy.
-* [Update Shape Tree Instance](#update-shape-tree-instance) - modify a resource in a managed resource hierarchy.
-* [Delete Shape Tree Instance](#delete-shape-tree-instance) - remove a resource in a managed resource hierarchy.
+* [Create Managed Instance](#create-managed-instance) - add a resource to a managed resource hierarchy.
+* [Update Managed Instance](#update-managed-instance) - modify a resource in a managed resource hierarchy.
+* [Delete Managed Instance](#delete-managed-instance) - remove a resource in a managed resource hierarchy.
 
 These operations make use of reusable, internal algorithms defined in
 [Shape Tree Algorithms](#algorithms).
@@ -1122,7 +1123,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 
 </div>
 
-## Create Shape Tree Instance ## {#create-shape-tree-instance}
+## Create Managed Instance ## {#create-managed-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1133,7 +1134,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
   <tbody>
     <tr>
       <td colspan=2>
-        This operation creates a [=shape tree instance=] within a 
+        This operation creates a [=managed instance=] within a 
         [=managed container=].
 
         Note: This operation can be performed as
@@ -1181,7 +1182,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 <div class="opdetails">
 
 1. Perform an HTTP `POST`, `PUT`, or `PATCH` in or on `TR` to create the
-    [=shape tree instance=] including:
+    [=managed instance=] including:
     * An HTTP `Link` header with the relation of 
         `http://www.w3.org/ns/shapetrees#TargetShapeTree` if `SHAPETREEURI` is provided
     * An HTTP `Link` header with the relation of 
@@ -1232,7 +1233,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 
 </div>
 
-## Update Shape Tree Instance ## {#update-shape-tree-instance}
+## Update Managed Instance ## {#update-managed-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1280,7 +1281,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 <div class="opdetails">
 
 1. Perform an HTTP `PUT` or `PATCH` on an existing resource `TR` to update the
-     [=shape tree instance=]
+     [=managed instance=]
    
 </div>
 
@@ -1320,7 +1321,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 
 </div>
 
-## Delete Shape Tree Instance ## {#delete-shape-tree-instance}
+## Delete Managed Instance ## {#delete-managed-instance}
 
 <table class="data operation" align="left">
   <colgroup></colgroup>
@@ -1332,7 +1333,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
     <tr>
       <td colspan=2>
         This operation deletes a [=managed resource=] for an existing 
-        [=shape tree instance=]. 
+        [=managed instance=]. 
 
         Note: This operation should be performed as
         a standard HTTP operation with no knowledge of [=shape trees=]. It
@@ -1367,7 +1368,7 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 <div class="opdetails">
 
 1. Perform an HTTP `DELETE` on an existing resource `TR` to delete the
-    [=shape tree instance=]
+    [=managed instance=]
 
 </div>
 
@@ -1750,6 +1751,12 @@ about a given [=shape tree=].
       <tr>
         <td><code class="vocab">skos:definition</code></td>
         <td>Provides a more in-depth, human readable description of the [=shape tree=]</td>
+      </tr>
+      <tr>
+        <td><code class="vocab">st:describesInstance</code></td>
+        <td>Identifies a predicate whose object value can be used to describe
+        a [=managed instance=] of the described [=shape tree=]. The object 
+        value must be a literal.</td>
       </tr>
       <tr>
         <td><code class="vocab">skos:narrower</code></td>

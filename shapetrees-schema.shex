@@ -57,6 +57,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
   a [st:Description] ;
   st:inDescriptionSet @<#DescriptionSetShape> ;
   st:describes IRI ;
+  st:describesInstance IRI ? ;
   skos:prefLabel xsd:string ;
   skos:definition xsd:string ? ;
   skos:narrower IRI ? ;
