@@ -228,7 +228,7 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 :focusNode
   a owl:ObjectProperty ;
-  rdfs:domain :ShapeTreeLocation ;
+  rdfs:domain :Assignment ;
   rdfs:comment "Identifies the focus node for shape validation in the associated managed resource"@en ;
   rdfs:isDefinedBy <> ;
   rdfs:label "Has Focus Node"@en .
