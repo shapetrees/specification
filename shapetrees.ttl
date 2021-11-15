@@ -85,7 +85,7 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 # Shape Tree Reference class
 #############################################################################
 # An st:Reference provides the necessary context to associate instance
-# data between related ShapeTrees via a ShapePath
+# data between related ShapeTrees via a ShapePath or predicate
 #############################################################################
 :Reference
   a rdfs:Class ;
