@@ -469,7 +469,7 @@ Let <code>STI</code> be a corresponding [=managed instance=].
   <pre class=include-code>
   path: shapetrees-schema.shex
   highlight: turtle
-  show: 1-24
+  show: 7-28
   </pre>
 </figure>
 
@@ -704,7 +704,7 @@ focus nodes.
   <pre class=include-code>
   path: shapetrees-schema.shex
   highlight: turtle
-  show: 26-38
+  show: 37-49
   </pre>
 </figure>
 
@@ -1777,7 +1777,7 @@ about a given [=shape tree=].
   <pre class=include-code>
     path: shapetrees-schema.shex
     highlight: turtle
-    show: 45-53
+    show: 56-65
   </pre>
 </figure>    
 
@@ -1825,7 +1825,7 @@ be used to group or organize related [=shape trees=] in a given
   <pre class=include-code>
     path: shapetrees-schema.shex
     highlight: turtle
-    show: 40-43
+    show: 51-54
   </pre>
 </figure>    
 
