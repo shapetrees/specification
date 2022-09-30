@@ -1705,6 +1705,7 @@ The following algorithms define a library of functions referenced in the above
 <div class="opdetails">
 
 1. Return a failing validation result if `ST st:expectedType` is set and is not the resource type of `R`
+1. Return a failing validation result if `ST st:targetClass` is set and is not equal to the class of the resource 'R'
 1. Return a failing validation result if `ST rdfs:label` is set and is not equal to the resource name of `R`
 1. Return a failing validation result if `ST st:shape` is set and shape validation of the body content of `R` fails
 1. Return a positive validation result
