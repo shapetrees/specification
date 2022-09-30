@@ -53,6 +53,14 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
   rdfs:isDefinedBy <> ;
   rdfs:label "Shape"@en .
 
+:targetClass  
+    a owl:ObjectProperty ;  
+    rdfs:domain :ShapeTree ;  
+    rdfs:range rdfs:Class ;  
+    rdfs:comment "Specifies the class of the managed resource"@en ;  
+    rdfs:isDefinedBy <> ;  
+    rdfs:label "targetClass"@en .  
+
 # Container IRI (maps to ldp:Container)
 #############################################################################
 # An IRI that represents a generalized container used in a ShapeTree
