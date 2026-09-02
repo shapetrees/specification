@@ -1,7 +1,7 @@
 # Shape Trees Specification
 
 This repository contains the specification and supporting documentation
-for [Shape Trees](https://shapetrees.org).
+for [Shape Trees](https://w3id.org/shapetrees).
 
 Shape trees marry RDF vocabularies, shapes, and resources into "little trees"
 that provide machine to machine interoperability, combining them into concepts
@@ -12,8 +12,8 @@ For applications that operate on more complex and interconnected resources,
 Shape Trees express the layout of those resources and associate them with
 their respective shapes.
 
-* Specification Editor's Draft - [Rendered](https://shapetrees.org/TR/specification/)
-* Primer Editor's Draft - [Rendered](https://shapetrees.org/TR/primer/) - [Source](https://github.com/shapetrees/primer/)
+* Specification Editor's Draft - [Rendered](https://w3id.org/shapetrees/TR/specification/) - [Source](index.bs)
+* Primer Editor's Draft - [Rendered](https://w3id.org/shapetrees/TR/primer/) - [Source](https://github.com/shapetrees/primer/)
 * Specification Test Suite - [Source](https://github.com/shapetrees/test-suite)
 
 Shape Trees are a
@@ -24,6 +24,48 @@ reviewed by the editors:
 
 - [Eric Prud'hommeaux](https://github.com/ericprud)
 - [Justin Bingham](https://github.com/justinwb)
+
+## Namespace
+
+The Shape Trees vocabulary namespace is `https://w3id.org/shapetrees#`, and
+is defined by [shapetrees.ttl](shapetrees.ttl). Prior drafts used
+`http://www.w3.org/ns/shapetrees#`; implementations should treat that as a
+deprecated alias for the same terms.
+
+| URL | Content |
+| --- | --- |
+| <https://w3id.org/shapetrees> | The [vocabulary](shapetrees.ttl) (Turtle) |
+| <https://w3id.org/shapetrees/TR/specification/> | This specification |
+| <https://w3id.org/shapetrees/TR/primer/> | The [primer](https://github.com/shapetrees/primer/) |
+
+The `w3id.org` entries redirect to GitHub Pages, where the documents are
+actually hosted:
+
+| Repository | GitHub Pages |
+| --- | --- |
+| [shapetrees/shapetrees.org](https://github.com/shapetrees/shapetrees.org) | <https://shapetrees.github.io/shapetrees.org/> |
+| [shapetrees/specification](https://github.com/shapetrees/specification) | <https://shapetrees.github.io/specification/> |
+| [shapetrees/primer](https://github.com/shapetrees/primer) | <https://shapetrees.github.io/primer/> |
+
+The redirect rules live in [`w3id/.htaccess`](w3id/.htaccess); see that
+directory's [README](w3id/README.md) for how to submit them to
+[perma-id/w3id.org](https://github.com/perma-id/w3id.org).
+
+These documents were previously published at `shapetrees.org`, which is no
+longer hosted.
+
+## Building
+
+The specification is written in [Bikeshed](https://speced.github.io/bikeshed/).
+To render it locally:
+
+```bash
+python3 -m pip install bikeshed && bikeshed update
+bikeshed spec index.bs
+```
+
+Every push to `main` rebuilds the spec and publishes it to GitHub Pages via
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml).
 
 ## Contributing
 

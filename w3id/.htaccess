@@ -1,0 +1,39 @@
+# https://w3id.org/shapetrees
+#
+# Shape Trees, a W3C Solid Community Group work effort.
+# Maintained at https://github.com/shapetrees/specification
+#
+# The documents were formerly published at shapetrees.org, which is no longer
+# hosted; they now live on GitHub Pages, one Pages site per source repository.
+
+Options +FollowSymLinks
+RewriteEngine on
+RewriteBase /shapetrees
+
+# ---------------------------------------------------------------------------
+# The vocabulary
+#
+# Terms are named https://w3id.org/shapetrees#managedBy, #manages, and so on,
+# so the namespace URI itself must serve the vocabulary to RDF clients and the
+# human-readable landing page to everyone else.
+# ---------------------------------------------------------------------------
+
+RewriteCond %{HTTP_ACCEPT} text/turtle [OR]
+RewriteCond %{HTTP_ACCEPT} application/(n-triples|ld\+json|rdf\+xml|trig|n-quads)
+RewriteRule ^$ https://shapetrees.github.io/specification/shapetrees.ttl [R=302,L]
+
+RewriteRule ^shapetrees\.ttl$ https://shapetrees.github.io/specification/shapetrees.ttl [R=302,L]
+RewriteRule ^shapetrees-schema\.shex$ https://shapetrees.github.io/specification/shapetrees-schema.shex [R=302,L]
+
+# ---------------------------------------------------------------------------
+# The documents, keeping the /TR/ paths the shapetrees.org site used
+# ---------------------------------------------------------------------------
+
+RewriteRule ^TR/specification/?(.*)$ https://shapetrees.github.io/specification/$1 [R=302,L]
+RewriteRule ^TR/primer/?(.*)$        https://shapetrees.github.io/primer/$1        [R=302,L]
+
+# ---------------------------------------------------------------------------
+# The landing page, and anything else that used to be served from the site root
+# ---------------------------------------------------------------------------
+
+RewriteRule ^(.*)$ https://shapetrees.github.io/shapetrees.org/$1 [R=302,L]

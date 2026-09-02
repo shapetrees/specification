@@ -1,4 +1,4 @@
-PREFIX st: <http://www.w3.org/ns/shapetrees#>
+PREFIX st: <https://w3id.org/shapetrees#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ex: <http://www.example/ns/ex#>
 

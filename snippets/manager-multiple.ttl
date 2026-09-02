@@ -1,4 +1,4 @@
-PREFIX st: <http://www.w3.org/ns/shapetrees#>
+PREFIX st: <https://w3id.org/shapetrees#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ex: <http://www.example/ns/ex#>
 
@@ -10,14 +10,14 @@ PREFIX ex: <http://www.example/ns/ex#>
 
 <#assignment1>
   st:assigns ex:DataCollectionTree ;
-  st:manages <https://storage.example/data/projects/>
+  st:manages <https://storage.example/data/projects/> ;
   st:hasRootAssignment <https://storage.example/data/.shapetree#assignment1> ;
   st:focusNode <https://storage.example/data/projects/#collection> ;
   st:shape ex:DataCollectionShape .
 
 <#assignment2>
   st:assigns ex:ProjectCollectionTree ;
-  st:manages <https://storage.example/data/projects/>
+  st:manages <https://storage.example/data/projects/> ;
   st:hasRootAssignment <https://storage.example/data/projects/.shapetree#assignment2> ;
   st:focusNode <https://storage.example/data/projects/#collection> ;
   st:shape ex:ProjectCollectionShape .

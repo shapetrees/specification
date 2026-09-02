@@ -5,7 +5,8 @@ Level: 1
 Max ToC Depth: 2
 Status: w3c/ED
 Group: w3c
-URL: https://shapetrees.org/TR/specification/
+URL: https://w3id.org/shapetrees/TR/specification/
+Repository: shapetrees/specification
 Editor: Eric Prud'hommeaux
 Editor: Justin Bingham
 Markup Shorthands: markdown yes
@@ -487,13 +488,13 @@ A [=shape tree manager=] includes one or more [=shape tree assignments=].
 The server MUST advertise the URI of the [=shape tree manager=] for a 
 given resource by responding to HTTP requests of that resource with an
 included `HTTP Link` header with a `rel` value of 
-`http://www.w3.org/ns/shapetrees#managedBy` and the manager resource
+`https://w3id.org/shapetrees#managedBy` and the manager resource
 as the link target.
 
 Conversely, the server MUST advertise the URI of the resource managed
 by a [=shape tree manager=] by responding to HTTP requests of the
 manager resource with an included `HTTP Link` header with a `rel` value of
-`http://www.w3.org/ns/shapetrees#manages` and the [=managed resource=]
+`https://w3id.org/shapetrees#manages` and the [=managed resource=]
 as the link target.
 
 <figure id="shapetree-manager-properties">
@@ -792,14 +793,14 @@ given [=resource=] in a single request.
 
 <pre highlight="http">
   HTTP/1.1 200 OK
-  Link: &lt;https://storage.example/meta/c560224b&gt;; rel="http://www.w3.org/ns/shapetrees#managedBy"
+  Link: &lt;https://storage.example/meta/c560224b&gt;; rel="https://w3id.org/shapetrees#managedBy"
   Link: &lt;http://www.w3.org/ns/ldp#Container&gt;; rel="type"
   ...other HTTP response headers omitted...
 </pre>
 
 2. Let <code>MANAGERURI</code> be the URI of a [=shape tree manager=] 
     associated with `RESOURCEURI` with a Link relation type of 
-    `http://www.w3.org/ns/shapetrees#managedBy`.
+    `https://w3id.org/shapetrees#managedBy`.
    
 3. If `MANAGERURI` is missing, the resource at 
     `RESOURCEURI` is not a [=managed resource=], and no [=shape tree manager=] 
@@ -813,7 +814,7 @@ given [=resource=] in a single request.
 
 <pre highlight="turtle">
   ...HTTP response headers omitted...
-  PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
+  PREFIX st: &lt;https://w3id.org/shapetrees#&gt; 
   PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
   PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
@@ -823,7 +824,7 @@ given [=resource=] in a single request.
     
   <#assignment1>
     st:assigns ex:DataCollectionTree ;
-    st:manages &lt;https://storage.example/data/projects/&gt;
+    st:manages &lt;https://storage.example/data/projects/&gt; ;
     st:hasRootAssignment &lt;https://storage.example/data/.shapetree#assignment1&gt; ;
     st:focusNode &lt;https://storage.example/data/projects/#collection&gt; ;
     st:shape ex:DataCollectionShape .
@@ -929,7 +930,7 @@ HTTP/1.1 404 Not Found
 PUT https://storage.example/data/projects/.shapetree
 </pre>
 <pre highlight="turtle">
-PREFIX st: &lt;http://www.w3.org/ns/shapetrees#&gt; 
+PREFIX st: &lt;https://w3id.org/shapetrees#&gt; 
 PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;  
 PREFIX ex: &lt;http://www.example/ns/ex#&gt;
 
@@ -939,14 +940,14 @@ PREFIX ex: &lt;http://www.example/ns/ex#&gt;
   
 <#assignment1>
   st:assigns ex:DataCollectionTree ;
-  st:manages &lt;https://storage.example/data/projects/&gt;
+  st:manages &lt;https://storage.example/data/projects/&gt; ;
   st:hasRootAssignment &lt;https://storage.example/data/.shapetree#assignment1&gt; ;
   st:focusNode &lt;https://storage.example/data/projects/#collection&gt; ;
   st:shape ex:DataCollectionShape .
 
 <#assignment2>
   st:assigns ex:ProjectCollectionTree ;
-  st:manages &lt;https://storage.example/data/projects/&gt;
+  st:manages &lt;https://storage.example/data/projects/&gt; ;
   st:hasRootAssignment &lt;https://storage.example/data/projects/.shapetree#assignment2&gt; ;
   st:focusNode &lt;https://storage.example/data/projects/#collection&gt; ;
   st:shape ex:ProjectCollectionShape .
@@ -1184,9 +1185,9 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 1. Perform an HTTP `POST`, `PUT`, or `PATCH` in or on `TR` to create the
     [=managed instance=] including:
     * An HTTP `Link` header with the relation of 
-        `http://www.w3.org/ns/shapetrees#TargetShapeTree` if `SHAPETREEURI` is provided
+        `https://w3id.org/shapetrees#TargetShapeTree` if `SHAPETREEURI` is provided
     * An HTTP `Link` header with the relation of 
-        `http://www.w3.org/ns/shapetrees#FocusNode` if `FNURI` is provided
+        `https://w3id.org/shapetrees#FocusNode` if `FNURI` is provided
 
 </div>
 
@@ -1218,9 +1219,9 @@ to the `HTTP PUT`, `HTTP PATCH`, or `HTTP DELETE` on `MANAGERURI` by the
 
 1. Let `TR` be the proposed resource from `REQ`
 1. Let `TST` be the value of an optionally provided HTTP `Link` header with 
-    the relation of `http://www.w3.org/ns/shapetrees#TargetShapeTree`
+    the relation of `https://w3id.org/shapetrees#TargetShapeTree`
 1. Let `FN` be the value of an optionally provided HTTP `Link` header with
-    the relation of `http://www.w3.org/ns/shapetrees#FocusNode`
+    the relation of `https://w3id.org/shapetrees#FocusNode`
 1. Let `PC` be the parent [=container=] for `TR`
 1. Let `CASN` be the [=shape tree assignment=] whose [=shape tree=] `CASNST` 
     manages the allowed members of `PC` via `CASNST st:contains`

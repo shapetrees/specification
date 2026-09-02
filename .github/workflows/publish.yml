@@ -1,55 +1,73 @@
-# Workflow for processing and publishing bikeshed proposals to github pages
+# Build the bikeshed sources and publish them to GitHub Pages.
+#
+# The rendered spec is served at https://shapetrees.github.io/specification/,
+# which https://w3id.org/shapetrees/TR/specification/ redirects to.
 
 name: publish specification
+
 on:
   push:
-    # only concerned with changes in the main branch
     branches: [ main ]
-    # only invoke when a bikeshed document is updated
-    # paths: [ '*.bs' ]
+  # allow a manual re-publish from the Actions tab
+  workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# GITHUB_TOKEN permissions needed to deploy to Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time; don't cancel one in flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v4
 
       - name: setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
-
-      - name: upgrade pip
-        run: python3 -m pip install --upgrade pip
+          python-version: '3.11'
 
       - name: install bikeshed
         run: |
+          python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade bikeshed
           bikeshed update
 
       - name: generate html
-        run: for index in *.bs; do bikeshed spec $index; done
-
-      - name: List contents
-        run: ls -al
-
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'us-east-1'
-
-      - name: Copy files
         run: |
-          aws s3 cp . s3://${{ secrets.SHAPETREESORG_DEPLOY_AWS_S3_BUCKET }}/TR/specification/ --no-progress --acl public-read --exclude "*" --include "*.html" --include "*.svg" --include "*.css" --include "*.ttl" --recursive
+          mkdir -p _site
+          for src in *.bs; do
+            bikeshed spec "$src" "_site/${src%.bs}.html"
+          done
 
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: stage supporting files
+        # the vocabulary, schema and examples the spec links to
+        run: |
+          cp shapetrees.ttl shapetrees-schema.shex _site/
+          cp -r snippets _site/
+
+      - name: list contents
+        run: find _site -type f | sort
+
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          path: _site
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

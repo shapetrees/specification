@@ -1,4 +1,4 @@
-BASE <http://www.w3.org/ns/shapetrees>
+BASE <https://w3id.org/shapetrees>
 PREFIX : <#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -7,14 +7,17 @@ PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 <>
+  a owl:Ontology ;
   dcterms:issued "2020-07-01"^^xsd:date ;
-  dcterms:modified "2020-07-06"^^xsd:date ;
-  rdfs:label "ShapeTree terms"@en .
+  dcterms:modified "2026-09-02"^^xsd:date ;
+  dcterms:title "Shape Trees Vocabulary"@en ;
+  rdfs:label "ShapeTree terms"@en ;
+  rdfs:seeAlso <https://w3id.org/shapetrees/TR/specification/> .
 
 # ShapeTree Class
 #############################################################################
 # Defines a tree of related resources which combine to enable some task
-# see: https://shapetrees.org/TR/specification/
+# see: https://w3id.org/shapetrees/TR/specification/
 #############################################################################
 :ShapeTree
   a rdfs:Class ;
