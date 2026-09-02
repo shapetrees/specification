@@ -5,8 +5,8 @@ Level: 1
 Max ToC Depth: 2
 Status: CG-DRAFT
 Group: solidcg
-URL: https://w3id.org/shapetrees/TR/specification/
-ED: https://w3id.org/shapetrees/TR/specification/
+URL: https://shapetrees.github.io/specification/
+ED: https://shapetrees.github.io/specification/
 Repository: shapetrees/specification
 Editor: Eric Prud'hommeaux
 Editor: Justin Bingham

@@ -1,7 +1,6 @@
 # Build the bikeshed sources and publish them to GitHub Pages.
 #
-# The rendered spec is served at https://shapetrees.github.io/specification/,
-# which https://w3id.org/shapetrees/TR/specification/ redirects to.
+# The rendered spec is served at https://shapetrees.github.io/specification/.
 
 name: publish specification
 

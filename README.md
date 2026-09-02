@@ -12,8 +12,8 @@ For applications that operate on more complex and interconnected resources,
 Shape Trees express the layout of those resources and associate them with
 their respective shapes.
 
-* Specification Editor's Draft - [Rendered](https://w3id.org/shapetrees/TR/specification/) - [Source](index.bs)
-* Primer Editor's Draft - [Rendered](https://w3id.org/shapetrees/TR/primer/) - [Source](https://github.com/shapetrees/primer/)
+* Specification Editor's Draft - [Rendered](https://shapetrees.github.io/specification/) - [Source](index.bs)
+* Primer Editor's Draft - [Rendered](https://shapetrees.github.io/primer/) - [Source](https://github.com/shapetrees/primer/)
 * Specification Test Suite - [Source](https://github.com/shapetrees/test-suite)
 
 Shape Trees are a
@@ -35,11 +35,12 @@ deprecated alias for the same terms.
 | URL | Content |
 | --- | --- |
 | <https://w3id.org/shapetrees> | The [vocabulary](shapetrees.ttl) (Turtle) |
-| <https://w3id.org/shapetrees/TR/specification/> | This specification |
-| <https://w3id.org/shapetrees/TR/primer/> | The [primer](https://github.com/shapetrees/primer/) |
+| <https://shapetrees.github.io/specification/> | This specification |
+| <https://shapetrees.github.io/primer/> | The [primer](https://github.com/shapetrees/primer/) |
 
-The `w3id.org` entries redirect to GitHub Pages, where the documents are
-actually hosted:
+The namespace URI resolves to the vocabulary through
+[w3id.org](https://w3id.org/shapetrees). The two documents are served straight
+from GitHub Pages, one Pages site per source repository:
 
 | Repository | GitHub Pages |
 | --- | --- |
@@ -47,12 +48,14 @@ actually hosted:
 | [shapetrees/specification](https://github.com/shapetrees/specification) | <https://shapetrees.github.io/specification/> |
 | [shapetrees/primer](https://github.com/shapetrees/primer) | <https://shapetrees.github.io/primer/> |
 
-The redirect rules live in [`w3id/.htaccess`](w3id/.htaccess); see that
-directory's [README](w3id/README.md) for how to submit them to
-[perma-id/w3id.org](https://github.com/perma-id/w3id.org). Until they are
-merged there, the registered `w3id.org/shapetrees` entry answers every path
-with the vocabulary, so only the first row of the table above resolves —
-the two documents are reachable at their GitHub Pages URLs in the meantime.
+[`w3id/.htaccess`](w3id/.htaccess) would additionally serve both documents
+under `https://w3id.org/shapetrees/TR/`, the paths the old site used, and
+content negotiate the namespace URI between the vocabulary and the home page.
+It is proposed in [perma-id/w3id.org#6628](https://github.com/perma-id/w3id.org/pull/6628);
+until that merges, the registered `w3id.org/shapetrees` entry answers every
+path with the vocabulary, so `/TR/` URLs hand back Turtle rather than the
+rendered documents. Nothing here links to them for that reason. See that
+directory's [README](w3id/README.md).
 
 These documents were previously published at `shapetrees.org`; that domain
 expired and is now squatted.
