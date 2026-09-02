@@ -3,9 +3,10 @@ Title: Shape Trees Specification
 Shortname: shapetrees-spec
 Level: 1
 Max ToC Depth: 2
-Status: w3c/ED
-Group: w3c
+Status: CG-DRAFT
+Group: solidcg
 URL: https://w3id.org/shapetrees/TR/specification/
+ED: https://w3id.org/shapetrees/TR/specification/
 Repository: shapetrees/specification
 Editor: Eric Prud'hommeaux
 Editor: Justin Bingham
@@ -209,7 +210,7 @@ requests to a server.
 consistency=] by managing all manipulations of data within a resource hierarchy
 (see [=managed resource=]).
 
-## ShapeTree Support From Proxy or Client-side Library
+## ShapeTree Support From Proxy or Client-side Library ## {#proxy-client-support}
 
 If a server does not support [=shape trees=], some [=shape tree consistency=]
 can be achieved by implementing [=shape tree=] support in the client, typically
