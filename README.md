@@ -43,7 +43,7 @@ actually hosted:
 
 | Repository | GitHub Pages |
 | --- | --- |
-| [shapetrees/shapetrees.org](https://github.com/shapetrees/shapetrees.org) | <https://shapetrees.github.io/shapetrees.org/> |
+| [shapetrees/shapetrees.github.io](https://github.com/shapetrees/shapetrees.github.io) | <https://shapetrees.github.io/> |
 | [shapetrees/specification](https://github.com/shapetrees/specification) | <https://shapetrees.github.io/specification/> |
 | [shapetrees/primer](https://github.com/shapetrees/primer) | <https://shapetrees.github.io/primer/> |
 

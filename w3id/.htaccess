@@ -38,4 +38,4 @@ RewriteRule ^TR/primer/?(.*)$        https://shapetrees.github.io/primer/$1     
 # The landing page, and anything else that used to be served from the site root
 # ---------------------------------------------------------------------------
 
-RewriteRule ^(.*)$ https://shapetrees.github.io/shapetrees.org/$1 [R=302,L]
+RewriteRule ^(.*)$ https://shapetrees.github.io/$1 [R=302,L]

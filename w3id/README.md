@@ -25,10 +25,10 @@ changes it has to be sent there again — nothing syncs automatically.
 | Request | Redirects to |
 | --- | --- |
 | `https://w3id.org/shapetrees` with an RDF `Accept` header | `https://shapetrees.github.io/specification/shapetrees.ttl` |
-| `https://w3id.org/shapetrees` from a browser | `https://shapetrees.github.io/shapetrees.org/` |
+| `https://w3id.org/shapetrees` from a browser | `https://shapetrees.github.io/` |
 | `https://w3id.org/shapetrees/TR/specification/` | `https://shapetrees.github.io/specification/` |
 | `https://w3id.org/shapetrees/TR/primer/` | `https://shapetrees.github.io/primer/` |
-| anything else under `/shapetrees/` | the same path on `https://shapetrees.github.io/shapetrees.org/` |
+| anything else under `/shapetrees/` | the same path on `https://shapetrees.github.io/` |
 
 Two changes from the registered entry are worth calling out. The vocabulary is
 served from GitHub Pages rather than `raw.githubusercontent.com`, so it arrives
