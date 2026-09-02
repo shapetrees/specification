@@ -7,15 +7,18 @@ repository — a copy in this repo has no effect on its own.
 
 ## Installing it
 
-1. Fork [perma-id/w3id.org](https://github.com/perma-id/w3id.org).
-2. Copy this directory's `.htaccess` to `shapetrees/.htaccess` in that fork
-   (create the `shapetrees` directory; it holds nothing else).
-3. Open a pull request. w3id.org asks that the PR say who maintains the
-   namespace and give a contact address; the editors listed in the top-level
-   [README](../README.md) are the maintainers.
+The namespace is already registered, as
+[`shapetrees/`](https://github.com/perma-id/w3id.org/tree/master/shapetrees) in
+[perma-id/w3id.org](https://github.com/perma-id/w3id.org), listing
+[@ericprud](https://github.com/ericprud),
+[@justinwb](https://github.com/justinwb) and
+[@elf-pavlik](https://github.com/elf-pavlik) as maintainers. The entry as
+registered sends *every* path to the raw `shapetrees.ttl` on GitHub, which is
+right for the vocabulary but leaves the documents unreachable.
 
-Whenever a rule here changes, the change has to be sent to `perma-id/w3id.org`
-again — nothing syncs automatically.
+To install the rules here, fork `perma-id/w3id.org`, replace
+`shapetrees/.htaccess` with this one, and open a pull request. Whenever a rule
+changes it has to be sent there again — nothing syncs automatically.
 
 ## What it resolves
 
@@ -26,6 +29,12 @@ again — nothing syncs automatically.
 | `https://w3id.org/shapetrees/TR/specification/` | `https://shapetrees.github.io/specification/` |
 | `https://w3id.org/shapetrees/TR/primer/` | `https://shapetrees.github.io/primer/` |
 | anything else under `/shapetrees/` | the same path on `https://shapetrees.github.io/shapetrees.org/` |
+
+Two changes from the registered entry are worth calling out. The vocabulary is
+served from GitHub Pages rather than `raw.githubusercontent.com`, so it arrives
+as `text/turtle` instead of `text/plain`. And it is only served to clients that
+ask for RDF: a browser following `https://w3id.org/shapetrees` now lands on the
+Shape Trees home page rather than downloading a Turtle file.
 
 The redirects are `302` so the GitHub Pages hosts can be moved later without
 poisoning caches. Once the arrangement has settled, they can become `301`.
@@ -45,7 +54,11 @@ docker run --rm -p 8080:80 \
 then check that each row of the table above lands where it should:
 
 ```bash
-curl -sI -H 'Accept: text/turtle' http://localhost:8080/shapetrees | grep -i location
+curl -sI -H 'Accept: text/turtle' http://localhost:8080/shapetrees/ | grep -i location
 curl -sI http://localhost:8080/shapetrees/TR/specification/ | grep -i location
 curl -sI http://localhost:8080/shapetrees/TR/primer/ | grep -i location
 ```
+
+Note that `http://localhost:8080/shapetrees` (no trailing slash) is answered by
+Apache's own `DirectorySlash` redirect before these rules see it, so test the
+namespace URI with the slash.

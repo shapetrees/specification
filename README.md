@@ -49,10 +49,13 @@ actually hosted:
 
 The redirect rules live in [`w3id/.htaccess`](w3id/.htaccess); see that
 directory's [README](w3id/README.md) for how to submit them to
-[perma-id/w3id.org](https://github.com/perma-id/w3id.org).
+[perma-id/w3id.org](https://github.com/perma-id/w3id.org). Until they are
+merged there, the registered `w3id.org/shapetrees` entry answers every path
+with the vocabulary, so only the first row of the table above resolves —
+the two documents are reachable at their GitHub Pages URLs in the meantime.
 
-These documents were previously published at `shapetrees.org`, which is no
-longer hosted.
+These documents were previously published at `shapetrees.org`; that domain
+expired and is now squatted.
 
 ## Building
 

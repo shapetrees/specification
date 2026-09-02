@@ -1,10 +1,12 @@
-# https://w3id.org/shapetrees
+# shapetrees
 #
 # Shape Trees, a W3C Solid Community Group work effort.
 # Maintained at https://github.com/shapetrees/specification
 #
-# The documents were formerly published at shapetrees.org, which is no longer
-# hosted; they now live on GitHub Pages, one Pages site per source repository.
+# The documents were formerly published at shapetrees.org; that domain expired
+# and is now squatted. They live on GitHub Pages instead, one Pages site per
+# source repository, so this serves the rendered documents as well as the
+# vocabulary.
 
 Options +FollowSymLinks
 RewriteEngine on
